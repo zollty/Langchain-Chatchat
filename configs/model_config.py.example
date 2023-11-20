@@ -18,16 +18,16 @@ EMBEDDING_MODEL_OUTPUT_PATH = "output"
 
 # 要运行的 LLM 名称，可以包括本地模型和在线模型。
 # 第一个将作为 API 和 WEBUI 的默认模型
-LLM_MODELS = ["chatglm2-6b", "zhipu-api", "openai-api"]
+LLM_MODELS = ["chatglm3-6b", "Qwen-7B-Chat", "Chinese-Alpaca-2-13B", "Llama2-Chinese-13b-Chat"] # ["chatglm2-6b", "zhipu-api", "openai-api"]
 
 # AgentLM模型的名称 (可以不指定，指定之后就锁定进入Agent之后的Chain的模型，不指定就是LLM_MODELS[0])
 Agent_MODEL = None
 
 # LLM 运行设备。设为"auto"会自动检测，也可手动设定为"cuda","mps","cpu"其中之一。
-LLM_DEVICE = "auto"
+LLM_DEVICE = "cuda"
 
 # 历史对话轮数
-HISTORY_LEN = 3
+HISTORY_LEN = 0
 
 # 大模型最长支持的长度，如果不填写，则使用模型默认的最大长度，如果填写，则为用户设定的最大长度
 MAX_TOKENS = None
@@ -36,7 +36,8 @@ MAX_TOKENS = None
 TEMPERATURE = 0.7
 # TOP_P = 0.95 # ChatOpenAI暂不支持该参数
 
-ONLINE_LLM_MODEL = {
+ONLINE_LLM_MODEL = {}
+ONLINE_LLM_MODEL2 = {
     # 线上模型。请在server_config中为每个在线API设置不同的端口
 
     "openai-api": {
@@ -147,8 +148,16 @@ MODEL_PATH = {
         "piccolo-large-zh": "sensenova/piccolo-large-zh",
         "text-embedding-ada-002": "your OPENAI_API_KEY",
     },
-
     "llm_model": {
+        "chatglm2-6b": "/ai/models/chatglm2-6b",
+        "chatglm3-6b": "/ai/models/chatglm3-6b",
+        "chatglm3-6b-32k": "/ai/models/chatglm3-6b-32k",
+        "Llama2-Chinese-13b-Chat":"/ai/models/Llama2-Chinese-13b-Chat",
+        "Chinese-Alpaca-2-7B":"/ai/models/chinese-alpaca-2-7b-hf",
+        "Chinese-Alpaca-2-13B":"/ai/models/chinese-alpaca-2-13b-16k-hf",
+        "Qwen-7B-Chat":"/ai/models/Qwen-7B-Chat",
+    },
+    "llm_model2": {
         # 以下部分模型并未完全测试，仅根据fastchat和vllm模型的模型列表推定支持
         "chatglm2-6b": "THUDM/chatglm2-6b",
         "chatglm2-6b-32k": "THUDM/chatglm2-6b-32k",
@@ -209,6 +218,16 @@ MODEL_PATH = {
 NLTK_DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "nltk_data")
 
 VLLM_MODEL_DICT = {
+        "chatglm2-6b": "/ai/models/chatglm2-6b",
+        "chatglm3-6b": "/ai/models/chatglm3-6b",
+        "chatglm3-6b-32k": "/ai/models/chatglm3-6b-32k",
+        "Llama2-Chinese-13b-Chat":"/ai/models/Llama2-Chinese-13b-Chat",
+        "Chinese-Alpaca-2-7B":"/ai/models/chinese-alpaca-2-7b-hf",
+        "Chinese-Alpaca-2-13B":"/ai/models/chinese-alpaca-2-13b-16k-hf",
+        "Qwen-7B-Chat":"/ai/models/Qwen-7B-Chat",
+}
+
+VLLM_MODEL_DICT2 = {
     "aquila-7b": "BAAI/Aquila-7B",
     "aquilachat-7b": "BAAI/AquilaChat-7B",
 

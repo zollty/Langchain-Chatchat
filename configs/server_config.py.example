@@ -94,6 +94,49 @@ FSCHAT_MODEL_WORKERS = {
     # "baichuan-7b": { # 使用default中的IP和端口
     #    "device": "cpu",
     # },
+	
+    "Qwen-7B-Chat": {
+       "device": LLM_DEVICE,
+       "gpus": "0", # 使用的GPU，以str的格式指定，如"0,1"，如失效请使用CUDA_VISIBLE_DEVICES="0,1"等形式指定
+       "num_gpus": 1, # 使用GPU的数量
+       "max_gpu_memory": "23GiB", # 每个GPU占用的最大显存
+    },
+    "chatglm2-6b": {
+       "device": LLM_DEVICE,
+	   "gpus": "0,1", # 使用的GPU，以str的格式指定，如"0,1"，如失效请使用CUDA_VISIBLE_DEVICES="0,1"等形式指定
+       "num_gpus": 2, # 使用GPU的数量
+       "max_gpu_memory": "23GiB", # 每个GPU占用的最大显存
+    },
+    "chatglm3-6b": {
+       "device": LLM_DEVICE,
+	   "gpus": "1", # 使用的GPU，以str的格式指定，如"0,1"，如失效请使用CUDA_VISIBLE_DEVICES="0,1"等形式指定
+       "num_gpus": 1, # 使用GPU的数量
+       "max_gpu_memory": "23GiB", # 每个GPU占用的最大显存
+    },
+    "chatglm3-6b-32k": {
+       "device": LLM_DEVICE,
+	   "gpus": "0,1", # 使用的GPU，以str的格式指定，如"0,1"，如失效请使用CUDA_VISIBLE_DEVICES="0,1"等形式指定
+       "num_gpus": 2, # 使用GPU的数量
+       "max_gpu_memory": "23GiB", # 每个GPU占用的最大显存
+    },
+    "Chinese-Alpaca-2-7B": {
+       "device": LLM_DEVICE,
+	   "gpus": "0,2", # 使用的GPU，以str的格式指定，如"0,1"，如失效请使用CUDA_VISIBLE_DEVICES="0,1"等形式指定
+       "num_gpus": 2, # 使用GPU的数量
+       "max_gpu_memory": "23GiB", # 每个GPU占用的最大显存
+    },
+    "Chinese-Alpaca-2-13B": {
+       "device": LLM_DEVICE,
+	   "gpus": "2", # 使用的GPU，以str的格式指定，如"0,1"，如失效请使用CUDA_VISIBLE_DEVICES="0,1"等形式指定
+       "num_gpus": 1, # 使用GPU的数量
+       "max_gpu_memory": "23GiB", # 每个GPU占用的最大显存
+    },
+    "Llama2-Chinese-13b-Chat": {
+       "device": LLM_DEVICE,
+	   "gpus": "3", # 使用的GPU，以str的格式指定，如"0,1"，如失效请使用CUDA_VISIBLE_DEVICES="0,1"等形式指定
+       "num_gpus": 1, # 使用GPU的数量
+       "max_gpu_memory": "23GiB", # 每个GPU占用的最大显存
+    },
 
     #以下配置可以不用修改，在model_config中设置启动的模型
     "zhipu-api": {
