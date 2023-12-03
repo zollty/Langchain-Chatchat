@@ -17,8 +17,8 @@ EMBEDDING_KEYWORD_FILE = "keywords.txt"
 EMBEDDING_MODEL_OUTPUT_PATH = "output"
 
 # 要运行的 LLM 名称，可以包括本地模型和在线模型。
-# 第一个将作为 API 和 WEBUI 的默认模型
-LLM_MODELS = ["chatglm3-6b", "Qwen-7B-Chat", "Chinese-Alpaca-2-13B", "Llama2-Chinese-13b-Chat"] # ["chatglm2-6b", "zhipu-api", "openai-api"]
+# 第一个将作为 API 和 WEBUI 的默认模型  "Chinese-Alpaca-2-13B", , "Llama2-Chinese-13b-Chat", "chatglm3-6b", , "chatglm3-6b-32k" "Qwen-7B-Chat", "Chinese-Alpaca-2-13B"
+LLM_MODELS = ["Chinese-Alpaca-2-13B"] # ["chatglm2-6b", "zhipu-api", "openai-api"]
 
 # AgentLM模型的名称 (可以不指定，指定之后就锁定进入Agent之后的Chain的模型，不指定就是LLM_MODELS[0])
 Agent_MODEL = None
@@ -148,16 +148,7 @@ MODEL_PATH = {
         "piccolo-large-zh": "sensenova/piccolo-large-zh",
         "text-embedding-ada-002": "your OPENAI_API_KEY",
     },
-    "llm_model": {
-        "chatglm2-6b": "/ai/models/chatglm2-6b",
-        "chatglm3-6b": "/ai/models/chatglm3-6b",
-        "chatglm3-6b-32k": "/ai/models/chatglm3-6b-32k",
-        "Llama2-Chinese-13b-Chat":"/ai/models/Llama2-Chinese-13b-Chat",
-        "Chinese-Alpaca-2-7B":"/ai/models/chinese-alpaca-2-7b-hf",
-        "Chinese-Alpaca-2-13B":"/ai/models/chinese-alpaca-2-13b-16k-hf",
-        "Qwen-7B-Chat":"/ai/models/Qwen-7B-Chat",
-    },
-    "llm_model2": {
+    "llm000_model2": {
         # 以下部分模型并未完全测试，仅根据fastchat和vllm模型的模型列表推定支持
         "chatglm2-6b": "THUDM/chatglm2-6b",
         "chatglm2-6b-32k": "THUDM/chatglm2-6b-32k",
@@ -204,10 +195,19 @@ MODEL_PATH = {
 
         "Qwen-7B": "Qwen/Qwen-7B",
         "Qwen-14B": "Qwen/Qwen-14B",
-        "Qwen-7B-Chat": "Qwen/Qwen-7B-Chat",
+        "Qwen-7B-Chat": "Qwen/Qwen-7B-Chat00000",
         "Qwen-14B-Chat": "Qwen/Qwen-14B-Chat",
         "Qwen-14B-Chat-Int8": "Qwen/Qwen-14B-Chat-Int8",  # 确保已经安装了auto-gptq optimum flash-attn
         "Qwen-14B-Chat-Int4": "Qwen/Qwen-14B-Chat-Int4",  # 确保已经安装了auto-gptq optimum flash-attn
+    },
+    "llm_model": {
+        "chatglm2-6b": "/ai/models/chatglm2-6b",
+        "chatglm3-6b": "/ai/models/chatglm3-6b",
+        "chatglm3-6b-32k": "/ai/models/chatglm3-6b-32k",
+        "Llama2-Chinese-13b-Chat":"/ai/models/Llama2-Chinese-13b-Chat",
+        "Chinese-Alpaca-2-7B":"/ai/models/chinese-alpaca-2-7b-hf",
+        "Chinese-Alpaca-2-13B":"/ai/models/chinese-alpaca-2-13b-16k-hf",
+        "Qwen-7B-Chat":"/ai/models/Qwen-7B-Chat",
     },
 }
 
@@ -217,17 +217,7 @@ MODEL_PATH = {
 # nltk 模型存储路径
 NLTK_DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "nltk_data")
 
-VLLM_MODEL_DICT = {
-        "chatglm2-6b": "/ai/models/chatglm2-6b",
-        "chatglm3-6b": "/ai/models/chatglm3-6b",
-        "chatglm3-6b-32k": "/ai/models/chatglm3-6b-32k",
-        "Llama2-Chinese-13b-Chat":"/ai/models/Llama2-Chinese-13b-Chat",
-        "Chinese-Alpaca-2-7B":"/ai/models/chinese-alpaca-2-7b-hf",
-        "Chinese-Alpaca-2-13B":"/ai/models/chinese-alpaca-2-13b-16k-hf",
-        "Qwen-7B-Chat":"/ai/models/Qwen-7B-Chat",
-}
-
-VLLM_MODEL_DICT2 = {
+VLLM333_MODEL_DICT = {
     "aquila-7b": "BAAI/Aquila-7B",
     "aquilachat-7b": "BAAI/AquilaChat-7B",
 
@@ -268,13 +258,23 @@ VLLM_MODEL_DICT2 = {
 
     "Qwen-7B": "Qwen/Qwen-7B",
     "Qwen-14B": "Qwen/Qwen-14B",
-    "Qwen-7B-Chat": "Qwen/Qwen-7B-Chat",
+    "Qwen-7B-Chat": "Qwen/Qwen-7B-Chat333",
     "Qwen-14B-Chat": "Qwen/Qwen-14B-Chat",
 
     "agentlm-7b": "THUDM/agentlm-7b",
     "agentlm-13b": "THUDM/agentlm-13b",
     "agentlm-70b": "THUDM/agentlm-70b",
 
+}
+
+VLLM_MODEL_DICT = {
+    "chatglm2-6b": "/ai/models/chatglm2-6b",
+    "chatglm3-6b": "/ai/models/chatglm3-6b",
+    "chatglm3-6b-32k": "/ai/models/chatglm3-6b-32k",
+    "Llama2-Chinese-13b-Chat":"/ai/models/Llama2-Chinese-13b-Chat",
+    "Chinese-Alpaca-2-7B":"/ai/models/chinese-alpaca-2-7b-hf",
+    "Chinese-Alpaca-2-13B":"/ai/models/chinese-alpaca-2-13b-16k-hf",
+    "Qwen-7B-Chat":"/ai/models/Qwen-7B-Chat",
 }
 
 # 你认为支持Agent能力的模型，可以在这里添加，添加后不会出现可视化界面的警告

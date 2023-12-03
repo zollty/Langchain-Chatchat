@@ -32,7 +32,7 @@ def list_config_models() -> BaseResponse:
     '''
     从本地获取configs中配置的模型列表
     '''
-    configs = {}
+    configs = list_config_llm_models()
     # 删除ONLINE_MODEL配置中的敏感信息
     for name, config in list_config_llm_models()["online"].items():
         configs[name] = {}
@@ -91,6 +91,7 @@ def stop_llm_model(
 def change_llm_model(
     model_name: str = Body(..., description="当前运行模型", examples=[LLM_MODELS[0]]),
     new_model_name: str = Body(..., description="要切换的新模型", examples=[LLM_MODELS[0]]),
+    keep_origin: bool = Body(False, description="不释放原模型，加载新模型", examples=[False]),
     controller_address: str = Body(None, description="Fastchat controller服务器地址", examples=[fschat_controller_address()])
 ):
     '''
@@ -101,7 +102,7 @@ def change_llm_model(
         with get_httpx_client() as client:
             r = client.post(
                 controller_address + "/release_worker",
-                json={"model_name": model_name, "new_model_name": new_model_name},
+                json={"model_name": model_name, "new_model_name": new_model_name, "keep_origin": keep_origin},
                 timeout=HTTPX_DEFAULT_TIMEOUT, # wait for new worker_model
             )
             return r.json()
