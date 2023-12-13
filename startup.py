@@ -104,7 +104,7 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
         from configs.model_config import VLLM_MODEL_DICT
         if kwargs["model_names"][0] in VLLM_MODEL_DICT and args.infer_turbo == "vllm":
             import fastchat.serve.vllm_worker
-            from fastchat.serve.vllm_worker import VLLMWorker, app
+            from fastchat.serve.vllm_worker import VLLMWorker, app, worker_id
             from vllm import AsyncLLMEngine
             from vllm.engine.arg_utils import AsyncEngineArgs,EngineArgs
 
@@ -137,7 +137,10 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
             args.quantization = None
             args.max_log_len = None
             args.tokenizer_revision = None
-
+            
+            # 0.2.2 vllm需要新加的参数
+            args.max_paddings = 256
+            
             if args.model_path:
                 args.model = args.model_path
             if args.num_gpus > 1:
@@ -161,7 +164,7 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
                         conv_template = args.conv_template,
                         )
             sys.modules["fastchat.serve.vllm_worker"].engine = engine
-            # sys.modules["fastchat.serve.vllm_worker"].worker = worker
+            sys.modules["fastchat.serve.vllm_worker"].worker = worker
             sys.modules["fastchat.serve.vllm_worker"].logger.setLevel(log_level)
 
         else:
@@ -298,10 +301,6 @@ def run_controller(log_level: str = "INFO", started_event: mp.Event = None):
             keep_origin: bool = Body(True, description="不释放原模型，加载新模型")
     ) -> Dict:
         available_models = app._controller.list_models()
-        if model_name == "Llama2-Chinese-13b-Chat" or model_name == "Chinese-Alpaca-2-13B":
-            keep_origin = True
-        else:
-            keep_origin = True
         if new_model_name in available_models:
             msg = f"要切换的LLM模型 {new_model_name} 已经存在"
             logger.info(msg)

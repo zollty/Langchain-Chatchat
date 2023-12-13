@@ -26,7 +26,7 @@ class OpenAiChatMsgIn(BaseModel):
 async def openai_chat(msg: OpenAiChatMsgIn):
     config = get_model_worker_config(msg.model)
     openai.api_key = config.get("api_key", "EMPTY")
-    if msg.max_tokens == 0:
+    if isinstance(msg.max_tokens, int) and msg.max_tokens <= 0:
         msg.max_tokens = None
     print(f"{openai.api_key=}")
     openai.api_base = config.get("api_base_url", fschat_openai_api_address())

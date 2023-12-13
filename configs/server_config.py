@@ -40,6 +40,8 @@ FSCHAT_MODEL_WORKERS = {
         "device": LLM_DEVICE,
         # False,'vllm',使用的推理加速框架,使用vllm如果出现HuggingFace通信问题，参见doc/FAQ
         # vllm对一些模型支持还不成熟，暂时默认关闭
+        # fschat=0.2.33的代码有bug, 如需使用，源码修改fastchat.server.vllm_worker，
+        # 将103行中sampling_params = SamplingParams的参数stop=list(stop)修改为stop= [i for i in stop if i!=""]
         "infer_turbo": False,
 
         # model_worker多卡加载需要配置的参数
@@ -64,7 +66,7 @@ FSCHAT_MODEL_WORKERS = {
         # "no_register": False,
         # "embed_in_truncate": False,
 
-        # 以下为vllm_woker配置参数,注意使用vllm必须有gpu，仅在Linux测试通过
+        # 以下为vllm_worker配置参数,注意使用vllm必须有gpu，仅在Linux测试通过
 
         # tokenizer = model_path # 如果tokenizer与model_path不一致在此处添加
         # 'tokenizer_mode':'auto',
@@ -184,6 +186,9 @@ FSCHAT_MODEL_WORKERS = {
     # "azure-api": {
     #     "port": 21008,
     # },
+    # "tiangong-api": {
+    #     "port": 21009,
+    # },
 }
 
 # fastchat multi model worker server
@@ -194,6 +199,6 @@ FSCHAT_MULTI_MODEL_WORKERS = {
 # fastchat controller server
 FSCHAT_CONTROLLER = {
     "host": DEFAULT_BIND_HOST,
-    "port": 20001,
+    "port": 21001,
     "dispatch_method": "shortest_queue",
 }
