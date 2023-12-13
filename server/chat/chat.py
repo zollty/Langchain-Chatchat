@@ -29,6 +29,8 @@ async def chat(query: str = Body(..., description="用户输入", examples=["恼
                prompt_name: str = Body("default", description="使用的prompt模板名称(在configs/prompt_config.py中配置)"),
                ):
     history = [History.from_data(h) for h in history]
+    if max_tokens == 0:
+        max_tokens = None
 
     async def chat_iterator(query: str,
                             history: List[History] = [],

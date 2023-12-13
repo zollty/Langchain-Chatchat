@@ -295,13 +295,13 @@ def run_controller(log_level: str = "INFO", started_event: mp.Event = None):
             model_name: str = Body(..., description="要释放模型的名称", samples=["chatglm-6b"]),
             # worker_address: str = Body(None, description="要释放模型的地址，与名称二选一", samples=[FSCHAT_CONTROLLER_address()]),
             new_model_name: str = Body(None, description="释放后加载该模型"),
-            keep_origin: bool = Body(False, description="不释放原模型，加载新模型")
+            keep_origin: bool = Body(True, description="不释放原模型，加载新模型")
     ) -> Dict:
         available_models = app._controller.list_models()
         if model_name == "Llama2-Chinese-13b-Chat" or model_name == "Chinese-Alpaca-2-13B":
             keep_origin = True
         else:
-            keep_origin = False
+            keep_origin = True
         if new_model_name in available_models:
             msg = f"要切换的LLM模型 {new_model_name} 已经存在"
             logger.info(msg)

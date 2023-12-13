@@ -59,9 +59,9 @@ def mount_app_routes(app: FastAPI, run_mode: str = None):
             summary="swagger 文档")(document)
 
     # Tag: Chat
-    app.post("/chat/fastchat",
+    app.post("/chat/openapi",
              tags=["Chat"],
-             summary="与llm模型对话(直接与fastchat api对话)",
+             summary="与llm模型对话(直接与fs代理的openapi对话)",
              )(openai_chat)
 
     app.post("/chat/chat",

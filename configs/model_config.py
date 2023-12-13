@@ -18,7 +18,7 @@ EMBEDDING_MODEL_OUTPUT_PATH = "output"
 
 # 要运行的 LLM 名称，可以包括本地模型和在线模型。
 # 第一个将作为 API 和 WEBUI 的默认模型  "Chinese-Alpaca-2-13B", , "Llama2-Chinese-13b-Chat", "chatglm3-6b", , "chatglm3-6b-32k" "Qwen-7B-Chat", "Chinese-Alpaca-2-13B"
-LLM_MODELS = ["Chinese-Alpaca-2-13B"] # ["chatglm2-6b", "zhipu-api", "openai-api"]
+LLM_MODELS = ["chatglm3-6b-32k"] # ["chatglm2-6b", "zhipu-api", "openai-api"]
 
 # AgentLM模型的名称 (可以不指定，指定之后就锁定进入Agent之后的Chain的模型，不指定就是LLM_MODELS[0])
 Agent_MODEL = None

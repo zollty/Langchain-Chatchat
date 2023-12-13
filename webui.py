@@ -8,10 +8,17 @@ import sys
 from configs import VERSION
 from server.utils import api_address
 
+from streamlit_router import StreamlitRouter
+
 
 api = ApiRequest(base_url=api_address())
 
-if __name__ == "__main__":
+def index2(router):
+    st.text(f"xxxxxx fron page create task")
+    st.text("others on page create task")
+
+
+def index(router):
     is_lite = "lite" in sys.argv
 
     st.set_page_config(
@@ -19,9 +26,9 @@ if __name__ == "__main__":
         os.path.join("img", "chatchat_icon_blue_square_v2.png"),
         initial_sidebar_state="expanded",
         menu_items={
-            'Get Help': 'https://github.com/chatchat-space/Langchain-Chatchat',
-            'Report a bug': "https://github.com/chatchat-space/Langchain-Chatchat/issues",
-            'About': f"""欢迎使用 Langchain-Chatchat WebUI {VERSION}！"""
+            'Get Help': 'https://github.com',
+            'Report a bug': "https://github.com",
+            'About': f"""欢迎使用 FuxiAI-Chat WebUI {VERSION}！"""
         }
     )
 
@@ -62,3 +69,21 @@ if __name__ == "__main__":
 
     if selected_page in pages:
         pages[selected_page]["func"](api=api, is_lite=is_lite)
+
+
+# variable router auto inject if as first params
+def test_page2(x, router):
+	st.text(f"POSTTTTT fron page create task x={x}")
+	if st.button("back to index"):
+		router.redirect(*router.build("index"))
+	st.text("others on page create task")
+
+        
+if __name__ == "__main__":
+    router = StreamlitRouter()
+    router.register(index, '/')
+    router.register(test_page2, "/tasks/<int:x>", methods=['POST'])
+    # index(router)
+    router.serve()
+    
+
