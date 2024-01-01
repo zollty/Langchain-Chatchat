@@ -52,10 +52,10 @@ def index(router):
             ),
             use_column_width=True
         )
-        st.caption(
-            f"""<p align="right">当前版本：{VERSION}</p>""",
-            unsafe_allow_html=True,
-        )
+        # st.caption(
+        #     f"""<p align="right">当前版本：{VERSION}</p>""",
+        #     unsafe_allow_html=True,
+        # )
         options = list(pages)
         icons = [x["icon"] for x in pages.values()]
 
