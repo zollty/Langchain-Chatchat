@@ -46,7 +46,7 @@ async def document():
 
 def create_app(run_mode: str = None):
     app = FastAPI(
-        title="FuxiAI-Chat API Server",
+        title="FenghouAI-Chat API Server",
         version=VERSION
     )
     MakeFastAPIOffline(app)

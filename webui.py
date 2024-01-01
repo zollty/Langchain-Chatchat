@@ -23,13 +23,13 @@ def index(router):
     is_lite = "lite" in sys.argv
 
     st.set_page_config(
-        "FuxiAI-Chat WebUI",
+        "FenghouAI-Chat WebUI",
         os.path.join("img", "chatchat_icon_blue_square_v2.png"),
         initial_sidebar_state="expanded",
         menu_items={
             'Get Help': 'https://github.com',
             'Report a bug': "https://github.com",
-            'About': f"""欢迎使用 FuxiAI-Chat WebUI {VERSION}！"""
+            'About': f"""欢迎使用 FenghouAI-Chat WebUI {VERSION}！"""
         }
     )
 
@@ -48,7 +48,7 @@ def index(router):
         st.image(
             os.path.join(
                 "img",
-                "fuxi-chat-logo.png"
+                "fenghou-banner.png"
             ),
             use_column_width=True
         )
