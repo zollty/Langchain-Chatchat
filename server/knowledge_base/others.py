@@ -57,12 +57,12 @@ def parse_docs(
         if success:
             documents += docs
             print(f"{file}--------------------------update file success: ")
-            print(docs)
+            # print(docs)
             rt_success = True
         else:
             failed_files.append({file: msg})
             print(f"{file}--------------------------update file failed: ")
             print(msg)
     if rt_success:
-        return BaseResponse(code=200, msg="文件上传与解析完成", data={"docs": documents, "failed_files": failed_files})
+        return BaseResponse(code=200, msg="文件上传与解析完成", data={"id":id, "docs": documents, "failed_files": failed_files})
     return BaseResponse(code=500, msg="解析文件失败", data={"failed_files": failed_files})

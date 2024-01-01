@@ -83,14 +83,21 @@ def list_files_from_folder(kb_name: str):
 
     return result
 
-
+    # AmazonTextractPDFParser,
+    # DocumentIntelligenceParser,
+    # PDFMinerParser,
+    # PDFPlumberParser,
+    # PyMuPDFParser,
+    # PyPDFium2Parser,
+    # PyPDFParser,
 LOADER_DICT = {"UnstructuredHTMLLoader": ['.html'],
                "UnstructuredMarkdownLoader": ['.md'],
                "JSONLoader": [".json"],
                "JSONLinesLoader": [".jsonl"],
                "CSVLoader": [".csv"],
                # "FilteredCSVLoader": [".csv"], # 需要自己指定，目前还没有支持
-               "RapidOCRPDFLoader": [".pdf"],
+               "RapidOCRPDFLoader": [".pdf0"],
+               "UnstructuredPDFLoader": [".pdf"],
                "RapidOCRLoader": ['.png', '.jpg', '.jpeg', '.bmp'],
                "UnstructuredEmailLoader": ['.eml', '.msg'],
                "UnstructuredEPubLoader": ['.epub'],
@@ -407,7 +414,7 @@ if __name__ == "__main__":
     from pprint import pprint
 
     kb_file = KnowledgeFile(
-        filename="/ai/apps/misc/xxx.txt",
+        filename="/ai/apps/misc/test_files/附件2：爱康国宾体检注意事项.txt",
         knowledge_base_name="temp")
     # kb_file.text_splitter_name = "RecursiveCharacterTextSplitter"
     docs = kb_file.file2docs()
