@@ -15,6 +15,7 @@ from starlette.responses import RedirectResponse
 from server.chat.chat import chat
 from server.chat.openai_chat import openai_chat
 from server.chat.search_engine_chat import search_engine_chat
+from server.chat.yby_chat import yby_chat
 from server.chat.completion import completion
 from server.chat.feedback import chat_feedback
 from server.embeddings_api import embed_texts_endpoint
@@ -26,6 +27,17 @@ from server.utils import (BaseResponse, ListResponse, FastAPI, MakeFastAPIOfflin
 from typing import List, Literal
 
 nltk.data.path = [NLTK_DATA_PATH] + nltk.data.path
+
+
+from server.utils import BaseResponse, ListResponse
+from server.db.repository.message_repository import filter_message
+def query_message(conversation_id: str = Body(..., examples=["0f4f588ede084b80be37716570b469aa"]), 
+            limit: int = Body(10, description="size limit"),
+            ) -> BaseResponse:
+    ret = filter_message(conversation_id, limit)
+    return BaseResponse(data=ret)
+    
+
 
 
 async def document():
@@ -73,6 +85,11 @@ def mount_app_routes(app: FastAPI, run_mode: str = None):
              tags=["Chat"],
              summary="与搜索引擎对话",
              )(search_engine_chat)
+
+    app.post("/chat/yby_chat",
+             tags=["Chat"],
+             summary="与园博园Agent对话",
+             )(yby_chat)
 
     app.post("/chat/feedback",
              tags=["Chat"],
@@ -125,7 +142,7 @@ def mount_app_routes(app: FastAPI, run_mode: str = None):
              tags=["Server State"],
              summary="获取服务区配置的 prompt 模板")
     def get_server_prompt_template(
-        type: Literal["llm_chat", "knowledge_base_chat", "search_engine_chat", "agent_chat"]=Body("llm_chat", description="模板类型，可选值：llm_chat，knowledge_base_chat，search_engine_chat，agent_chat"),
+        type: Literal["llm_chat", "knowledge_base_chat", "search_engine_chat", "agent_chat", "yby_chat"]=Body("llm_chat", description="模板类型，可选值：llm_chat，knowledge_base_chat，search_engine_chat，agent_chat，yby_chat"),
         name: str = Body("default", description="模板名称"),
     ) -> str:
         return get_prompt_template(type=type, name=name)
@@ -140,6 +157,12 @@ def mount_app_routes(app: FastAPI, run_mode: str = None):
             tags=["Other"],
             summary="将文本向量化，支持本地模型和在线模型",
             )(embed_texts_endpoint)
+
+    app.post("/other/filter_message",
+            tags=["Other"],
+            summary="查询历史消息",
+            )(query_message)
+
 
 
 def mount_knowledge_routes(app: FastAPI):

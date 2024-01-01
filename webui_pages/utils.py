@@ -298,6 +298,7 @@ class ApiRequest:
             temperature: float = TEMPERATURE,
             max_tokens: int = None,
             prompt_name: str = "default",
+            system_prompt: str = None,
             **kwargs,
     ):
         '''
@@ -313,6 +314,7 @@ class ApiRequest:
             "temperature": temperature,
             "max_tokens": max_tokens,
             "prompt_name": prompt_name,
+            "system_prompt": system_prompt,
         }
 
         # print(f"received input message:")
@@ -349,6 +351,45 @@ class ApiRequest:
 
         response = self.post("/chat/agent_chat", json=data, stream=True)
         return self._httpx_stream2generator(response)
+
+
+    def yby_chat(
+        self,
+        query: str,
+        top_k: int = SEARCH_ENGINE_TOP_K,
+        history: List[Dict] = [],
+        stream: bool = True,
+        model: str = LLM_MODELS[0],
+        temperature: float = TEMPERATURE,
+        max_tokens: int = None,
+        prompt_name: str = "default",
+        split_result: bool = False,
+    ):
+        '''
+        对应api.py/chat/yby_chat接口
+        '''
+        data = {
+            "query": query,
+            "top_k": top_k,
+            "history": history,
+            "stream": stream,
+            "model_name": model,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+            "prompt_name": prompt_name,
+            "split_result": split_result,
+        }
+
+        # print(f"received input message:")
+        # pprint(data)
+
+        response = self.post(
+            "/chat/yby_chat",
+            json=data,
+            stream=True,
+        )
+        return self._httpx_stream2generator(response, as_json=True)
+
 
     def knowledge_base_chat(
         self,

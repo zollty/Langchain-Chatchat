@@ -60,11 +60,18 @@ def feedback_message_to_db(session, message_id, feedback_score, feedback_reason)
 
 @with_session
 def filter_message(session, conversation_id: str, limit: int = 10):
-    messages = (session.query(MessageModel).filter_by(conversation_id=conversation_id).
-                # 用户最新的query 也会插入到db，忽略这个message record
-                filter(MessageModel.response != '').
-                # 返回最近的limit 条记录
-                order_by(MessageModel.create_time.desc()).limit(limit).all())
+    messages = None
+    if conversation_id is None or conversation_id == '':
+        # 用户最新的query 也会插入到db，忽略这个message record
+        messages = (session.query(MessageModel).filter(MessageModel.response != '').
+                    # 返回最近的limit 条记录
+                    order_by(MessageModel.create_time.desc()).limit(limit).all())
+    else:
+        messages = (session.query(MessageModel).filter_by(conversation_id=conversation_id).
+                    # 用户最新的query 也会插入到db，忽略这个message record
+                    filter(MessageModel.response != '').
+                    # 返回最近的limit 条记录
+                    order_by(MessageModel.create_time.desc()).limit(limit).all())
     # 直接返回 List[MessageModel] 报错
     data = []
     for m in messages:

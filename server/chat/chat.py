@@ -32,7 +32,8 @@ async def chat(query: str = Body(..., description="用户输入", examples=["恼
                temperature: float = Body(TEMPERATURE, description="LLM 采样温度", ge=0.0, le=1.0),
                max_tokens: Optional[int] = Body(None, description="限制LLM生成Token数量，默认None代表模型最大值"),
                # top_p: float = Body(TOP_P, description="LLM 核采样。勿与temperature同时设置", gt=0.0, lt=1.0),
-               prompt_name: str = Body("default", description="使用的prompt模板名称(在configs/prompt_config.py中配置)"),
+               prompt_name: Optional[str] = Body("default", description="使用的prompt模板名称(在configs/prompt_config.py中配置)"),
+               system_prompt: Optional[str] = Body(None, description="使用的system_prompt"),
                ):
     async def chat_iterator() -> AsyncIterable[str]:
         nonlocal history, max_tokens
@@ -60,7 +61,10 @@ async def chat(query: str = Body(..., description="用户输入", examples=["恼
 
         if history: # 优先使用前端传入的历史消息
             history = [History.from_data(h) for h in history]
-            prompt_template = get_prompt_template("llm_chat", prompt_name)
+            if system_prompt: 
+                prompt_template = system_prompt
+            else:
+                prompt_template = get_prompt_template("llm_chat", prompt_name)
             input_msg = History(role="user", content=prompt_template).to_msg_template(False)
             chat_prompt = ChatPromptTemplate.from_messages(
                 [i.to_msg_template() for i in history] + [input_msg])
@@ -73,7 +77,10 @@ async def chat(query: str = Body(..., description="用户输入", examples=["恼
                                                 llm=model,
                                                 message_limit=history_len)
         else:
-            prompt_template = get_prompt_template("llm_chat", prompt_name)
+            if system_prompt: 
+                prompt_template = system_prompt
+            else:
+                prompt_template = get_prompt_template("llm_chat", prompt_name)
             input_msg = History(role="user", content=prompt_template).to_msg_template(False)
             chat_prompt = ChatPromptTemplate.from_messages([input_msg])
 

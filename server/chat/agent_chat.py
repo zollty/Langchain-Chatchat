@@ -91,6 +91,7 @@ async def agent_chat(query: str = Body(..., description="用户输入", examples
                 memory.chat_memory.add_ai_message(message.content)
 
         if "chatglm3" in model_container.MODEL.model_name:
+            print("--------------------------------------------use original chatglm3 agent")
             agent_executor = initialize_glm3_agent(
                 llm=model,
                 tools=tools,
@@ -102,6 +103,7 @@ async def agent_chat(query: str = Body(..., description="用户输入", examples
                 verbose=True,
             )
         else:
+            print("-------------------------------------------use special agent")
             agent = LLMSingleActionAgent(
                 llm_chain=llm_chain,
                 output_parser=output_parser,

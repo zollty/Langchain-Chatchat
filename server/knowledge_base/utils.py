@@ -178,6 +178,7 @@ def get_loader(loader_name: str, file_path: str, loader_kwargs: Dict = None):
         loader_kwargs.setdefault("text_content", False)
 
     loader = DocumentLoader(file_path, **loader_kwargs)
+    print(f"-----------------------使用文档加载器：{loader_name}")
     return loader
 
 
@@ -191,9 +192,11 @@ def make_text_splitter(
     根据参数获取特定的分词器
     """
     splitter_name = splitter_name or "SpacyTextSplitter"
+    print(f"------------------------------------------获取文档切分器：{splitter_name}")
     try:
         if splitter_name == "MarkdownHeaderTextSplitter":  # MarkdownHeaderTextSplitter特殊判定
             headers_to_split_on = text_splitter_dict[splitter_name]['headers_to_split_on']
+            print("------------------------------------------使用文档切分器：MarkdownHeaderTextSplitter")
             text_splitter = langchain.text_splitter.MarkdownHeaderTextSplitter(
                 headers_to_split_on=headers_to_split_on)
         else:
@@ -280,6 +283,8 @@ class KnowledgeFile:
         self.splited_docs = None
         self.document_loader_name = get_LoaderClass(self.ext)
         self.text_splitter_name = TEXT_SPLITTER_NAME
+        if self.kb_name[-3:] == "_md":
+            self.text_splitter_name = "MarkdownHeaderTextSplitter"
 
     def file2docs(self, refresh: bool = False):
         if self.docs is None or refresh:
@@ -308,13 +313,17 @@ class KnowledgeFile:
                                                    chunk_overlap=chunk_overlap)
             if self.text_splitter_name == "MarkdownHeaderTextSplitter":
                 docs = text_splitter.split_text(docs[0].page_content)
+                lens = len(docs)
+                print(f"--------MarkdownHeaderTextSplitter--------文档切分后数量：{lens}")
             else:
                 docs = text_splitter.split_documents(docs)
 
         if not docs:
             return []
 
-        print(f"文档切分示例：{docs[0]}")
+        print("文档切分结果：-----------------------------------")
+        for dd in docs:
+            print(dd)
         if zh_title_enhance:
             docs = func_zh_title_enhance(docs)
         self.splited_docs = docs

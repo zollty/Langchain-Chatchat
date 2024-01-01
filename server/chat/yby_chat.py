@@ -14,32 +14,19 @@ from typing import AsyncIterable
 import asyncio
 from langchain.prompts.chat import ChatPromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from text_splitter import ChineseRecursiveTextSplitter
 from typing import List, Optional, Dict
 from server.chat.utils import History
 from langchain.docstore.document import Document
 import json
-import requests
 from strsimpy.normalized_levenshtein import NormalizedLevenshtein
 from markdownify import markdownify
+import requests
 
 
-def bing_search(text, result_len=SEARCH_ENGINE_TOP_K, **kwargs):
-    if not (BING_SEARCH_URL and BING_SUBSCRIPTION_KEY):
-        return [{"snippet": "please set BING_SUBSCRIPTION_KEY and BING_SEARCH_URL in os ENV",
-                 "title": "env info is not found",
-                 "link": "https://python.langchain.com/en/latest/modules/agents/tools/examples/bing_search.html"}]
-    search = BingSearchAPIWrapper(bing_subscription_key=BING_SUBSCRIPTION_KEY,
-                                  bing_search_url=BING_SEARCH_URL)
-    return search.results(text, result_len)
+def knowledge_search(text, result_len=SEARCH_ENGINE_TOP_K, **kwargs):
 
-
-def duckduckgo_search(text, result_len=SEARCH_ENGINE_TOP_K, **kwargs):
-    search = DuckDuckGoSearchAPIWrapper()
-    return search.results(text, result_len)
-
-def yuque_search(text, result_len=SEARCH_ENGINE_TOP_K, **kwargs):
-
-    url = 'https://www.yuque.com/api/v2/repos/lvcto2/project_doc/docs/gpn4a7'
+    url = 'https://www.yuque.com/api/v2/repos/lvcto2/cf_records/docs/ke0oveoeianiemry'
     data = {}       
     headers={
         "X-Auth-Token": "QLErUdVHGs3SGJ8dblK3zkjMgHH6XCg5DvqYxH3a",
@@ -48,45 +35,66 @@ def yuque_search(text, result_len=SEARCH_ENGINE_TOP_K, **kwargs):
     # 发起请求并获取响应
     response = requests.get(url, headers=headers)
     data = response.json()
-    print("=========================------------------------")
+    # print("=========================------------------------")
     data = data["data"]
-    print(data)
+    # print(data)
+    
+    url2 = 'https://www.yuque.com/api/v2/repos/lvcto2/cf_records/docs/qozaqv7deeg7n0ne'
+    response2 = requests.get(url2, headers=headers)
+    data2 = response2.json()
+    # print("=========================22------------------------")
+    data2 = data2["data"]
+    # print(data2)
+    
+    url3 = 'https://www.yuque.com/api/v2/repos/lvcto2/cf_records/docs/scq2qgwbsbot3som'
+    response3 = requests.get(url3, headers=headers)
+    data3 = response3.json()
+    # print("=========================333------------------------")
+    data3 = data3["data"]
+    # print(data3)
 
     docs = [{
-        "snippet": data["body"],
-        "link":url,
+        "extract": data["body"],
+        "url":url,
         "title":data["title"],
     }]
 
     return docs
 
 
-def metaphor_search(
+def search_engine(
     text: str,
     result_len: int = SEARCH_ENGINE_TOP_K,
     split_result: bool = False,
-    chunk_size: int = 500,
+    chunk_size: int = 15000,
     chunk_overlap: int = OVERLAP_SIZE,
 ) -> List[Dict]:
-    from metaphor_python import Metaphor
 
-    if not METAPHOR_API_KEY:
-        return []
-
-    client = Metaphor(METAPHOR_API_KEY)
-    search = client.search(text, num_results=result_len, use_autoprompt=True)
-    contents = search.get_contents().contents
-    for x in contents:
-        x.extract = markdownify(x.extract)
+    tdocs = knowledge_search(text, num_results=result_len, use_autoprompt=True)
+    for x in tdocs:
+        x["extract"] = markdownify(x["extract"])
+    contents = tdocs
 
     # metaphor 返回的内容都是长文本，需要分词再检索
     if split_result:
-        docs = [Document(page_content=x.extract,
-                        metadata={"link": x.url, "title": x.title})
+        docs = [Document(page_content=x["extract"],
+                        metadata={"link": x["url"], "title": x["title"]})
                 for x in contents]
-        text_splitter = RecursiveCharacterTextSplitter(["\n\n", "\n", ".", " "],
+        separators = [
+            "\n\n",
+            "\n",
+            "。|！|？",
+            "\.\s|\!\s|\?\s",
+            "；|;\s",
+            "，|,\s"
+        ]
+        text_splitter = RecursiveCharacterTextSplitter(separators,
                                                        chunk_size=chunk_size,
                                                        chunk_overlap=chunk_overlap)
+        #text_splitter = ChineseRecursiveTextSplitter(keep_separator=True,
+        #                                               is_separator_regex=True,
+        #                                               chunk_size=chunk_size,
+        #                                               chunk_overlap=chunk_overlap)
         splitted_docs = text_splitter.split_documents(docs)
         
         # 将切分好的文档放入临时向量库，重新筛选出TOP_K个文档
@@ -102,19 +110,12 @@ def metaphor_search(
                 "title": x.metadata["title"]}
                 for x in splitted_docs]
     else:
-        docs = [{"snippet": x.extract,
-                "link": x.url,
-                "title": x.title}
+        docs = [{"snippet": x["extract"],
+                "link": x["url"],
+                "title": x["title"]}
                 for x in contents]
 
     return docs
-
-
-SEARCH_ENGINES = {"bing": bing_search,
-                  "duckduckgo": duckduckgo_search,
-                  "metaphor": metaphor_search,
-                  "yuque": yuque_search,
-                  }
 
 
 def search_result2docs(search_results):
@@ -129,18 +130,15 @@ def search_result2docs(search_results):
 
 async def lookup_search_engine(
         query: str,
-        search_engine_name: str,
         top_k: int = SEARCH_ENGINE_TOP_K,
         split_result: bool = False,
 ):
-    search_engine = SEARCH_ENGINES[search_engine_name]
     results = await run_in_threadpool(search_engine, query, result_len=top_k, split_result=split_result)
     docs = search_result2docs(results)
     return docs
 
 
-async def search_engine_chat(query: str = Body(..., description="用户输入", examples=["你好"]),
-                            search_engine_name: str = Body(..., description="搜索引擎名称", examples=["duckduckgo"]),
+async def yby_chat(query: str = Body(..., description="用户输入", examples=["你好"]),
                             top_k: int = Body(SEARCH_ENGINE_TOP_K, description="检索结果数量"),
                             history: List[History] = Body([],
                                                             description="历史对话",
@@ -157,16 +155,10 @@ async def search_engine_chat(query: str = Body(..., description="用户输入", 
                             prompt_name: str = Body("default",description="使用的prompt模板名称(在configs/prompt_config.py中配置)"),
                             split_result: bool = Body(False, description="是否对搜索结果进行拆分（主要用于metaphor搜索引擎）")
                        ):
-    if search_engine_name not in SEARCH_ENGINES.keys():
-        return BaseResponse(code=404, msg=f"未支持搜索引擎 {search_engine_name}")
-
-    if search_engine_name == "bing" and not BING_SUBSCRIPTION_KEY:
-        return BaseResponse(code=404, msg=f"要使用Bing搜索引擎，需要设置 `BING_SUBSCRIPTION_KEY`")
 
     history = [History.from_data(h) for h in history]
 
-    async def search_engine_chat_iterator(query: str,
-                                          search_engine_name: str,
+    async def yby_chat_iterator(query: str,
                                           top_k: int,
                                           history: Optional[List[History]],
                                           model_name: str = LLM_MODELS[0],
@@ -184,10 +176,10 @@ async def search_engine_chat(query: str = Body(..., description="用户输入", 
             callbacks=[callback],
         )
 
-        docs = await lookup_search_engine(query, search_engine_name, top_k, split_result=split_result)
+        docs = await lookup_search_engine(query, top_k, split_result=split_result)
         context = "\n".join([doc.page_content for doc in docs])
 
-        prompt_template = get_prompt_template("search_engine_chat", prompt_name)
+        prompt_template = get_prompt_template("yby_chat", prompt_name)
         input_msg = History(role="user", content=prompt_template).to_msg_template(False)
         chat_prompt = ChatPromptTemplate.from_messages(
             [i.to_msg_template() for i in history] + [input_msg])
@@ -222,10 +214,10 @@ async def search_engine_chat(query: str = Body(..., description="用户输入", 
                              ensure_ascii=False)
         await task
 
-    return StreamingResponse(search_engine_chat_iterator(query=query,
-                                                         search_engine_name=search_engine_name,
+    return StreamingResponse(yby_chat_iterator(query=query,
                                                          top_k=top_k,
                                                          history=history,
                                                          model_name=model_name,
                                                          prompt_name=prompt_name),
                              media_type="text/event-stream")
+

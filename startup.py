@@ -564,7 +564,7 @@ def dump_server_info(after_start=False, args=None):
     from server.utils import api_address, webui_address
 
     print("\n")
-    print("=" * 30 + "Langchain-Chatchat Configuration" + "=" * 30)
+    print("=" * 30 + "Chatchat Configuration" + "=" * 30)
     print(f"操作系统：{platform.platform()}.")
     print(f"python版本：{sys.version}")
     print(f"项目版本：{VERSION}")
@@ -591,7 +591,7 @@ def dump_server_info(after_start=False, args=None):
             print(f"    Chatchat  API  Server: {api_address()}")
         if args.webui:
             print(f"    Chatchat WEBUI Server: {webui_address()}")
-    print("=" * 30 + "Langchain-Chatchat Configuration" + "=" * 30)
+    print("=" * 30 + "Chatchat Configuration" + "=" * 30)
     print("\n")
 
 

@@ -9,6 +9,7 @@ import time
 from configs import (TEMPERATURE, HISTORY_LEN, PROMPT_TEMPLATES,
                      DEFAULT_KNOWLEDGE_BASE, DEFAULT_SEARCH_ENGINE, SUPPORT_AGENT_MODEL)
 from server.knowledge_base.utils import LOADER_DICT
+from server.utils import get_prompt_template
 import uuid
 from typing import List, Dict
 
@@ -105,7 +106,7 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
 
     if not chat_box.chat_inited:
         st.toast(
-            f"欢迎使用 [`Langchain-Chatchat`](https://github.com/chatchat-space/Langchain-Chatchat) ! \n\n"
+            f"欢迎使用 [`FuxiAI-Chat`](https://github.com) ! \n\n"
             f"当前运行的模型`{default_model}`, 您可以开始提问了."
         )
         chat_box.init_session()
@@ -142,6 +143,7 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                         "文件对话",
                         "搜索引擎问答",
                         "自定义Agent问答",
+                        "园博园Agent问答",
                         ]
         dialogue_mode = st.selectbox("请选择对话模式：",
                                      dialogue_modes,
@@ -206,6 +208,7 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
             "搜索引擎问答": "search_engine_chat",
             "知识库问答": "knowledge_base_chat",
             "文件对话": "knowledge_base_chat",
+            "园博园Agent问答": "yby_chat",
         }
         prompt_templates_kb_list = list(PROMPT_TEMPLATES[index_prompt[dialogue_mode]].keys())
         prompt_template_name = prompt_templates_kb_list[0]
@@ -224,6 +227,13 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
             key="prompt_template_select",
         )
         prompt_template_name = st.session_state.prompt_template_select
+        prompt_template = get_prompt_template(index_prompt[dialogue_mode], prompt_template_name)
+        system_prompt = st.text_area(
+            label="System Prompt",
+            height=300,
+            value=prompt_template,
+            key="system_prompt",
+        )
         temperature = st.slider("Temperature：", 0.0, 1.0, TEMPERATURE, 0.05)
         history_len = st.number_input("历史对话轮数：", 0, 20, HISTORY_LEN)
 
@@ -310,6 +320,7 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                                 conversation_id=conversation_id,
                                 model=llm_model,
                                 prompt_name=prompt_template_name,
+                                system_prompt=system_prompt,
                                 temperature=temperature)
                 for t in r:
                     if error_msg := check_error_msg(t):  # check whether error occured
@@ -364,8 +375,8 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                     if chunk := d.get("tools"):
                         text += "\n\n".join(d.get("tools", []))
                         chat_box.update_msg(text, element_index=1)
-                chat_box.update_msg(ans, element_index=0, streaming=False)
-                chat_box.update_msg(text, element_index=1, streaming=False)
+                    chat_box.update_msg(ans, element_index=0, streaming=False)
+                    chat_box.update_msg(text, element_index=1, streaming=False)
             elif dialogue_mode == "知识库问答":
                 chat_box.ai_say([
                     f"正在查询知识库 `{selected_kb}` ...",
@@ -385,8 +396,8 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                     elif chunk := d.get("answer"):
                         text += chunk
                         chat_box.update_msg(text, element_index=0)
-                chat_box.update_msg(text, element_index=0, streaming=False)
-                chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
+                    chat_box.update_msg(text, element_index=0, streaming=False)
+                    chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
             elif dialogue_mode == "文件对话":
                 if st.session_state["file_chat_id"] is None:
                     st.error("请先上传文件再进行对话")
@@ -409,8 +420,8 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                     elif chunk := d.get("answer"):
                         text += chunk
                         chat_box.update_msg(text, element_index=0)
-                chat_box.update_msg(text, element_index=0, streaming=False)
-                chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
+                        chat_box.update_msg(text, element_index=0, streaming=False)
+                        chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
             elif dialogue_mode == "搜索引擎问答":
                 chat_box.ai_say([
                     f"正在执行 `{search_engine}` 搜索...",
@@ -430,8 +441,31 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                     elif chunk := d.get("answer"):
                         text += chunk
                         chat_box.update_msg(text, element_index=0)
-                chat_box.update_msg(text, element_index=0, streaming=False)
-                chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
+                    chat_box.update_msg(text, element_index=0, streaming=False)
+                    chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
+
+            elif dialogue_mode == "园博园Agent问答":
+                chat_box.ai_say([
+                    f"正在查询知识库...",
+                    Markdown("...", in_expander=True, title="知识库匹配结果", state="complete"),
+                ])
+                text = ""
+                se_top_k = 1
+                for d in api.yby_chat(prompt,
+                                                top_k=se_top_k,
+                                                history=history,
+                                                model=llm_model,
+                                                prompt_name=prompt_template_name,
+                                                temperature=temperature,
+                                                split_result=se_top_k > 1):
+                    if error_msg := check_error_msg(d):  # check whether error occured
+                        st.error(error_msg)
+                    elif chunk := d.get("answer"):
+                        text += chunk
+                        chat_box.update_msg(text, element_index=0)
+                    chat_box.update_msg(text, element_index=0, streaming=False)
+                    chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
+
 
     if st.session_state.get("need_rerun"):
         st.session_state["need_rerun"] = False

@@ -1,0 +1,162 @@
+# -*- coding:utf-8 -*-
+from enum import Enum
+import streamlit as st
+from webui_pages.utils import *
+from streamlit_chatbox import *
+from streamlit_modal import Modal
+from datetime import datetime
+import os
+import re
+import time
+from configs import (TEMPERATURE, HISTORY_LEN, PROMPT_TEMPLATES,
+                     DEFAULT_KNOWLEDGE_BASE, DEFAULT_SEARCH_ENGINE, SUPPORT_AGENT_MODEL)
+from server.knowledge_base.utils import LOADER_DICT
+import uuid
+from typing import List, Dict
+
+chat_box = ChatBox(
+    assistant_avatar=os.path.join(
+        "img",
+        "chatchat_icon_blue_square_v2.png"
+    )
+)
+
+
+def get_messages_history(history_len: int, content_in_expander: bool = False) -> List[Dict]:
+    '''
+    返回消息历史。
+    content_in_expander控制是否返回expander元素中的内容，一般导出的时候可以选上，传入LLM的history不需要
+    '''
+
+    def filter(msg):
+        content = [x for x in msg["elements"] if x._output_method in ["markdown", "text"]]
+        if not content_in_expander:
+            content = [x for x in content if not x._in_expander]
+        content = [x.content for x in content]
+
+        return {
+            "role": msg["role"],
+            "content": "\n\n".join(content),
+        }
+
+    return chat_box.filter_history(history_len=history_len, filter=filter)
+
+
+
+def yby_page(api: ApiRequest, is_lite: bool = False):
+    st.session_state.setdefault("conversation_ids", {})
+    st.session_state["conversation_ids"].setdefault(chat_box.cur_chat_name, uuid.uuid4().hex)
+    st.session_state.setdefault("file_chat_id", None)
+    default_model = api.get_default_llm_model()[0]
+    llm_model = "chatglm3-6b-32k"
+    
+    if not chat_box.chat_inited:
+        st.toast(
+            f"欢迎使用 [`FuxiAI-Chat`](https://github.com) ! \n\n"
+            f"当前运行的模型`{default_model}`, 您可以开始提问了."
+        )
+        chat_box.init_session()
+
+    st.markdown(
+        """
+    <style>
+        [data-testid="stSidebarNav"] {
+            display: none
+        }
+    </style>
+    """,
+        unsafe_allow_html=True,
+    )
+
+
+    # Set the title of the demo
+    st.title("💬 园博园Chat")
+    # Add your custom text here, with smaller font size
+    st.markdown("<sub>园博园专用聊天（左边设置参数），例如： </sub> \n\n <sub> 例1：介绍一下园博园</sub> \n\n <sub> 例2：介绍一下国际园林展区</sub>", unsafe_allow_html=True)
+
+    DEFAULT_SYSTEM_PROMPT = '''
+    You are an AI programming assistant. Follow the user's instructions carefully. Respond using markdown.
+    '''.strip()
+
+    now = datetime.now()
+    with st.sidebar:
+        temperature = st.slider(
+            'temperature', 0.0, 1.5, 0.95, step=0.01
+        )
+        history_len = st.number_input("历史对话轮数：", 0, 20, HISTORY_LEN)
+        kb_top_k = st.number_input("匹配知识条数：", 1, 20, VECTOR_SEARCH_TOP_K)
+        score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
+        
+        cols = st.columns(2)
+        export_btn = cols[0]
+        if cols[1].button(
+                "清空对话",
+                use_container_width=True,
+        ):
+            chat_box.reset_history()
+            st.rerun()
+
+    export_btn.download_button(
+        "导出记录",
+        "".join(chat_box.export2md()),
+        file_name=f"{now:%Y-%m-%d %H.%M}_对话记录.md",
+        mime="text/markdown",
+        use_container_width=True,
+    )
+    
+    # Display chat messages from history on app rerun
+    chat_box.output_messages()
+    
+    chat_input_placeholder = "请输入对话内容，换行请使用Shift+Enter"
+    
+    if prompt := st.chat_input(chat_input_placeholder, key="prompt"):
+            history = get_messages_history(history_len)
+            chat_box.user_say(prompt)
+
+            chat_box.ai_say([
+                f"正在查询知识库...",
+                Markdown("...", in_expander=True, title="知识库匹配结果", state="complete"),
+            ])
+            text = ""
+            for d in api.yby_chat(prompt,
+                                            top_k=kb_top_k,
+                                            history=history,
+                                            model=llm_model,
+                                            prompt_name="default",
+                                            temperature=temperature,
+                                            split_result=False):
+                if error_msg := check_error_msg(d):  # check whether error occured
+                    st.error(error_msg)
+                elif chunk := d.get("answer"):
+                    text += chunk
+                    chat_box.update_msg(text, element_index=0)
+                chat_box.update_msg(text, element_index=0, streaming=False)
+                chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

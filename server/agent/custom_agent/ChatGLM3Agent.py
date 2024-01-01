@@ -131,7 +131,7 @@ class StructuredGLM3ChatAgent(Agent):
             input_variables: Optional[List[str]] = None,
             memory_prompts: Optional[List[BasePromptTemplate]] = None,
     ) -> BasePromptTemplate:
-        def tool_config_from_file(tool_name, directory="server/agent/tools/"):
+        def tool_config_from_file(tool_name, directory="/langchain-chatchat/server/agent/tools/"):
             """search tool yaml and return simplified json format"""
             file_path = os.path.join(directory, f"{tool_name.lower()}.yaml")
             try:

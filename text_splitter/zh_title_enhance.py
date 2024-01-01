@@ -49,16 +49,18 @@ def is_possible_title(
         print("Not a title. Text is empty.")
         return False
 
-    # 文本中有标点符号，就不是title
-    ENDS_IN_PUNCT_PATTERN = r"[^\w\s]\Z"
-    ENDS_IN_PUNCT_RE = re.compile(ENDS_IN_PUNCT_PATTERN)
-    if ENDS_IN_PUNCT_RE.search(text) is not None:
-        return False
-
     # 文本长度不能超过设定值，默认20
     # NOTE(robinson) - splitting on spaces here instead of word tokenizing because it
     # is less expensive and actual tokenization doesn't add much value for the length check
     if len(text) > title_max_word_length:
+        print(f"------------------222: {text}") 
+        return False
+
+    # 文本中有标点符号，就不是title
+    ENDS_IN_PUNCT_PATTERN = r"[^\w\s]\Z"
+    ENDS_IN_PUNCT_RE = re.compile(ENDS_IN_PUNCT_PATTERN)
+    if ENDS_IN_PUNCT_RE.search(text) is not None:
+        print(f"------------------111: {text}") 
         return False
 
     # 文本中数字的占比不能太高，否则不是title
@@ -80,12 +82,15 @@ def is_possible_title(
         text_5 = text[:5]
     alpha_in_text_5 = sum(list(map(lambda x: x.isnumeric(), list(text_5))))
     if not alpha_in_text_5:
+        print(f"------------------333: {text}") 
         return False
 
+    print(f"------------------识别到中文标题: {text}") 
     return True
 
 
 def zh_title_enhance(docs: Document) -> Document:
+    print("--------=================zh_title_enhance======----------") 
     title = None
     if len(docs) > 0:
         for doc in docs:

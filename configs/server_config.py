@@ -160,6 +160,24 @@ FSCHAT_MODEL_WORKERS = {
        "num_gpus": 5, # 使用GPU的数量
        "max_gpu_memory": "6GiB", # 每个GPU占用的最大显存
     },
+    "Qwen-14B-Chat": { # 
+       "port": 20009,
+       "device": LLM_DEVICE,
+       "infer_turbo": True,
+       "gpus": None,
+	   #"gpus": "0", # 使用的GPU，以str的格式指定，如"0,1"，如失效请使用CUDA_VISIBLE_DEVICES="0,1"等形式指定
+       "num_gpus": 5, # 使用GPU的数量
+       "max_gpu_memory": "6GiB", # 每个GPU占用的最大显存
+    },
+    "Qwen-1.8B-Chat": { # 3gb
+       "port": 20010,
+       "device": LLM_DEVICE,
+       "infer_turbo": True,
+       #"gpus": None,
+	   "gpus": "3", # 使用的GPU，以str的格式指定，如"0,1"，如失效请使用CUDA_VISIBLE_DEVICES="0,1"等形式指定
+       "num_gpus": 1, # 使用GPU的数量
+       "max_gpu_memory": "4GiB", # 每个GPU占用的最大显存
+    },
 
     #以下配置可以不用修改，在model_config中设置启动的模型
     #"zhipu-api": { # 请为每个要运行的在线API设置不同的端口
