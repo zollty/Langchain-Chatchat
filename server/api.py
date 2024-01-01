@@ -24,6 +24,7 @@ from server.llm_api import (list_running_models, list_config_models,
                             get_model_config, list_search_engines)
 from server.utils import (BaseResponse, ListResponse, FastAPI, MakeFastAPIOffline,
                           get_server_configs, get_prompt_template)
+from server.knowledge_base.others import parse_docs
 from typing import List, Literal
 
 nltk.data.path = [NLTK_DATA_PATH] + nltk.data.path
@@ -162,6 +163,11 @@ def mount_app_routes(app: FastAPI, run_mode: str = None):
             tags=["Other"],
             summary="查询历史消息",
             )(query_message)
+
+    app.post("/other/parse_docs",
+             tags=["Other"],
+             summary="解析文件，返回文本内容"
+             )(parse_docs)
 
 
 

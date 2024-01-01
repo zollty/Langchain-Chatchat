@@ -407,8 +407,8 @@ if __name__ == "__main__":
     from pprint import pprint
 
     kb_file = KnowledgeFile(
-        filename="/home/congyin/Code/Project_Langchain_0814/Langchain-Chatchat/knowledge_base/csv1/content/gm.csv",
-        knowledge_base_name="samples")
+        filename="/ai/apps/misc/xxx.txt",
+        knowledge_base_name="temp")
     # kb_file.text_splitter_name = "RecursiveCharacterTextSplitter"
     docs = kb_file.file2docs()
-    # pprint(docs[-1])
+    pprint(docs[-1])
