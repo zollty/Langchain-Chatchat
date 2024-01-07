@@ -170,7 +170,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             key="system_prompt",
         )
         temperature = st.slider(
-            'temperature', 0.0, 1.5, 0.95, step=0.01
+            'temperature', 0.0, 1.0, 0.1, step=0.05
         )
         history_len = st.number_input("历史对话轮数：", 0, 20, HISTORY_LEN)
         
