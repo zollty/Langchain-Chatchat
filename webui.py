@@ -4,6 +4,7 @@ from streamlit_option_menu import option_menu
 from webui_pages.dialogue.dialogue import dialogue_page, chat_box
 from webui_pages.knowledge_base.knowledge_base import knowledge_base_page
 from webui_pages.ybychat import yby_page
+from webui_pages.file_chat import file_chat_page
 import os
 import sys
 from configs import VERSION
@@ -83,12 +84,17 @@ def yby_chat_page(router):
 	is_lite = "lite" in sys.argv
 	yby_page(api=api, is_lite=is_lite)
 
+def filechat_page(router):
+	is_lite = "lite" in sys.argv
+	file_chat_page(api=api, is_lite=is_lite)
+
 
 if __name__ == "__main__":
     router = StreamlitRouter()
     router.register(index, '/')
     router.register(test_page2, "/tasks/<int:x>", methods=['POST'])
     router.register(yby_chat_page, '/yby')
+    router.register(filechat_page, '/fchat')
     # index(router)
     router.serve()
     
