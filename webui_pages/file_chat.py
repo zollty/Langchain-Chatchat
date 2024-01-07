@@ -64,6 +64,9 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
         [data-testid="stSidebarNav"] {
             display: none
         }
+        [data-testid="stSidebarUserContent"] {
+            padding-top: 3rem;
+        }
     </style>
     """,
         unsafe_allow_html=True,
@@ -165,7 +168,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
         prompt_template = get_prompt_template("knowledge_base_chat", prompt_template_name)
         system_prompt = st.text_area(
             label="System Prompt",
-            height=300,
+            height=200,
             value=prompt_template,
             key="system_prompt",
         )
