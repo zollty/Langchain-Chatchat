@@ -162,7 +162,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             key="prompt_template_select",
         )
         prompt_template_name = st.session_state.prompt_template_select
-        prompt_template = get_prompt_template(index_prompt[dialogue_mode], prompt_template_name)
+        prompt_template = get_prompt_template("knowledge_base_chat", prompt_template_name)
         system_prompt = st.text_area(
             label="System Prompt",
             height=300,
