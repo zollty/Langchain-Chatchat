@@ -6,7 +6,7 @@ import os
 MODEL_ROOT_PATH = ""
 
 # 选用的 Embedding 名称
-EMBEDDING_MODEL = "bge-large-zh"
+EMBEDDING_MODEL = "bge-large-zh-v1.5"
 
 # Embedding 模型运行设备。设为"auto"会自动检测，也可手动设定为"cuda","mps","cpu"其中之一。
 EMBEDDING_DEVICE = "auto"
@@ -138,6 +138,13 @@ ONLINE_LLM_MODEL2 = {
 #       2.2 如果以上本地路径不存在，则使用huggingface模型
 MODEL_PATH = {
     "embed_model": {
+        "nlp_corom_sentence-embedding_chinese-base": "/ai/models/nlp_corom_sentence-embedding_chinese-base",
+        "nlp_gte_sentence-embedding_chinese-large": "/ai/models/nlp_gte_sentence-embedding_chinese-large",
+        "bge-large-zh-v1.5": "/ai/models/BAAI_bge-large-zh-v1.5", # "BAAI/bge-large-zh-v1.5",
+        "bge-large-zh": "/ai/models/BAAI_bge-large-zh", # "BAAI/bge-large-zh", # "/langchain-chatchat/embeddings/BAAI/bge-large-zh_Merge_Keywords_20231215_132654", # BAAI/bge-large-zh
+        "bge-reranker-large": "/ai/models/BAAI_bge-reranker-large",
+        "m3e-large": "/ai/models/moka-ai_m3e-large", # "moka-ai/m3e-large",
+        "text2vec-bge-large-chinese": "/ai/models/text2vec-bge-large-chinese", # "shibing624/text2vec-bge-large-chinese",
         "ernie-tiny": "nghuyong/ernie-3.0-nano-zh",
         "ernie-base": "nghuyong/ernie-3.0-base-zh",
         "text2vec-base": "shibing624/text2vec-base-chinese",
@@ -145,19 +152,14 @@ MODEL_PATH = {
         "text2vec-paraphrase": "shibing624/text2vec-base-chinese-paraphrase",
         "text2vec-sentence": "shibing624/text2vec-base-chinese-sentence",
         "text2vec-multilingual": "shibing624/text2vec-base-multilingual",
-        "text2vec-bge-large-chinese": "shibing624/text2vec-bge-large-chinese",
         "m3e-small": "moka-ai/m3e-small",
         "m3e-base": "moka-ai/m3e-base",
-        "m3e-large": "moka-ai/m3e-large",
         "bge-small-zh": "BAAI/bge-small-zh",
         "bge-base-zh": "BAAI/bge-base-zh",
-        "bge-large-zh": "BAAI/bge-large-zh", # "/langchain-chatchat/embeddings/BAAI/bge-large-zh_Merge_Keywords_20231215_132654", # BAAI/bge-large-zh
         "bge-large-zh-noinstruct": "BAAI/bge-large-zh-noinstruct",
         "bge-base-zh-v1.5": "BAAI/bge-base-zh-v1.5",
-        "bge-large-zh-v1.5": "BAAI/bge-large-zh-v1.5",
         "piccolo-base-zh": "sensenova/piccolo-base-zh",
         "piccolo-large-zh": "sensenova/piccolo-large-zh",
-        "nlp_gte_sentence-embedding_chinese-large": "damo/nlp_gte_sentence-embedding_chinese-large",
         "text-embedding-ada-002": "your OPENAI_API_KEY",
     },
     "llm000_model2": {
