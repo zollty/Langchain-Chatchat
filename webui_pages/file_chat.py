@@ -233,8 +233,8 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
                 elif chunk := d.get("answer"):
                     text += chunk
                     chat_box.update_msg(text, element_index=0)
-                    chat_box.update_msg(text, element_index=0, streaming=False)
-                    chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
+                chat_box.update_msg(text, element_index=0, streaming=False)
+                chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
 
 
 
