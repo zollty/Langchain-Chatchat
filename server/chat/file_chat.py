@@ -25,7 +25,7 @@ async def summary_docs(kid: str = Body(..., description="临时知识库ID"),
                         stream: bool = Body(False, description="流式输出"),
                     ):
     doc_id = kid + file_name
-    org_docs = STATIC_DOCUMENTS[doc_id]
+    org_docs = STATIC_DOCUMENTS.get(doc_id)
     if not org_docs:
         return BaseResponse(code=404, msg=f"未找到临时文档 {doc_id}，请检查或重试")
     del STATIC_DOCUMENTS[doc_id]

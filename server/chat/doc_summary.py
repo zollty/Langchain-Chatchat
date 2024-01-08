@@ -8,6 +8,7 @@ from langchain.callbacks import AsyncIteratorCallbackHandler
 from typing import AsyncIterable
 import asyncio
 from langchain.prompts.chat import ChatPromptTemplate
+from langchain.prompts import PromptTemplate
 from typing import List, Optional, Dict
 import json
 
