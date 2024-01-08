@@ -160,7 +160,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             st.session_state["file_chat_files"] = upret.get("files")
 
             tmp_file_name = st.session_state["file_chat_files"][0]
-            with chat_box.output_messages(): 
+            with st.chat_input("文档总结", key="prompt"):
                 # response_container = st.container()
                 # input_container = st.container()
                 chat_box.ai_say([
