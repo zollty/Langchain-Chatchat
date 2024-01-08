@@ -97,7 +97,7 @@ async def doc_chat_iterator(doc: str,
                         # Use server-sent-events to stream the response
                         yield json.dumps({"answer": token}, ensure_ascii=False)
                 if idx==len(segments): 
-                    yield json.dumps({"answer": "\n\n", "src_info": src_info}, ensure_ascii=False)
+                    yield json.dumps({"answer": "\n\nn总结完成", "src_info": src_info}, ensure_ascii=False)
                 else:
                     yield json.dumps({"answer": "\n\n"}, ensure_ascii=False)
             else:
@@ -105,7 +105,7 @@ async def doc_chat_iterator(doc: str,
                 async for token in callback.aiter():
                         answer += token
                 if idx==len(segments): 
-                    yield json.dumps({"answer": answer, "src_info": src_info}, ensure_ascii=False)
+                    yield json.dumps({"answer": answer+"\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
                 else:
                     yield json.dumps({"answer": answer+"\n\n"}, ensure_ascii=False)
             
