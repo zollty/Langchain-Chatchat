@@ -6,6 +6,7 @@ from datetime import datetime
 import os
 import re
 import time
+import json
 from configs import (TEMPERATURE, HISTORY_LEN, PROMPT_TEMPLATES,
                      DEFAULT_KNOWLEDGE_BASE, DEFAULT_SEARCH_ENGINE, SUPPORT_AGENT_MODEL)
 from server.knowledge_base.utils import LOADER_DICT
@@ -42,13 +43,13 @@ def get_messages_history(history_len: int, content_in_expander: bool = False) ->
     return chat_box.filter_history(history_len=history_len, filter=filter)
 
 
-@st.cache_data
+# @st.cache_data
 def upload_temp_docs(files, _api: ApiRequest) -> str:
     '''
     将文件上传到临时目录，用于文件对话
     返回临时向量库ID
     '''
-    return _api.upload_temp_docs(files)
+    return _api.upload_temp_docs(files).get("data", {})
 
 
 def parse_command(text: str, modal: Modal) -> bool:
@@ -103,7 +104,6 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
     st.session_state["conversation_ids"].setdefault(chat_box.cur_chat_name, uuid.uuid4().hex)
     st.session_state.setdefault("file_chat_id", None)
     st.session_state.setdefault("file_chat_files", None)
-    st.session_state.setdefault("file_list_str", None)
     default_model = api.get_default_llm_model()[0]
 
     if not chat_box.chat_inited:
@@ -120,18 +120,10 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
             cmds = [x for x in parse_command.__doc__.split("\n") if x.strip().startswith("/")]
             st.write("\n\n".join(cmds))
     
-    info_placeholder = st.empty()
+    # info_placeholder = st.empty()
 
     def auto_summary():
         tmp_file_name = st.session_state["file_chat_files"][0]
-        file_list_str = st.session_state["file_list_str"]
-        if not file_list_str:
-            file_list_str = tmp_file_name
-        else:
-            file_list_str += "\n" + tmp_file_name
-        info_placeholder.text(file_list_str)
-        st.session_state["file_list_str"] = file_list_str
-
         chat_box.ai_say([
             f"正在总结 `{tmp_file_name}` ...",
             Markdown("...", in_expander=True, title="文件内容", state="complete"),
@@ -162,8 +154,6 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
         def on_mode_change():
             mode = st.session_state.dialogue_mode
             text = f"已切换到 {mode} 模式。"
-            if mode != "文件对话":
-                info_placeholder.empty()
             if mode == "知识库问答":
                 cur_kb = st.session_state.get("selected_kb")
                 if cur_kb:
@@ -301,13 +291,13 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                 score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
                 if st.button("开始上传", disabled=len(files)==0):
                     upret = upload_temp_docs(files, api)
-                    if error_msg := check_error_msg(upret):  # check whether error occured
-                        st.error(error_msg)
-                    elif updata := upret.get("data"):
-                        st.session_state["file_chat_id"] = updata.get("id")
-                        st.session_state["file_chat_files"] = updata.get("files")
+                    if upret.get("files"):  # check whether error occured
+                        st.session_state["file_chat_id"] = upret.get("id")
+                        st.session_state["file_chat_files"] = upret.get("files")
                         # call auto_summary
                         st.session_state["need_summary"] = True
+                    elif fail_datas := upret.get("failed_files"):
+                        st.error("上传或解析失败" + json.dumps(fail_datas))
 
         elif dialogue_mode == "搜索引擎问答":
             search_engine_list = api.list_search_engines()
