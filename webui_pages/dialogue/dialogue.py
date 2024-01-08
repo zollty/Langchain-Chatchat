@@ -103,6 +103,7 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
     st.session_state["conversation_ids"].setdefault(chat_box.cur_chat_name, uuid.uuid4().hex)
     st.session_state.setdefault("file_chat_id", None)
     st.session_state.setdefault("file_chat_files", None)
+    st.session_state.setdefault("file_list_str", None)
     default_model = api.get_default_llm_model()[0]
 
     if not chat_box.chat_inited:
