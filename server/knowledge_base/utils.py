@@ -328,7 +328,8 @@ class KnowledgeFile:
         if not docs:
             return []
 
-        print("文档切分结果：-----------------------------------")
+        lens = len(docs)
+        print(f"文档切分结果：-----------------------------------切分后数量：{lens}")
         for dd in docs:
             print(dd)
         if zh_title_enhance:
@@ -376,7 +377,7 @@ def files2docs_in_thread(
     生成器返回值为 status, (kb_name, file_name, docs | error)
     '''
 
-    def file2docs(*, file: KnowledgeFile, **kwargs) -> Tuple[bool, Tuple[str, str, List[Document]]]:
+    def inner_file_2docs(*, file: KnowledgeFile, **kwargs) -> Tuple[bool, Tuple[str, str, List[Document]]]:
         try:
             return True, (file.kb_name, file.filename, file.file2text(**kwargs))
         except Exception as e:
@@ -406,7 +407,7 @@ def files2docs_in_thread(
         except Exception as e:
             yield False, (kb_name, filename, str(e))
 
-    for result in run_in_thread_pool(func=file2docs, params=kwargs_list):
+    for result in run_in_thread_pool(func=inner_file_2docs, params=kwargs_list):
         yield result
 
 

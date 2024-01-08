@@ -93,6 +93,17 @@ PROMPT_TEMPLATES = {
             '{{ question }}\n\n',
     },
 
+    "doc_chat": {
+        "summary1":
+            '请简洁和专业的总结下面文档内容。'
+            '文档内容如下：\n'
+            '{{ context }}\n'
+            '文档总结为：\n',
+
+        "summary2":
+            '<指令>请简洁和专业的总结下面文档内容。</指令>\n'
+            '<文档>{{ context }}</文档>\n',
+    },
 
     "search_engine_chat": {
         "default":

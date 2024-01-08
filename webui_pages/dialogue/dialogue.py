@@ -48,7 +48,7 @@ def upload_temp_docs(files, _api: ApiRequest) -> str:
     将文件上传到临时目录，用于文件对话
     返回临时向量库ID
     '''
-    return _api.upload_temp_docs(files).get("data", {}).get("id")
+    return _api.upload_temp_docs(files).get("data", {})
 
 
 def parse_command(text: str, modal: Modal) -> bool:
@@ -102,6 +102,7 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
     st.session_state.setdefault("conversation_ids", {})
     st.session_state["conversation_ids"].setdefault(chat_box.cur_chat_name, uuid.uuid4().hex)
     st.session_state.setdefault("file_chat_id", None)
+    st.session_state.setdefault("file_chat_files", None)
     default_model = api.get_default_llm_model()[0]
 
     if not chat_box.chat_inited:
@@ -268,7 +269,22 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                 ## Bge 模型会超过1
                 score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
                 if st.button("开始上传", disabled=len(files)==0):
-                    st.session_state["file_chat_id"] = upload_temp_docs(files, api)
+                    upret = upload_temp_docs(files, api)
+                    st.session_state["file_chat_id"] = upret.get("id")
+                    st.session_state["file_chat_files"] = upret.get("files")
+
+                    text = ""
+                    for d in api.summary_docs(k_id=st.session_state["file_chat_id"],
+                                            file_name=st.session_state["file_chat_files"][0],
+                                            stream=True):
+                        if error_msg := check_error_msg(d):  # check whether error occured
+                            st.error(error_msg)
+                        elif chunk := d.get("answer"):
+                            text += chunk
+                            chat_box.update_msg(text, element_index=0)
+                        chat_box.update_msg(text, element_index=0, streaming=False)
+                        chat_box.update_msg("\n\n".join(d.get("src_info", [])), element_index=1, streaming=False)
+
         elif dialogue_mode == "搜索引擎问答":
             search_engine_list = api.list_search_engines()
             if DEFAULT_SEARCH_ENGINE in search_engine_list:

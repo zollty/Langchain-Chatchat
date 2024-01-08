@@ -466,6 +466,29 @@ class ApiRequest:
         )
         return self._get_response_value(response, as_json=True)
 
+    def summary_docs(
+        self,
+        kid: str,
+        file_name: str,
+        stream: bool = True,
+    ):
+        '''
+        对应 api.py/inner/auto_summary_docs 接口
+        '''
+        data = {
+            "kid": kid,
+            "file_name": file_name,
+            "stream": stream,
+        }
+
+        response = self.post(
+            "/inner/auto_summary_docs",
+            json=data,
+            stream=True,
+        )
+        return self._httpx_stream2generator(response, as_json=True)
+
+
     def file_chat(
         self,
         query: str,

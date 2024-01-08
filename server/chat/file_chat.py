@@ -1,7 +1,7 @@
 from fastapi import Body, File, Form, UploadFile
 from fastapi.responses import StreamingResponse
 from configs import (LLM_MODELS, VECTOR_SEARCH_TOP_K, SCORE_THRESHOLD, TEMPERATURE,
-                     CHUNK_SIZE, OVERLAP_SIZE, ZH_TITLE_ENHANCE)
+                     CHUNK_SIZE, OVERLAP_SIZE, ZH_TITLE_ENHANCE, LONG_CONTEXT_MODEL)
 from server.utils import (wrap_done, get_ChatOpenAI,
                         BaseResponse, get_prompt_template, get_temp_dir, run_in_thread_pool)
 from server.knowledge_base.kb_cache.faiss_cache import memo_faiss_pool
@@ -11,11 +11,39 @@ from typing import AsyncIterable, List, Optional
 import asyncio
 from langchain.prompts.chat import ChatPromptTemplate
 from server.chat.utils import History
+from server.chat.doc_summary import doc_chat_iterator
 from server.knowledge_base.kb_service.base import EmbeddingsFunAdapter
 from server.knowledge_base.utils import KnowledgeFile
 import json
 import os
 from pathlib import Path
+
+STATIC_DOCUMENTS = dict()
+
+async def summary_docs(kid: str = Body(..., description="临时知识库ID"),
+                        file_name: str = Body(..., description="文档名"),
+                        stream: bool = Body(False, description="流式输出"),
+                    ):
+    doc_id = kid + file_name
+    org_docs = STATIC_DOCUMENTS[doc_id]
+    if not org_docs:
+        return BaseResponse(code=404, msg=f"未找到临时文档 {doc_id}，请检查或重试")
+    del STATIC_DOCUMENTS[doc_id]
+
+    model_name = LONG_CONTEXT_MODEL
+    if not model_name
+        model_name = LLM_MODELS[0]
+
+    prompt_name = "summary1"
+    src_info = f"""原文 {file_name} \n\n{org_docs[0][:1000]}\n\n"""
+    return StreamingResponse(doc_chat_iterator(doc=org_docs[0],
+                                                stream=stream,
+                                                model_name=model_name,
+                                                max_tokens=0,
+                                                temperature=0,
+                                                prompt_name=prompt_name,
+                                                src_info=src_info),
+                             media_type="text/event-stream")
 
 
 def _parse_files_in_thread(
@@ -44,13 +72,14 @@ def _parse_files_in_thread(
                 f.write(file_content)
             kb_file = KnowledgeFile(filename=filename, knowledge_base_name="temp")
             kb_file.filepath = file_path
+            org_docs = kb_file.file2docs()
             docs = kb_file.file2text(zh_title_enhance=zh_title_enhance,
                                      chunk_size=chunk_size,
                                      chunk_overlap=chunk_overlap)
-            return True, filename, f"成功上传文件 {filename}", docs
+            return True, filename, f"成功上传文件 {filename}", docs, org_docs
         except Exception as e:
             msg = f"{filename} 文件上传失败，报错信息为: {e}"
-            return False, filename, msg, []
+            return False, filename, msg, [], []
 
     params = [{"file": file} for file in files]
     for result in run_in_thread_pool(parse_file, params=params):
@@ -72,21 +101,25 @@ def upload_temp_docs(
         memo_faiss_pool.pop(prev_id)
 
     failed_files = []
+    fileNames = []
     documents = []
     path, id = get_temp_dir(prev_id)
-    for success, file, msg, docs in _parse_files_in_thread(files=files,
+    for success, file, msg, docs, org_docs in _parse_files_in_thread(files=files,
                                                         dir=path,
                                                         zh_title_enhance=zh_title_enhance,
                                                         chunk_size=chunk_size,
                                                         chunk_overlap=chunk_overlap):
         if success:
             documents += docs
+            fileNames += file
+            STATIC_DOCUMENTS[id + file] = org_docs
         else:
             failed_files.append({file: msg})
 
     with memo_faiss_pool.load_vector_store(id).acquire() as vs:
         vs.add_documents(documents)
-    return BaseResponse(data={"id": id, "failed_files": failed_files})
+    
+    return BaseResponse(data={"id": id, "files": fileNames, "failed_files": failed_files})
 
 
 async def file_chat(query: str = Body(..., description="用户输入", examples=["你好"]),

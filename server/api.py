@@ -173,7 +173,7 @@ def mount_app_routes(app: FastAPI, run_mode: str = None):
 
 def mount_knowledge_routes(app: FastAPI):
     from server.chat.knowledge_base_chat import knowledge_base_chat
-    from server.chat.file_chat import upload_temp_docs, file_chat
+    from server.chat.file_chat import upload_temp_docs, file_chat, summary_docs
     from server.chat.agent_chat import agent_chat
     from server.knowledge_base.kb_api import list_kbs, create_kb, delete_kb
     from server.knowledge_base.kb_doc_api import (list_files, upload_docs, delete_docs,
@@ -259,6 +259,12 @@ def mount_knowledge_routes(app: FastAPI):
              tags=["Knowledge Base Management"],
              summary="上传文件到临时目录，用于文件对话。"
              )(upload_temp_docs)
+
+    # 内部接口
+    app.post("/inner/auto_summary_docs",
+             tags=["Inner"],
+             summary="自动总结文档",
+             )(summary_docs)
 
 
 def mount_filename_summary_routes(app: FastAPI):
