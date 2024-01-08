@@ -155,7 +155,7 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
             mode = st.session_state.dialogue_mode
             text = f"已切换到 {mode} 模式。"
             if mode != "文件对话":
-                info_placeholder.text("")
+                info_placeholder.empty()
             if mode == "知识库问答":
                 cur_kb = st.session_state.get("selected_kb")
                 if cur_kb:
@@ -298,7 +298,7 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                     # call auto_summary
                     st.session_state["need_summary"] = True
                     tmp_file_name = st.session_state["file_chat_files"][0]
-                    info_placeholder.text(info_placeholder + "\n" + tmp_file_name)
+                    info_placeholder.text(info_placeholder.value + "\n" + tmp_file_name)
 
         elif dialogue_mode == "搜索引擎问答":
             search_engine_list = api.list_search_engines()
