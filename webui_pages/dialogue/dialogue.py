@@ -123,22 +123,22 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
     # info_placeholder = st.empty()
 
     def auto_summary():
-        tmp_file_name = st.session_state["file_chat_files"][0]
-        chat_box.ai_say([
-            f"正在总结 `{tmp_file_name}` ...",
-            Markdown("...", in_expander=True, title="文件内容", state="complete"),
-        ])
-        text = ""
-        for d in api.summary_docs(kid=st.session_state["file_chat_id"],
-                                file_name=tmp_file_name,
-                                stream=True):
-            if error_msg := check_error_msg(d):  # check whether error occured
-                st.error(error_msg)
-            elif chunk := d.get("answer"):
-                text += chunk
-                chat_box.update_msg(text, element_index=0)
-            chat_box.update_msg(text, element_index=0, streaming=False)
-            chat_box.update_msg(d.get("src_info", ""), element_index=1, streaming=False)
+        for tmp_file_name in st.session_state["file_chat_files"]:
+            chat_box.ai_say([
+                f"正在总结 `{tmp_file_name}` ...",
+                Markdown("...", in_expander=True, title="文件内容", state="complete"),
+            ])
+            text = ""
+            for d in api.summary_docs(kid=st.session_state["file_chat_id"],
+                                    file_name=tmp_file_name,
+                                    stream=True):
+                if error_msg := check_error_msg(d):  # check whether error occured
+                    st.error(error_msg)
+                elif chunk := d.get("answer"):
+                    text += chunk
+                    chat_box.update_msg(text, element_index=0)
+                chat_box.update_msg(text, element_index=0, streaming=False)
+                chat_box.update_msg(d.get("src_info", ""), element_index=1, streaming=False)
 
     with st.sidebar:
         # 多会话

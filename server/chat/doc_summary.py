@@ -41,27 +41,66 @@ async def doc_chat_iterator(doc: str,
 
     chain = LLMChain(prompt=chat_prompt, llm=model)
 
-    print(prompt_template)
-    print("==================context")
-    print(doc)
-    # Begin a task that runs in the background.
-    task = asyncio.create_task(wrap_done(
-        chain.acall({"context": doc, "question": query}),
-        callback.done),
-    )
+    max_length = 32768
+    if len(doc) < max_length:
+        # Begin a task that runs in the background.
+        task = asyncio.create_task(wrap_done(
+            chain.acall({"context": doc, "question": query}),
+            callback.done),
+        )
 
-    if stream:
-        async for token in callback.aiter():
-            # Use server-sent-events to stream the response
-            yield json.dumps({"answer": token}, ensure_ascii=False)
-        yield json.dumps({"src_info": src_info}, ensure_ascii=False)
+        if stream:
+            async for token in callback.aiter():
+                # Use server-sent-events to stream the response
+                yield json.dumps({"answer": token}, ensure_ascii=False)
+            yield json.dumps({"src_info": src_info}, ensure_ascii=False)
+        else:
+            answer = ""
+            async for token in callback.aiter():
+                answer += token
+            yield json.dumps({"answer": answer, "src_info": src_info}, ensure_ascii=False)
+        
+        await task
     else:
-        answer = ""
-        async for token in callback.aiter():
-            answer += token
-        yield json.dumps({"answer": answer, "src_info": src_info}, ensure_ascii=False)
-    
-    await task
+
+        # 计算总长度
+        total_length = len(doc)
+        # 计算分段数量
+        num_segments = total_length // max_length
+
+        # 初始化分段列表
+        segments = []
+
+        # 遍历字符串，切割分段
+        for i in range(num_segments):
+            start = i * max_length
+            end = min((i + 1) * max_length, total_length)
+            segment = text[start:end]
+            segments.append(segment)
+
+        # 打印分段
+        idx = 0
+        for segment in segments:
+            idx += 1
+            # Begin a task that runs in the background.
+            task = asyncio.create_task(wrap_done(
+                chain.acall({"context": segment, "question": query}),
+                callback.done),
+            )
+
+            yield json.dumps({"answer": f"第{idx}段（{(idx - 1)*max_length}~{idx*max_length}字符）总结===\n"}, ensure_ascii=False)
+            if stream:
+                async for token in callback.aiter():
+                    # Use server-sent-events to stream the response
+                    yield json.dumps({"answer": token}, ensure_ascii=False)
+                yield json.dumps({"src_info": src_info}, ensure_ascii=False)
+            else:
+                answer = ""
+                async for token in callback.aiter():
+                    answer += token
+                yield json.dumps({"answer": answer, "src_info": src_info}, ensure_ascii=False)
+            
+            await task
 
 
 
