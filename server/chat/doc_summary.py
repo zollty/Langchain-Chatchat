@@ -12,7 +12,7 @@ from typing import List, Optional, Dict
 import json
 
 async def doc_chat_iterator(doc: str,
-                            query: str,
+                            query: str = None,
                             stream: bool = False,
                             model_name: str = LLM_MODELS[0],
                             max_tokens: int = 0,
