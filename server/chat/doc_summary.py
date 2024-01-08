@@ -75,7 +75,7 @@ async def doc_chat_iterator(doc: str,
         for i in range(num_segments):
             start = i * max_length
             end = min((i + 1) * max_length, total_length)
-            segment = text[start:end]
+            segment = doc[start:end]
             segments.append(segment)
 
         # 打印分段
