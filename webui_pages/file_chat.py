@@ -8,6 +8,7 @@ from datetime import datetime
 import os
 import re
 import time
+import json
 from configs import (TEMPERATURE, HISTORY_LEN, PROMPT_TEMPLATES,
                      DEFAULT_KNOWLEDGE_BASE, DEFAULT_SEARCH_ENGINE, SUPPORT_AGENT_MODEL)
 from server.knowledge_base.utils import LOADER_DICT
@@ -177,13 +178,13 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
         if st.button("开始上传", disabled=len(files)==0):
             upret = upload_temp_docs(files, api)
             if upret.get("files"):  # check whether error occured
-                st.session_state["file_chat_id"] = updata.get("id")
-                info_placeholder.text(updata.get("id"))
-                st.session_state["file_chat_files"] = updata.get("files")
+                st.session_state["file_chat_id"] = upret.get("id")
+                info_placeholder.text(upret.get("id"))
+                st.session_state["file_chat_files"] = upret.get("files")
                 # call auto_summary
                 st.session_state["need_summary"] = True
-            elif updata := upret.get("failed_files"):
-                st.error(error_msg)
+            elif fail_datas := upret.get("failed_files"):
+                st.error("上传或解析失败" + json.dumps(fail_datas))
 
         prompt_templates_kb_list = list(PROMPT_TEMPLATES["knowledge_base_chat"].keys())
         prompt_template_name = prompt_templates_kb_list[0]
