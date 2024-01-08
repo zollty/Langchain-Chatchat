@@ -120,10 +120,17 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
             st.write("\n\n".join(cmds))
     
     info_placeholder = st.empty()
+    file_list_str = ""
 
     def auto_summary():
+        nonlocal file_list_str
         tmp_file_name = st.session_state["file_chat_files"][0]
-        chat_box.reset_history()
+        if file_list_str=="":
+            file_list_str = tmp_file_name
+        else:
+            file_list_str += "\n" + tmp_file_name
+        info_placeholder.text(file_list_str)
+
         chat_box.ai_say([
             f"正在总结 `{tmp_file_name}` ...",
             Markdown("...", in_expander=True, title="文件内容", state="complete"),
@@ -297,8 +304,6 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                     st.session_state["file_chat_files"] = upret.get("files")
                     # call auto_summary
                     st.session_state["need_summary"] = True
-                    tmp_file_name = st.session_state["file_chat_files"][0]
-                    info_placeholder.text(info_placeholder.value() + "\n" + tmp_file_name)
 
         elif dialogue_mode == "搜索引擎问答":
             search_engine_list = api.list_search_engines()

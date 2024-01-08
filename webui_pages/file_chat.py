@@ -88,16 +88,21 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     # Add your custom text here, with smaller font size
     st.markdown("<sub>文件专用聊天（左边上传文件）文件列表：</sub>", unsafe_allow_html=True)
     info_placeholder = st.empty()
+    file_list_str = ""
 
     DEFAULT_SYSTEM_PROMPT = '''
     You are an AI programming assistant. Follow the user's instructions carefully. Respond using markdown.
     '''.strip()
 
     def auto_summary():
-        # response_container = st.container()
-        # input_container = st.container()
+        nonlocal file_list_str
         tmp_file_name = st.session_state["file_chat_files"][0]
-        chat_box.reset_history()
+        if file_list_str=="":
+            file_list_str = tmp_file_name
+        else:
+            file_list_str += "\n" + tmp_file_name
+        info_placeholder.text(file_list_str)
+
         chat_box.ai_say([
             f"正在总结 `{tmp_file_name}` ...",
             Markdown("...", in_expander=True, title="文件内容", state="complete"),
@@ -182,8 +187,6 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             st.session_state["file_chat_files"] = upret.get("files")
             # call auto_summary
             st.session_state["need_summary"] = True
-            tmp_file_name = st.session_state["file_chat_files"][0]
-            info_placeholder.text(info_placeholder.value() + "\n" + tmp_file_name)
 
         prompt_templates_kb_list = list(PROMPT_TEMPLATES["knowledge_base_chat"].keys())
         prompt_template_name = prompt_templates_kb_list[0]
