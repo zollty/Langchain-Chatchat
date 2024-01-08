@@ -86,7 +86,8 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     # Set the title of the demo
     st.title("💬 文件Chat")
     # Add your custom text here, with smaller font size
-    st.markdown("<sub>文件专用聊天（左边上传文件）</sub>", unsafe_allow_html=True)
+    welcome_msg = "<sub>文件专用聊天（左边上传文件）</sub>"
+    st.markdown(welcome_msg, unsafe_allow_html=True)
 
     DEFAULT_SYSTEM_PROMPT = '''
     You are an AI programming assistant. Follow the user's instructions carefully. Respond using markdown.
@@ -96,6 +97,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
         # response_container = st.container()
         # input_container = st.container()
         tmp_file_name = st.session_state["file_chat_files"][0]
+        welcome_msg += "\n" + tmp_file_name
         chat_box.reset_history()
         chat_box.ai_say([
             f"正在总结 `{tmp_file_name}` ...",
