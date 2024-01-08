@@ -24,7 +24,7 @@ chat_box = ChatBox(
 )
 
 
-@st.cache_data
+# @st.cache_data
 def upload_temp_docs(files, _api: ApiRequest) -> str:
     '''
     将文件上传到临时目录，用于文件对话
