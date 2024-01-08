@@ -13,12 +13,12 @@ import json
 
 async def doc_chat_iterator(doc: str,
                             query: str,
+                            src_info,
                             stream: bool = False,
                             model_name: str = LLM_MODELS[0],
                             max_tokens: int = 0,
                             temperature: float = TEMPERATURE,
                             prompt_name: str = prompt_name,
-                            src_info,
                             ) -> AsyncIterable[str]:
     
     use_max_tokens = None
