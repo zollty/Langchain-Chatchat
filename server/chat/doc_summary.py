@@ -23,7 +23,7 @@ async def doc_chat_iterator(doc: str,
                             src_info=None,
                             ) -> AsyncIterable[str]:
     
-    use_max_tokens = None
+    use_max_tokens = 30000
     if max_tokens > 0:
         use_max_tokens = max_tokens
 
@@ -97,7 +97,7 @@ async def doc_chat_iterator(doc: str,
                         # Use server-sent-events to stream the response
                         yield json.dumps({"answer": token}, ensure_ascii=False)
                 if idx==len(segments): 
-                    yield json.dumps({"answer": "\n\nn总结完成", "src_info": src_info}, ensure_ascii=False)
+                    yield json.dumps({"answer": "\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
                 else:
                     yield json.dumps({"answer": "\n\n"}, ensure_ascii=False)
             else:
