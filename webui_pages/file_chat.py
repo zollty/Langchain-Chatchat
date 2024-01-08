@@ -29,7 +29,7 @@ def upload_temp_docs(files, _api: ApiRequest) -> str:
     将文件上传到临时目录，用于文件对话
     返回临时向量库ID
     '''
-    return _api.upload_temp_docs(files)
+    return _api.upload_temp_docs(files).get("data", {})
 
 
 def get_messages_history(history_len: int, content_in_expander: bool = False) -> List[Dict]:
@@ -87,7 +87,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     st.title("💬 文件Chat")
     # Add your custom text here, with smaller font size
     st.markdown("<sub>文件专用聊天（左边上传文件）文件列表：</sub>", unsafe_allow_html=True)
-    # info_placeholder = st.empty()
+    info_placeholder = st.empty()
 
     DEFAULT_SYSTEM_PROMPT = '''
     You are an AI programming assistant. Follow the user's instructions carefully. Respond using markdown.
@@ -176,13 +176,14 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
         score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
         if st.button("开始上传", disabled=len(files)==0):
             upret = upload_temp_docs(files, api)
-            if error_msg := check_error_msg(upret):  # check whether error occured
-                st.error(error_msg)
-            elif updata := upret.get("data"):
+            if upret.get("files"):  # check whether error occured
                 st.session_state["file_chat_id"] = updata.get("id")
+                info_placeholder.text(updata.get("id"))
                 st.session_state["file_chat_files"] = updata.get("files")
                 # call auto_summary
                 st.session_state["need_summary"] = True
+            elif updata := upret.get("failed_files"):
+                st.error(error_msg)
 
         prompt_templates_kb_list = list(PROMPT_TEMPLATES["knowledge_base_chat"].keys())
         prompt_template_name = prompt_templates_kb_list[0]
@@ -240,8 +241,8 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             chat_box.user_say(prompt)
 
             if st.session_state["file_chat_id"] is None:
-                    st.error("请先上传文件再进行对话")
-                    st.stop()
+                st.error("请先上传文件再进行对话")
+                st.stop()
             chat_box.ai_say([
                 f"正在查询文件 `{st.session_state['file_chat_id']}` ...",
                 Markdown("...", in_expander=True, title="文件匹配结果", state="complete"),

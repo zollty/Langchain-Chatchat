@@ -107,6 +107,7 @@ def upload_temp_docs(
     fileNames = []
     documents = []
     path, id = get_temp_dir(prev_id)
+    print(f"{prev_id}-----------------------------{id}")
     for success, file, msg, docs, org_docs in _parse_files_in_thread(files=files,
                                                         dir=path,
                                                         zh_title_enhance=zh_title_enhance,
