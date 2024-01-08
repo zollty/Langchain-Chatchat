@@ -160,7 +160,8 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             st.session_state["file_chat_files"] = upret.get("files")
 
             tmp_file_name = st.session_state["file_chat_files"][0]
-            response_container = st.container()
+            chat_box.output_messages()
+            # response_container = st.container()
             # input_container = st.container()
             chat_box.ai_say([
                 f"正在总结 `{tmp_file_name}` ...",
@@ -168,7 +169,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             ])
             text = ""
             for d in api.summary_docs(kid=st.session_state["file_chat_id"],
-                                    file_name=st.session_state["file_chat_files"][0],
+                                    file_name=tmp_file_name,
                                     stream=True):
                 if error_msg := check_error_msg(d):  # check whether error occured
                     st.error(error_msg)
