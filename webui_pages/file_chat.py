@@ -183,7 +183,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             # call auto_summary
             st.session_state["need_summary"] = True
             tmp_file_name = st.session_state["file_chat_files"][0]
-            info_placeholder.text(info_placeholder.text() + "/n" + tmp_file_name)
+            info_placeholder.text(info_placeholder + "\n" + tmp_file_name)
 
         prompt_templates_kb_list = list(PROMPT_TEMPLATES["knowledge_base_chat"].keys())
         prompt_template_name = prompt_templates_kb_list[0]
