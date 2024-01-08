@@ -48,7 +48,7 @@ def upload_temp_docs(files, _api: ApiRequest) -> str:
     将文件上传到临时目录，用于文件对话
     返回临时向量库ID
     '''
-    return _api.upload_temp_docs(files).get("data", {})
+    return _api.upload_temp_docs(files)
 
 
 def parse_command(text: str, modal: Modal) -> bool:
@@ -301,10 +301,13 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                 score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
                 if st.button("开始上传", disabled=len(files)==0):
                     upret = upload_temp_docs(files, api)
-                    st.session_state["file_chat_id"] = upret.get("id")
-                    st.session_state["file_chat_files"] = upret.get("files")
-                    # call auto_summary
-                    st.session_state["need_summary"] = True
+                    if error_msg := check_error_msg(upret):  # check whether error occured
+                        st.error(error_msg)
+                    elif updata := upret.get("data"):
+                        st.session_state["file_chat_id"] = updata.get("id")
+                        st.session_state["file_chat_files"] = updata.get("files")
+                        # call auto_summary
+                        st.session_state["need_summary"] = True
 
         elif dialogue_mode == "搜索引擎问答":
             search_engine_list = api.list_search_engines()

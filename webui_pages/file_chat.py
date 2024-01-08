@@ -105,6 +105,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
                                 stream=True):
             if error_msg := check_error_msg(d):  # check whether error occured
                 st.error(error_msg)
+                break
             elif chunk := d.get("answer"):
                 text += chunk
                 chat_box.update_msg(text, element_index=0)
