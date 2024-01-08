@@ -87,7 +87,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     # Set the title of the demo
     st.title("💬 文件Chat")
     # Add your custom text here, with smaller font size
-    st.markdown("<sub>文件专用聊天（左边上传文件）文件列表：</sub>", unsafe_allow_html=True)
+    st.markdown("<sub>文件专用聊天（左边上传文件）</sub>", unsafe_allow_html=True)
     info_placeholder = st.empty()
 
     DEFAULT_SYSTEM_PROMPT = '''
