@@ -35,7 +35,8 @@ async def doc_chat_iterator(doc: str,
     )
 
     prompt_template = get_prompt_template("doc_chat", prompt_name)
-    chat_prompt = PromptTemplate.from_template(prompt_template)
+    input_msg = History(role="user", content=prompt_template).to_msg_template(False)
+    chat_prompt = ChatPromptTemplate.from_messages([input_msg])
 
     chain = LLMChain(prompt=chat_prompt, llm=model)
 
