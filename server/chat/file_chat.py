@@ -31,7 +31,7 @@ async def summary_docs(kid: str = Body(..., description="临时知识库ID"),
     del STATIC_DOCUMENTS[doc_id]
 
     model_name = LONG_CONTEXT_MODEL
-    if not model_name
+    if not model_name:
         model_name = LLM_MODELS[0]
 
     prompt_name = "summary1"
