@@ -103,7 +103,7 @@ FSCHAT_MODEL_WORKERS = {
        "infer_turbo": True,
        "gpus": None,
        #"gpus": "0", # 使用的GPU，以str的格式指定，如"0,1"，如失效请使用CUDA_VISIBLE_DEVICES="0,1"等形式指定
-       "num_gpus": 4, # 使用GPU的数量
+       "num_gpus": 5, # 使用GPU的数量
        "max_gpu_memory": "5GiB", # 每个GPU占用的最大显存
     },
     "chatglm2-6b": {
@@ -121,7 +121,7 @@ FSCHAT_MODEL_WORKERS = {
        "infer_turbo": True,
        "gpus": None,
 	   #"gpus": "3", # 使用的GPU，以str的格式指定，如"0,1"，如失效请使用CUDA_VISIBLE_DEVICES="0,1"等形式指定
-       "num_gpus": 4, # 使用GPU的数量
+       "num_gpus": 5, # 使用GPU的数量
        "max_gpu_memory": "4GiB", # 每个GPU占用的最大显存
     },
     "chatglm3-6b-32k": {
@@ -130,7 +130,7 @@ FSCHAT_MODEL_WORKERS = {
        "infer_turbo": True,
        "gpus": None,
 	   #"gpus": "1", # 使用的GPU，以str的格式指定，如"0,1"，如失效请使用CUDA_VISIBLE_DEVICES="0,1"等形式指定
-       "num_gpus": 4, # 使用GPU的数量
+       "num_gpus": 5, # 使用GPU的数量
        "max_gpu_memory": "4GiB", # 每个GPU占用的最大显存
     },
     "Chinese-Alpaca-2-7B": {
