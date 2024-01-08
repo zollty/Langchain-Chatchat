@@ -159,6 +159,10 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             st.session_state["file_chat_id"] = upret.get("id")
             st.session_state["file_chat_files"] = upret.get("files")
 
+            chat_box.ai_say([
+                f"正在总结 `{st.session_state["file_chat_files"][0]}` ...",
+                Markdown("...", in_expander=True, title="文件内容", state="complete"),
+            ])
             text = ""
             for d in api.summary_docs(kid=st.session_state["file_chat_id"],
                                     file_name=st.session_state["file_chat_files"][0],
