@@ -175,10 +175,13 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
         score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
         if st.button("开始上传", disabled=len(files)==0):
             upret = upload_temp_docs(files, api)
-            st.session_state["file_chat_id"] = upret.get("id")
-            st.session_state["file_chat_files"] = upret.get("files")
-            # call auto_summary
-            st.session_state["need_summary"] = True
+            if error_msg := check_error_msg(upret):  # check whether error occured
+                st.error(error_msg)
+            elif updata := upret.get("data"):
+                st.session_state["file_chat_id"] = updata.get("id")
+                st.session_state["file_chat_files"] = updata.get("files")
+                # call auto_summary
+                st.session_state["need_summary"] = True
 
         prompt_templates_kb_list = list(PROMPT_TEMPLATES["knowledge_base_chat"].keys())
         prompt_template_name = prompt_templates_kb_list[0]
