@@ -41,7 +41,7 @@ async def doc_chat_iterator(doc: str,
 
     chain = LLMChain(prompt=chat_prompt, llm=model)
 
-    max_length = 32767
+    max_length = 12767
     if len(doc) < max_length:
         # Begin a task that runs in the background.
         task = asyncio.create_task(wrap_done(
@@ -88,7 +88,7 @@ async def doc_chat_iterator(doc: str,
                 callback.done),
             )
 
-            yield json.dumps({"answer": f"第{idx}段（{(idx - 1)*max_length}~{idx*max_length}字符）总结===\n"}, ensure_ascii=False)
+            yield json.dumps({"answer": f"第{idx}段（{(idx - 1)*max_length}~{idx*max_length}字符）总结===\n\n"}, ensure_ascii=False)
             if stream:
                 async for token in callback.aiter():
                     # Use server-sent-events to stream the response
