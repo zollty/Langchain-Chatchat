@@ -58,7 +58,6 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     st.session_state["conversation_ids"].setdefault(chat_box.cur_chat_name, uuid.uuid4().hex)
     st.session_state.setdefault("file_chat_id", None)
     st.session_state.setdefault("file_chat_files", None)
-    st.session_state.setdefault("file_list_str", None)
     default_model = api.get_default_llm_model()[0]
     llm_model = "chatglm3-6b-32k"
     
@@ -88,7 +87,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     st.title("💬 文件Chat")
     # Add your custom text here, with smaller font size
     st.markdown("<sub>文件专用聊天（左边上传文件）文件列表：</sub>", unsafe_allow_html=True)
-    info_placeholder = st.empty()
+    # info_placeholder = st.empty()
 
     DEFAULT_SYSTEM_PROMPT = '''
     You are an AI programming assistant. Follow the user's instructions carefully. Respond using markdown.
@@ -96,14 +95,6 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
 
     def auto_summary():
         tmp_file_name = st.session_state["file_chat_files"][0]
-        file_list_str = st.session_state["file_list_str"]
-        if not file_list_str:
-            file_list_str = tmp_file_name
-        else:
-            file_list_str += "\n" + tmp_file_name
-        info_placeholder.text(file_list_str)
-        st.session_state["file_list_str"] = file_list_str
-
         chat_box.ai_say([
             f"正在总结 `{tmp_file_name}` ...",
             Markdown("...", in_expander=True, title="文件内容", state="complete"),
