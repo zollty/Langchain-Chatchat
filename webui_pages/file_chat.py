@@ -94,11 +94,9 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     '''.strip()
 
     def auto_summary():
-        nonlocal welcome_msg
         # response_container = st.container()
         # input_container = st.container()
         tmp_file_name = st.session_state["file_chat_files"][0]
-        welcome_msg += "\n" + tmp_file_name
         chat_box.reset_history()
         chat_box.ai_say([
             f"正在总结 `{tmp_file_name}` ...",
@@ -184,6 +182,8 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             st.session_state["file_chat_files"] = upret.get("files")
             # call auto_summary
             st.session_state["need_summary"] = True
+            tmp_file_name = st.session_state["file_chat_files"][0]
+            welcome_msg += "\n" + tmp_file_name
 
         prompt_templates_kb_list = list(PROMPT_TEMPLATES["knowledge_base_chat"].keys())
         prompt_template_name = prompt_templates_kb_list[0]
