@@ -156,12 +156,15 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
         score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
         if st.button("开始上传", disabled=len(files)==0):
             upret = upload_temp_docs(files, api)
+            print("--------------------------upfile success")
+            print(upret)
             st.session_state["file_chat_id"] = upret.get("id")
             st.session_state["file_chat_files"] = upret.get("files")
+            print(st.session_state["file_chat_files"][0])
 
             text = ""
             for d in api.summary_docs(kid=st.session_state["file_chat_id"],
-                                    file_name=st.session_state["file_chat_files"][0],
+                                    file_name=st.session_state["file_chat_files"],
                                     stream=True):
                 if error_msg := check_error_msg(d):  # check whether error occured
                     st.error(error_msg)
