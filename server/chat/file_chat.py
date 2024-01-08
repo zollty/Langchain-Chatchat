@@ -35,8 +35,9 @@ async def summary_docs(kid: str = Body(..., description="临时知识库ID"),
         model_name = LLM_MODELS[0]
 
     prompt_name = "summary1"
-    src_info = f"""原文 {file_name} \n\n{org_docs[0].page_content[:1000]}\n\n"""
-    return StreamingResponse(doc_chat_iterator(doc=org_docs[0],
+    doc = org_docs[0].page_content
+    src_info = f"""原文 {file_name} \n\n{doc[:1000]}\n\n"""
+    return StreamingResponse(doc_chat_iterator(doc=doc,
                                                 stream=stream,
                                                 model_name=model_name,
                                                 max_tokens=0,
