@@ -160,7 +160,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             st.session_state["file_chat_files"] = upret.get("files")
 
             text = ""
-            for d in api.summary_docs(k_id=st.session_state["file_chat_id"],
+            for d in api.summary_docs(kid=st.session_state["file_chat_id"],
                                     file_name=st.session_state["file_chat_files"][0],
                                     stream=True):
                 if error_msg := check_error_msg(d):  # check whether error occured
