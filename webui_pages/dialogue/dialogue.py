@@ -120,16 +120,16 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
             st.write("\n\n".join(cmds))
     
     info_placeholder = st.empty()
-    file_list_str = ""
 
     def auto_summary():
-        nonlocal file_list_str
         tmp_file_name = st.session_state["file_chat_files"][0]
-        if file_list_str=="":
+        file_list_str = st.session_state["file_list_str"]
+        if not file_list_str:
             file_list_str = tmp_file_name
         else:
             file_list_str += "\n" + tmp_file_name
         info_placeholder.text(file_list_str)
+        st.session_state["file_list_str"] = file_list_str
 
         chat_box.ai_say([
             f"正在总结 `{tmp_file_name}` ...",

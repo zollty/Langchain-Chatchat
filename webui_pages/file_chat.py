@@ -88,20 +88,20 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     # Add your custom text here, with smaller font size
     st.markdown("<sub>文件专用聊天（左边上传文件）文件列表：</sub>", unsafe_allow_html=True)
     info_placeholder = st.empty()
-    file_list_str = ""
 
     DEFAULT_SYSTEM_PROMPT = '''
     You are an AI programming assistant. Follow the user's instructions carefully. Respond using markdown.
     '''.strip()
 
     def auto_summary():
-        nonlocal file_list_str
         tmp_file_name = st.session_state["file_chat_files"][0]
-        if file_list_str=="":
+        file_list_str = st.session_state["file_list_str"]
+        if not file_list_str:
             file_list_str = tmp_file_name
         else:
             file_list_str += "\n" + tmp_file_name
         info_placeholder.text(file_list_str)
+        st.session_state["file_list_str"] = file_list_str
 
         chat_box.ai_say([
             f"正在总结 `{tmp_file_name}` ...",
