@@ -94,6 +94,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     '''.strip()
 
     def auto_summary():
+        nonlocal welcome_msg
         # response_container = st.container()
         # input_container = st.container()
         tmp_file_name = st.session_state["file_chat_files"][0]
