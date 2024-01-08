@@ -498,6 +498,10 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                     chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
 
 
+    if st.session_state.get("need_summary"):
+        st.session_state["need_summary"] = False
+        auto_summary()
+
     if st.session_state.get("need_rerun"):
         st.session_state["need_rerun"] = False
         st.rerun()
