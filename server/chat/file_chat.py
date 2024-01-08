@@ -37,11 +37,13 @@ async def summary_docs(kid: str = Body(..., description="临时知识库ID"),
     prompt_name = "summary1"
     doc = org_docs[0].page_content
     src_info = f"""原文 {file_name} \n\n{doc[:1000]}\n\n"""
+    print("==================")
+    print(src_info)
     return StreamingResponse(doc_chat_iterator(doc=doc,
                                                 stream=stream,
                                                 model_name=model_name,
                                                 max_tokens=0,
-                                                temperature=0,
+                                                temperature=0.1,
                                                 prompt_name=prompt_name,
                                                 src_info=src_info),
                              media_type="text/event-stream")

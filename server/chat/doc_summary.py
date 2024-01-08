@@ -39,6 +39,9 @@ async def doc_chat_iterator(doc: str,
 
     chain = LLMChain(prompt=chat_prompt, llm=model)
 
+    print(prompt_template)
+    print("==================context")
+    print(doc)
     # Begin a task that runs in the background.
     task = asyncio.create_task(wrap_done(
         chain.acall({"context": doc, "question": query}),
