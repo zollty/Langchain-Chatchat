@@ -25,6 +25,8 @@ async def summary_docs(kid: str = Body(..., description="临时知识库ID"),
                         stream: bool = Body(False, description="流式输出"),
                     ):
     doc_id = kid + file_name
+    print(f"==================================================={doc_id}")
+    print(STATIC_DOCUMENTS)
     org_docs = STATIC_DOCUMENTS[doc_id]
     if not org_docs:
         return BaseResponse(code=404, msg=f"未找到临时文档 {doc_id}，请检查或重试")
@@ -119,6 +121,8 @@ def upload_temp_docs(
     with memo_faiss_pool.load_vector_store(id).acquire() as vs:
         vs.add_documents(documents)
     
+    print("===================================================duc")
+    print(STATIC_DOCUMENTS)
     return BaseResponse(data={"id": id, "files": fileNames, "failed_files": failed_files})
 
 
