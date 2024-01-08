@@ -86,7 +86,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     # Set the title of the demo
     st.title("💬 文件Chat")
     # Add your custom text here, with smaller font size
-    st.markdown("<sub>文件专用聊天（左边上传文件）</sub>", unsafe_allow_html=True)
+    st.markdown("<sub>文件专用聊天（左边上传文件）文件列表：</sub>", unsafe_allow_html=True)
     info_placeholder = st.empty()
 
     DEFAULT_SYSTEM_PROMPT = '''
@@ -183,7 +183,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             # call auto_summary
             st.session_state["need_summary"] = True
             tmp_file_name = st.session_state["file_chat_files"][0]
-            info_placeholder.write(tmp_file_name)
+            info_placeholder.text(info_placeholder.text() + "/n" + tmp_file_name)
 
         prompt_templates_kb_list = list(PROMPT_TEMPLATES["knowledge_base_chat"].keys())
         prompt_template_name = prompt_templates_kb_list[0]

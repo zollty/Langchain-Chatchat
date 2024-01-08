@@ -118,6 +118,27 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
         with modal.container():
             cmds = [x for x in parse_command.__doc__.split("\n") if x.strip().startswith("/")]
             st.write("\n\n".join(cmds))
+    
+    info_placeholder = st.empty()
+
+    def auto_summary():
+        tmp_file_name = st.session_state["file_chat_files"][0]
+        chat_box.reset_history()
+        chat_box.ai_say([
+            f"正在总结 `{tmp_file_name}` ...",
+            Markdown("...", in_expander=True, title="文件内容", state="complete"),
+        ])
+        text = ""
+        for d in api.summary_docs(kid=st.session_state["file_chat_id"],
+                                file_name=tmp_file_name,
+                                stream=True):
+            if error_msg := check_error_msg(d):  # check whether error occured
+                st.error(error_msg)
+            elif chunk := d.get("answer"):
+                text += chunk
+                chat_box.update_msg(text, element_index=0)
+            chat_box.update_msg(text, element_index=0, streaming=False)
+            chat_box.update_msg(d.get("src_info", ""), element_index=1, streaming=False)
 
     with st.sidebar:
         # 多会话
@@ -133,6 +154,8 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
         def on_mode_change():
             mode = st.session_state.dialogue_mode
             text = f"已切换到 {mode} 模式。"
+            if mode != "文件对话":
+                info_placeholder.text("")
             if mode == "知识库问答":
                 cur_kb = st.session_state.get("selected_kb")
                 if cur_kb:
@@ -272,18 +295,10 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                     upret = upload_temp_docs(files, api)
                     st.session_state["file_chat_id"] = upret.get("id")
                     st.session_state["file_chat_files"] = upret.get("files")
-
-                    text = ""
-                    for d in api.summary_docs(k_id=st.session_state["file_chat_id"],
-                                            file_name=st.session_state["file_chat_files"][0],
-                                            stream=True):
-                        if error_msg := check_error_msg(d):  # check whether error occured
-                            st.error(error_msg)
-                        elif chunk := d.get("answer"):
-                            text += chunk
-                            chat_box.update_msg(text, element_index=0)
-                        chat_box.update_msg(text, element_index=0, streaming=False)
-                        chat_box.update_msg("\n\n".join(d.get("src_info", [])), element_index=1, streaming=False)
+                    # call auto_summary
+                    st.session_state["need_summary"] = True
+                    tmp_file_name = st.session_state["file_chat_files"][0]
+                    info_placeholder.text(info_placeholder.text() + "/n" + tmp_file_name)
 
         elif dialogue_mode == "搜索引擎问答":
             search_engine_list = api.list_search_engines()
