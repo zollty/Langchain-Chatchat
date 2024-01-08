@@ -92,6 +92,27 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     You are an AI programming assistant. Follow the user's instructions carefully. Respond using markdown.
     '''.strip()
 
+    def auto_summary():
+        # response_container = st.container()
+        # input_container = st.container()
+        tmp_file_name = st.session_state["file_chat_files"][0]
+        chat_box.reset_history()
+        chat_box.ai_say([
+            f"正在总结 `{tmp_file_name}` ...",
+            Markdown("...", in_expander=True, title="文件内容", state="complete"),
+        ])
+        text = ""
+        for d in api.summary_docs(kid=st.session_state["file_chat_id"],
+                                file_name=tmp_file_name,
+                                stream=True):
+            if error_msg := check_error_msg(d):  # check whether error occured
+                st.error(error_msg)
+            elif chunk := d.get("answer"):
+                text += chunk
+                chat_box.update_msg(text, element_index=0)
+            chat_box.update_msg(text, element_index=0, streaming=False)
+            chat_box.update_msg(d.get("src_info", ""), element_index=1, streaming=False)
+
     now = datetime.now()
     with st.sidebar:
 
@@ -158,26 +179,8 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             upret = upload_temp_docs(files, api)
             st.session_state["file_chat_id"] = upret.get("id")
             st.session_state["file_chat_files"] = upret.get("files")
-
-            tmp_file_name = st.session_state["file_chat_files"][0]
-            # response_container = st.container()
-            # input_container = st.container()
-            chat_box.reset_history()
-            chat_box.ai_say([
-                f"正在总结 `{tmp_file_name}` ...",
-                Markdown("...", in_expander=True, title="文件内容", state="complete"),
-            ])
-            text = ""
-            for d in api.summary_docs(kid=st.session_state["file_chat_id"],
-                                    file_name=tmp_file_name,
-                                    stream=True):
-                if error_msg := check_error_msg(d):  # check whether error occured
-                    st.error(error_msg)
-                elif chunk := d.get("answer"):
-                    text += chunk
-                    chat_box.update_msg(text, element_index=0)
-                chat_box.update_msg(text, element_index=0, streaming=False)
-                chat_box.update_msg(d.get("src_info", ""), element_index=1, streaming=False)
+            # call auto_summary
+            auto_summary()
 
 
         prompt_templates_kb_list = list(PROMPT_TEMPLATES["knowledge_base_chat"].keys())
