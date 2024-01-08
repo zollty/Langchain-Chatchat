@@ -29,7 +29,7 @@ def upload_temp_docs(files, _api: ApiRequest) -> str:
     将文件上传到临时目录，用于文件对话
     返回临时向量库ID
     '''
-    return _api.upload_temp_docs(files).get("data", {})
+    return _api.upload_temp_docs(files)
 
 
 def get_messages_history(history_len: int, content_in_expander: bool = False) -> List[Dict]:
