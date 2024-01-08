@@ -41,7 +41,7 @@ async def doc_chat_iterator(doc: str,
 
     chain = LLMChain(prompt=chat_prompt, llm=model)
 
-    max_length = 12767
+    max_length = 22767
     if len(doc) < max_length:
         # Begin a task that runs in the background.
         task = asyncio.create_task(wrap_done(
