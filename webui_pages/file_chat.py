@@ -180,8 +180,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             st.session_state["file_chat_id"] = upret.get("id")
             st.session_state["file_chat_files"] = upret.get("files")
             # call auto_summary
-            auto_summary()
-
+            st.session_state["need_summary"] = True
 
         prompt_templates_kb_list = list(PROMPT_TEMPLATES["knowledge_base_chat"].keys())
         prompt_template_name = prompt_templates_kb_list[0]
@@ -261,6 +260,10 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
                     chat_box.update_msg(text, element_index=0)
                 chat_box.update_msg(text, element_index=0, streaming=False)
                 chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
+
+    if st.session_state.get("need_summary"):
+        st.session_state["need_summary"] = False
+        auto_summary()
 
 
 
