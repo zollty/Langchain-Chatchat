@@ -12,14 +12,23 @@ import asyncio
 from langchain.prompts.chat import ChatPromptTemplate
 from server.utils import torch_gc
 from server.chat.utils import History
-from server.chat.doc_summary4 import doc_chat_iterator
+from server.chat.doc_summary5 import doc_chat_iterator
 from server.knowledge_base.kb_service.base import EmbeddingsFunAdapter
 from server.knowledge_base.utils import KnowledgeFile
 import json
 import os
 from pathlib import Path
+import threading
 
 STATIC_DOCUMENTS = dict()
+def do_clear(doc_id):
+    def action():
+        nonlocal doc_id
+        print(f"-------------------do-------------ddddddddddddd {doc_id}")
+        del STATIC_DOCUMENTS[doc_id]
+    t = threading.Timer(10, action) #延时10秒后执行do_something函数
+    t.start()  
+
 
 async def summary_docs(kid: str = Body(..., description="临时知识库ID"),
                         file_name: str = Body(..., description="文档名"),
@@ -29,7 +38,7 @@ async def summary_docs(kid: str = Body(..., description="临时知识库ID"),
     org_docs = STATIC_DOCUMENTS.get(doc_id)
     if not org_docs:
         return BaseResponse(code=404, msg=f"未找到临时文档 {doc_id}，请检查或重试")
-    del STATIC_DOCUMENTS[doc_id]
+    do_clear(doc_id)
 
     model_name = LONG_CONTEXT_MODEL
     if not model_name:
