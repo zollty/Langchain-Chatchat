@@ -201,7 +201,7 @@ async def doc_chat_iterator(doc: str,
             segment = doc[start:end]
             segments.append(segment)
 
-        yield inner_iterator(1, segments, stream, src_info)
+        await inner_iterator(1, segments, stream, src_info)
 
 
 
