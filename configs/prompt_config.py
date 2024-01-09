@@ -97,12 +97,42 @@ PROMPT_TEMPLATES = {
         "summary1":
             '请简洁和专业的总结下面文档内容。'
             '文档内容如下：\n'
-            '{{ context }}\n'
+            '{{ text }}\n'
             '文档总结为：\n',
 
         "summary2":
             '<指令>请简洁和专业的总结下面文档内容。</指令>\n'
-            '<文档>{{ context }}</文档>\n',
+            '<文档>{{ text }}</文档>\n',
+
+        "summary_lc":
+            """Write a concise summary of the following:
+
+
+"{text}"
+
+
+CONCISE SUMMARY:""",
+
+        "summary_lc_zh":
+            """Write a concise summary of the following:
+
+
+"{text}"
+
+
+CONCISE SUMMARY IN CHINESE:""",
+
+        "refine":
+            """\
+Your job is to produce a final summary.
+We have provided an existing summary up to a certain point: {existing_answer}
+We have the opportunity to refine the existing summary (only if needed) with some more context below.
+------------
+{text}
+------------
+Given the new context, refine the original summary.
+If the context isn't useful, return the original summary.\
+""",
     },
 
     "search_engine_chat": {
