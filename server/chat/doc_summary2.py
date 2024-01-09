@@ -85,7 +85,8 @@ async def doc_chat_iterator(doc: str,
         docs = [Document(page_content=t) for t in segments]
         prompt = PromptTemplate.from_template(get_prompt_template("doc_chat", "summary_lc_zh"))
         # 注意这里是load_summarize_chain
-        chain = load_summarize_chain(llm=model, chain_type="refine", verbose=True, token_max=use_max_tokens, question_prompt=prompt)
+        chain = load_summarize_chain(llm=model, chain_type="refine", verbose=True, question_prompt=prompt)
+        # chain = load_summarize_chain(llm=model, chain_type="refine", verbose=True, token_max=use_max_tokens, map_prompt=prompt, combine_prompt=prompt)
         # chain.run(docs)
         # Begin a task that runs in the background.
         task = asyncio.create_task(wrap_done(
