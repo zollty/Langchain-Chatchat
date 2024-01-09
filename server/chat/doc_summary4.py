@@ -47,9 +47,9 @@ async def doc_chat_iterator(doc: str,
     for segment in segments:
         idx += 1
         print("------------------------------------------------------")
-        print(f"第{idx}段（{(idx - 1)*max_length}~{idx*max_length}字符）总结===\n\n")
+        print(f"第{idx}段（{(idx - 1)*MAX_LENGTH}~{idx*MAX_LENGTH}字符）总结===\n\n")
         print(segment)
-        yield json.dumps({"answer": f"第{idx}段（{(idx - 1)*max_length}~{idx*max_length}字符）总结===\n\n"}, ensure_ascii=False)
+        yield json.dumps({"answer": f"第{idx}段（{(idx - 1)*MAX_LENGTH}~{idx*MAX_LENGTH}字符）总结===\n\n"}, ensure_ascii=False)
         yield doc_chat_iterator2(doc=segment,
                             stream=stream,
                             model_name=model_name,
@@ -57,10 +57,16 @@ async def doc_chat_iterator(doc: str,
                             temperature=temperature,
                             prompt_name=prompt_name,
                             src_info=src_info)
-        if idx==len(segments): 
-            yield json.dumps({"answer": "\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
+        if stream:
+            if idx==len(segments): 
+                yield json.dumps({"answer": "\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
+            else:
+                yield json.dumps({"answer": "\n\n"}, ensure_ascii=False)
         else:
-            yield json.dumps({"answer": "\n\n"}, ensure_ascii=False)
+            if idx==len(segments): 
+                yield json.dumps({"answer": "\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
+            else:
+                yield json.dumps({"answer": "\n\n"}, ensure_ascii=False)
 
 
 async def doc_chat_iterator2(doc: str,
@@ -100,11 +106,11 @@ async def doc_chat_iterator2(doc: str,
     if stream:
         async for token in callback.aiter():
             yield json.dumps({"answer": token}, ensure_ascii=False)
-        yield json.dumps({"src_info": src_info}, ensure_ascii=False)
+        # yield json.dumps({"src_info": src_info}, ensure_ascii=False)
     else:
         answer = ""
         async for token in callback.aiter():
             answer += token
-        yield json.dumps({"answer": answer, "src_info": src_info}, ensure_ascii=False)
+        yield json.dumps({"answer": answer}, ensure_ascii=False)
     
     await task
