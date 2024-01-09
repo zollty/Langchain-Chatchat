@@ -58,7 +58,7 @@ async def summary_docs(kid: str = Body(..., description="临时知识库ID"),
         start = seg * MAX_LENGTH
         end = min((seg + 1) * MAX_LENGTH, total_length)
         doc = doc[start:end]
-        doc_desc = f"""原文 {file_name} 第{seg}段 \n\n{doc[:1000]}\n\n"""
+        doc_desc = f"""原文 {file_name} 第{seg}段（每段长度小于{MAX_LENGTH}） \n\n{doc[:1000]}\n\n"""
 
         if seg < (num_segments-2) or (seg == (num_segments-1) and (total_length-seg*MAX_LENGTH) > 500):
             src_info = {"doc":doc_desc, "next_seg": seg+1}
