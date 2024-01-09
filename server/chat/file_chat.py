@@ -11,7 +11,7 @@ from typing import AsyncIterable, List, Optional
 import asyncio
 from langchain.prompts.chat import ChatPromptTemplate
 from server.chat.utils import History
-from server.chat.doc_summary import doc_chat_iterator
+from server.chat.doc_summary2 import doc_chat_iterator
 from server.knowledge_base.kb_service.base import EmbeddingsFunAdapter
 from server.knowledge_base.utils import KnowledgeFile
 import json
