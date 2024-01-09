@@ -88,6 +88,9 @@ async def doc_chat_iterator(doc: str,
 
         # 将拆分后的文本转成文档
         docs = [Document(page_content=t) for t in segments]
+        print("------------------------------------------------------文档长度")
+        print(len(docs))
+        print(docs[:-1])
         prompt = PromptTemplate.from_template(get_prompt_template("doc_chat", "summary_lc_zh"))
         # 注意这里是load_summarize_chain
         chain = load_summarize_chain(llm=model, chain_type="refine", verbose=True, question_prompt=prompt)
