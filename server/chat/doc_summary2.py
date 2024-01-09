@@ -132,7 +132,7 @@ async def doc_chat_iterator(doc: str,
         
 
 async def inner_iterator(idx: int,
-                            segments: str[],
+                            segments: List[str],
                             stream: bool,
                             src_info=None,
                             ) -> AsyncIterable[str]:
