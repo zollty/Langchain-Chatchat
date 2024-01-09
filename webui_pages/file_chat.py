@@ -201,10 +201,6 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
                                 )
 
         enable_summary = st.checkbox(label="开启总结", value=True, key="enable_summary")
-        kb_top_k = st.number_input("匹配知识条数：", 1, 20, VECTOR_SEARCH_TOP_K)
-
-        ## Bge 模型会超过1
-        score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
         if st.button("开始上传", disabled=len(files)==0):
             upret = upload_temp_docs(files, api)
             if upret.get("files"):  # check whether error occured
@@ -216,6 +212,9 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             elif fail_datas := upret.get("failed_files"):
                 st.error("上传或解析失败" + json.dumps(fail_datas))
 
+        kb_top_k = st.number_input("匹配知识条数：", 1, 20, VECTOR_SEARCH_TOP_K)
+        ## Bge 模型会超过1
+        score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
         prompt_templates_kb_list = list(PROMPT_TEMPLATES["knowledge_base_chat"].keys())
         prompt_template_name = prompt_templates_kb_list[0]
         if "prompt_template_select" not in st.session_state:
