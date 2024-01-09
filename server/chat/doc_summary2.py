@@ -209,6 +209,7 @@ async def inner_iterator(idx: int,
                             segments: List[str],
                             stream: bool,
                             chain: LLMChain,
+                            callback=None,
                             src_info=None,
                             ) -> AsyncIterable[str]:
     # Begin a task that runs in the background.
@@ -223,7 +224,7 @@ async def inner_iterator(idx: int,
             yield json.dumps({"answer": "\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
         else:
             yield json.dumps({"answer": "\n\n"}, ensure_ascii=False)
-            yield inner_iterator(idx+1, segments, stream, chain, src_info)
+            yield inner_iterator(idx+1, segments, stream, chain, callback, src_info)
     else:
         answer = ""
         async for token in callback.aiter():
@@ -232,7 +233,7 @@ async def inner_iterator(idx: int,
             yield json.dumps({"answer": answer+"\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
         else:
             yield json.dumps({"answer": answer+"\n\n"}, ensure_ascii=False)
-            yield inner_iterator(idx+1, segments, stream, chain, src_info)
+            yield inner_iterator(idx+1, segments, stream, chain, callback, src_info)
     
     await task
 
