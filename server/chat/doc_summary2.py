@@ -84,7 +84,7 @@ async def doc_chat_iterator(doc: str,
         # 将拆分后的文本转成文档
         docs = [Document(page_content=t) for t in segments]
         # 注意这里是load_summarize_chain
-        chain = load_summarize_chain(llm=model, chain_type="refine", verbose=true, token_max=use_max_tokens, question_prompt=get_prompt_template("doc_chat", "summary_lc_zh"))
+        chain = load_summarize_chain(llm=model, chain_type="refine", verbose=True, token_max=use_max_tokens, question_prompt=get_prompt_template("doc_chat", "summary_lc_zh"))
         # chain.run(docs)
         # Begin a task that runs in the background.
         task = asyncio.create_task(wrap_done(
