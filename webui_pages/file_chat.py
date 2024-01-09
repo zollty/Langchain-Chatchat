@@ -144,6 +144,28 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     now = datetime.now()
     with st.sidebar:
 
+        files = st.file_uploader("上传知识文件：",
+                                [i for ls in LOADER_DICT.values() for i in ls],
+                                accept_multiple_files=True,
+                                )
+
+        enable_summary = st.checkbox(label="开启总结", value=True, key="enable_summary")
+        if st.button("开始上传", disabled=len(files)==0):
+            upret = upload_temp_docs(files, api)
+            if upret.get("files"):  # check whether error occured
+                st.session_state["file_chat_id"] = upret.get("id")
+                # info_placeholder.text(upret.get("id"))
+                st.session_state["file_chat_files"] = upret.get("files")
+                # call auto_summary
+                st.session_state["need_summary"] = True
+            elif fail_datas := upret.get("failed_files"):
+                st.error("上传或解析失败" + json.dumps(fail_datas))
+
+        kb_top_k = st.number_input("匹配知识条数：", 1, 20, VECTOR_SEARCH_TOP_K)
+        ## Bge 模型会超过1
+        score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
+
+
         def on_llm_change():
             if llm_model:
                 config = api.get_model_config(llm_model)
@@ -195,26 +217,6 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
                     st.session_state["prev_llm_model"] = llm_model
 
 
-        files = st.file_uploader("上传知识文件：",
-                                [i for ls in LOADER_DICT.values() for i in ls],
-                                accept_multiple_files=True,
-                                )
-
-        enable_summary = st.checkbox(label="开启总结", value=True, key="enable_summary")
-        if st.button("开始上传", disabled=len(files)==0):
-            upret = upload_temp_docs(files, api)
-            if upret.get("files"):  # check whether error occured
-                st.session_state["file_chat_id"] = upret.get("id")
-                # info_placeholder.text(upret.get("id"))
-                st.session_state["file_chat_files"] = upret.get("files")
-                # call auto_summary
-                st.session_state["need_summary"] = True
-            elif fail_datas := upret.get("failed_files"):
-                st.error("上传或解析失败" + json.dumps(fail_datas))
-
-        kb_top_k = st.number_input("匹配知识条数：", 1, 20, VECTOR_SEARCH_TOP_K)
-        ## Bge 模型会超过1
-        score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
         prompt_templates_kb_list = list(PROMPT_TEMPLATES["knowledge_base_chat"].keys())
         prompt_template_name = prompt_templates_kb_list[0]
         if "prompt_template_select" not in st.session_state:
