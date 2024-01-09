@@ -38,17 +38,21 @@ async def doc_chat_iterator(doc: str,
         callbacks=[callback],
     )
 
-    prompt_template = get_prompt_template("doc_chat", prompt_name)
-    input_msg = History(role="user", content=prompt_template).to_msg_template(False)
-    chat_prompt = ChatPromptTemplate.from_messages([input_msg])
+    # prompt_template = get_prompt_template("doc_chat", prompt_name)
+    # input_msg = History(role="user", content=prompt_template).to_msg_template(False)
+    # chat_prompt = ChatPromptTemplate.from_messages([input_msg])
+    # chain = LLMChain(prompt=chat_prompt, llm=model)
 
-    chain = LLMChain(prompt=chat_prompt, llm=model)
+    prompt = PromptTemplate.from_template(get_prompt_template("doc_chat", prompt_name))
+    # 注意这里是load_summarize_chain
+    chain = load_summarize_chain(llm=model, chain_type="stuff", verbose=True, prompt=prompt)
 
     max_length = use_max_tokens
     if len(doc) < max_length:
         # Begin a task that runs in the background.
         task = asyncio.create_task(wrap_done(
-            chain.acall({"context": doc, "question": query}),
+            # chain.acall({"context": doc, "question": query}),
+            chain.acall([Document(page_content=doc)])
             callback.done),
         )
 
