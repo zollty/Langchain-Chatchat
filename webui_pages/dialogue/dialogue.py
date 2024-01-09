@@ -138,7 +138,8 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                     text += chunk
                     chat_box.update_msg(text, element_index=0)
                 chat_box.update_msg(text, element_index=0, streaming=False)
-                chat_box.update_msg(d.get("src_info", ""), element_index=1, streaming=False)
+                if src_info := d.get("src_info"):
+                    chat_box.update_msg(src_info.get("doc", ""), element_index=1, streaming=False)
 
     with st.sidebar:
         # 多会话
