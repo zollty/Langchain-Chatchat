@@ -89,7 +89,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     st.title("💬 文件Chat")
     # Add your custom text here, with smaller font size
     st.markdown("<sub>文件专用聊天（左边上传文件）</sub>", unsafe_allow_html=True)
-    info_placeholder = st.empty()
+    #info_placeholder = st.empty()
 
     DEFAULT_SYSTEM_PROMPT = '''
     You are an AI programming assistant. Follow the user's instructions carefully. Respond using markdown.
@@ -209,7 +209,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             upret = upload_temp_docs(files, api)
             if upret.get("files"):  # check whether error occured
                 st.session_state["file_chat_id"] = upret.get("id")
-                info_placeholder.text(upret.get("id"))
+                # info_placeholder.text(upret.get("id"))
                 st.session_state["file_chat_files"] = upret.get("files")
                 # call auto_summary
                 st.session_state["need_summary"] = True
