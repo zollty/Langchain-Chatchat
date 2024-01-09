@@ -34,7 +34,7 @@ async def summary_docs(kid: str = Body(..., description="临时知识库ID"),
     if not model_name:
         model_name = LLM_MODELS[0]
 
-    prompt_name = "summary1"
+    prompt_name = "summary2"
     doc = org_docs[0].page_content
     src_info = f"""原文 {file_name} \n\n{doc[:1000]}\n\n"""
     print("==================")

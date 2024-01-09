@@ -95,7 +95,6 @@ async def doc_chat_iterator(doc: str,
             if stream:
                 async for token in callback.aiter():
                         # Use server-sent-events to stream the response
-                        print(segment, end="")
                         yield json.dumps({"answer": token}, ensure_ascii=False)
                 if idx==len(segments): 
                     yield json.dumps({"answer": "\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
