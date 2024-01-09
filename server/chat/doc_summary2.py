@@ -53,7 +53,7 @@ async def doc_chat_iterator(doc: str,
         docs = [Document(page_content=doc)]
         task = asyncio.create_task(wrap_done(
             # chain.acall({"context": doc, "question": query}),
-            chain.acall(docs)
+            chain.acall(docs),
             callback.done),
         )
 
