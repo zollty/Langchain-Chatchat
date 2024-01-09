@@ -26,7 +26,7 @@ def do_clear(doc_id):
         nonlocal doc_id
         print(f"-------------------do-------------ddddddddddddd {doc_id}")
         del STATIC_DOCUMENTS[doc_id]
-    t = threading.Timer(10, action) #延时10秒后执行do_something函数
+    t = threading.Timer(10, action) #延时10秒后执行action函数
     t.start()  
 
 
