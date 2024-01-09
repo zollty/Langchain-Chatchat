@@ -201,7 +201,7 @@ async def doc_chat_iterator(doc: str,
             segment = doc[start:end]
             segments.append(segment)
 
-        yield inner_iterator(1, segments, stream, src_info)
+        async inner_iterator(1, segments, stream, src_info)
 
 
 
@@ -225,7 +225,7 @@ async def inner_iterator(idx: int,
             yield json.dumps({"answer": "\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
         else:
             yield json.dumps({"answer": "\n\n"}, ensure_ascii=False)
-            yield inner_iterator(idx+1, segments, stream, src_info)
+            async inner_iterator(idx+1, segments, stream, src_info)
     else:
         answer = ""
         async for token in callback.aiter():
@@ -234,7 +234,7 @@ async def inner_iterator(idx: int,
             yield json.dumps({"answer": answer+"\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
         else:
             yield json.dumps({"answer": answer+"\n\n"}, ensure_ascii=False)
-            yield inner_iterator(idx+1, segments, stream, src_info)
+            async inner_iterator(idx+1, segments, stream, src_info)
     
     await task
 
