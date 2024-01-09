@@ -10,6 +10,7 @@ from langchain.callbacks import AsyncIteratorCallbackHandler
 from typing import AsyncIterable, List, Optional
 import asyncio
 from langchain.prompts.chat import ChatPromptTemplate
+from server.utils import torch_gc
 from server.chat.utils import History
 from server.chat.doc_summary2 import doc_chat_iterator
 from server.knowledge_base.kb_service.base import EmbeddingsFunAdapter
@@ -123,6 +124,7 @@ def upload_temp_docs(
     with memo_faiss_pool.load_vector_store(id).acquire() as vs:
         vs.add_documents(documents)
     
+    torch_gc()
     return BaseResponse(data={"id": id, "files": fileNames, "failed_files": failed_files})
 
 

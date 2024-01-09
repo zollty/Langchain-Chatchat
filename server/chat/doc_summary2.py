@@ -88,32 +88,47 @@ async def doc_chat_iterator(doc: str,
 
         # 将拆分后的文本转成文档
         docs = [Document(page_content=t) for t in segments]
-        print("------------------------------------------------------文档长度")
+        print("-------------------------------------------------------------")
+        print(f"------------------------------------------------------文档长度: {total_length}")
         print(len(docs))
-        print(docs[:-1])
         prompt = PromptTemplate.from_template(get_prompt_template("doc_chat", "summary_lc_zh"))
         # 注意这里是load_summarize_chain
-        chain = load_summarize_chain(llm=model, chain_type="refine", verbose=True, question_prompt=prompt)
+        chain = load_summarize_chain(llm=model, chain_type="stuff", verbose=True, prompt=prompt)
+        # chain = load_summarize_chain(llm=model, chain_type="refine", verbose=True, question_prompt=prompt)
         # chain = load_summarize_chain(llm=model, chain_type="refine", verbose=True, token_max=use_max_tokens, map_prompt=prompt, combine_prompt=prompt)
-        # chain.run(docs)
-        # Begin a task that runs in the background.
-        task = asyncio.create_task(wrap_done(
-            chain.acall(docs),
-            callback.done),
-        )
 
-        if stream:
-            async for token in callback.aiter():
-                # Use server-sent-events to stream the response
-                yield json.dumps({"answer": token}, ensure_ascii=False)
-            yield json.dumps({"src_info": src_info}, ensure_ascii=False)
-        else:
-            answer = ""
-            async for token in callback.aiter():
-                answer += token
-            yield json.dumps({"answer": answer, "src_info": src_info}, ensure_ascii=False)
-        
-        await task
+        # 打印分段
+        idx = 0
+        for segment in segments:
+            idx += 1
+            print("------------------------------------------------------")
+            print(f"第{idx}段（{(idx - 1)*max_length}~{idx*max_length}字符）总结===\n\n")
+            print(segment)
+            # Begin a task that runs in the background.
+            task = asyncio.create_task(wrap_done(
+                chain.acall(docs),
+                callback.done),
+            )
+
+            yield json.dumps({"answer": f"第{idx}段（{(idx - 1)*max_length}~{idx*max_length}字符）总结===\n\n"}, ensure_ascii=False)
+            if stream:
+                async for token in callback.aiter():
+                        # Use server-sent-events to stream the response
+                        yield json.dumps({"answer": token}, ensure_ascii=False)
+                if idx==len(segments): 
+                    yield json.dumps({"answer": "\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
+                else:
+                    yield json.dumps({"answer": "\n\n"}, ensure_ascii=False)
+            else:
+                answer = ""
+                async for token in callback.aiter():
+                        answer += token
+                if idx==len(segments): 
+                    yield json.dumps({"answer": answer+"\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
+                else:
+                    yield json.dumps({"answer": answer+"\n\n"}, ensure_ascii=False)
+            
+            await task
         
 
 
