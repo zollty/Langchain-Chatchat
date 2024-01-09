@@ -115,6 +115,8 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             info_msg = f"正在总结 `{tmp_file_name}` ..."
             if seg > 0:
                 info_msg = f"正在总结 `{tmp_file_name}`第{seg+1}段 ..."
+            else:
+                st.session_state["file_summary"] = ""
             chat_box.ai_say([
                 info_msg,
                 Markdown("...", in_expander=True, title="文件内容", state="complete"),
