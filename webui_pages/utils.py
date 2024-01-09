@@ -470,6 +470,7 @@ class ApiRequest:
         self,
         kid: str,
         file_name: str,
+        seg: int,
         stream: bool = True,
     ):
         '''
@@ -478,6 +479,7 @@ class ApiRequest:
         data = {
             "kid": kid,
             "file_name": file_name,
+            "seg": seg, 
             "stream": stream,
         }
 

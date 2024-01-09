@@ -14,7 +14,7 @@ from configs import (TEMPERATURE, HISTORY_LEN, PROMPT_TEMPLATES,
 from server.knowledge_base.utils import LOADER_DICT
 from server.utils import get_prompt_template
 import uuid
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 chat_box = ChatBox(
     assistant_avatar=os.path.join(
@@ -94,8 +94,9 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     You are an AI programming assistant. Follow the user's instructions carefully. Respond using markdown.
     '''.strip()
 
-    def auto_summary():
-        for tmp_file_name in st.session_state["file_chat_files"]:
+    def auto_summary(file_chat_files: List[str],
+                        seg: int = 0):
+        for tmp_file_name in file_chat_files:
             chat_box.ai_say([
                 f"正在总结 `{tmp_file_name}` ...",
                 Markdown("...", in_expander=True, title="文件内容", state="complete"),
@@ -103,6 +104,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             text = ""
             for d in api.summary_docs(kid=st.session_state["file_chat_id"],
                                     file_name=tmp_file_name,
+                                    seg=seg,
                                     stream=True):
                 if error_msg := check_error_msg(d):  # check whether error occured
                     st.error(error_msg)
@@ -111,7 +113,10 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
                     text += chunk
                     chat_box.update_msg(text, element_index=0)
                 chat_box.update_msg(text, element_index=0, streaming=False)
-                chat_box.update_msg(d.get("src_info", ""), element_index=1, streaming=False)
+                if src_info := d.get("src_info"):
+                    chat_box.update_msg(src_info.get("doc", ""), element_index=1, streaming=False)
+                    if src_info.get("next_seg"):
+                        auto_summary([tmp_file_name], src_info.get("next_seg"))
 
     now = datetime.now()
     with st.sidebar:
@@ -267,7 +272,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
 
     if st.session_state.get("need_summary"):
         st.session_state["need_summary"] = False
-        auto_summary()
+        auto_summary(st.session_state["file_chat_files"])
 
 
 

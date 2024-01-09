@@ -20,19 +20,21 @@ import os
 from pathlib import Path
 import threading
 
+MAX_LENGTH = 30000
 STATIC_DOCUMENTS = dict()
 def do_clear(doc_id):
     def action():
         nonlocal doc_id
-        print(f"-------------------do-------------ddddddddddddd {doc_id}")
+        print(f"---------------------------------del mem doc: {doc_id}")
         del STATIC_DOCUMENTS[doc_id]
-    t = threading.Timer(10, action) #延时10秒后执行action函数
+    t = threading.Timer(300, action) #延时x秒后执行action函数
     t.start()  
 
 
 async def summary_docs(kid: str = Body(..., description="临时知识库ID"),
                         file_name: str = Body(..., description="文档名"),
                         stream: bool = Body(False, description="流式输出"),
+                        seg: int = Body(0, description="分段"),
                     ):
     doc_id = kid + file_name
     org_docs = STATIC_DOCUMENTS.get(doc_id)
@@ -46,7 +48,24 @@ async def summary_docs(kid: str = Body(..., description="临时知识库ID"),
 
     prompt_name = "summary2"
     doc = org_docs[0].page_content
-    src_info = f"""原文 {file_name} \n\n{doc[:1000]}\n\n"""
+    # 计算总长度
+    total_length = len(doc)
+    if total_length > MAX_LENGTH:
+        # 计算分段数量
+        num_segments = (total_length // MAX_LENGTH) + 1
+
+        # 获取第seg段内容
+        start = seg * MAX_LENGTH
+        end = min((seg + 1) * MAX_LENGTH, total_length)
+        doc = doc[start:end]
+        doc_desc = f"""原文 {file_name} \n\n{doc[:1000]}\n\n"""
+
+        if seg < (num_segments-1):
+            src_info = {"doc":doc_desc, "next_seg": seg+1}
+        else:
+            src_info = {"doc":doc_desc}
+    else:
+        src_info = {"doc": f"""原文 {file_name} \n\n{doc[:1000]}\n\n"""}
     print("==================")
     print(src_info)
     return StreamingResponse(doc_chat_iterator(doc=doc,
