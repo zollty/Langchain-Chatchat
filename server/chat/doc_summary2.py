@@ -50,9 +50,10 @@ async def doc_chat_iterator(doc: str,
     max_length = use_max_tokens
     if len(doc) < max_length:
         # Begin a task that runs in the background.
+        docs = [Document(page_content=doc)]
         task = asyncio.create_task(wrap_done(
             # chain.acall({"context": doc, "question": query}),
-            chain.acall([Document(page_content=doc)])
+            chain.acall(docs)
             callback.done),
         )
 
