@@ -95,12 +95,12 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     You are an AI programming assistant. Follow the user's instructions carefully. Respond using markdown.
     '''.strip()
 
-    def gen_relate_qa(text: str):
+    def gen_relate_qa(doc: str):
         chat_box.ai_say([
             f"AI猜您想问 ..."
         ])
         text = "对此文档提问如下，可进一步了解:\n"
-        for d in api.gen_relate_qa(doc=text,
+        for d in api.gen_relate_qa(doc=doc,
                                 stream=True):
             if error_msg := check_error_msg(d):  # check whether error occured
                 st.error(error_msg)
