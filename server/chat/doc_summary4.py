@@ -12,6 +12,8 @@ from langchain.prompts.chat import ChatPromptTemplate
 from langchain.prompts import PromptTemplate
 from typing import List, Optional, Dict
 import json
+from langchain.docstore.document import Document
+from langchain.chains.summarize import load_summarize_chain
 
 async def doc_chat_iterator(doc: str,
                             query: str = None,
