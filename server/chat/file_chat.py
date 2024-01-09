@@ -58,9 +58,9 @@ async def summary_docs(kid: str = Body(..., description="临时知识库ID"),
         start = seg * MAX_LENGTH
         end = min((seg + 1) * MAX_LENGTH, total_length)
         doc = doc[start:end]
-        doc_desc = f"""原文 {file_name} 第{seg}段（每段长度小于{MAX_LENGTH}） \n\n{doc[:1000]}\n\n"""
+        doc_desc = f"""原文 {file_name} 第{seg+1}段（每段长度小于{MAX_LENGTH}） \n\n{doc[:1000]}\n\n"""
 
-        if seg < (num_segments-2) or (seg == (num_segments-1) and (total_length-seg*MAX_LENGTH) > 500):
+        if seg < (num_segments-2) or (seg == (num_segments-2) and (total_length-(seg+1)*MAX_LENGTH) > 200):
             src_info = {"doc":doc_desc, "next_seg": seg+1}
         else:
             src_info = {"doc":doc_desc}
@@ -77,6 +77,23 @@ async def summary_docs(kid: str = Body(..., description="临时知识库ID"),
                                                 src_info=src_info),
                              media_type="text/event-stream")
 
+
+async def gen_relate_qa(doc: str = Body(..., description="文档内容"),
+                        stream: bool = Body(False, description="流式输出"),
+                    ):
+
+    model_name = LONG_CONTEXT_MODEL
+    if not model_name:
+        model_name = LLM_MODELS[0]
+
+    prompt_name = "relate_qa"
+    return StreamingResponse(doc_chat_iterator(doc=doc,
+                                                stream=stream,
+                                                model_name=model_name,
+                                                max_tokens=0,
+                                                temperature=0.1,
+                                                prompt_name=prompt_name),
+                             media_type="text/event-stream")
 
 def _parse_files_in_thread(
     files: List[UploadFile],

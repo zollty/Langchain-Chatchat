@@ -148,6 +148,15 @@ We have the opportunity to refine the existing summary (only if needed) with som
 Given the new context, refine the original summary.
 If the context isn't useful, return the original summary.\
 """,
+
+        "relate_qa": """根据以下内容，生成几个相关的提问。内容如下：
+
+
+"{text}"
+
+
+相关的提问：""",
+
     },
 
     "search_engine_chat": {

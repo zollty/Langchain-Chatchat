@@ -491,6 +491,27 @@ class ApiRequest:
         return self._httpx_stream2generator(response, as_json=True)
 
 
+    def gen_relate_qa(
+        self,
+        doc: str,
+        stream: bool = True,
+    ):
+        '''
+        对应 api.py/inner/gen_relate_qa 接口
+        '''
+        data = {
+            "doc": doc,
+            "stream": stream,
+        }
+
+        response = self.post(
+            "/inner/gen_relate_qa",
+            json=data,
+            stream=True,
+        )
+        return self._httpx_stream2generator(response, as_json=True)
+
+
     def file_chat(
         self,
         query: str,

@@ -59,6 +59,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     st.session_state["conversation_ids"].setdefault(chat_box.cur_chat_name, uuid.uuid4().hex)
     st.session_state.setdefault("file_chat_id", None)
     st.session_state.setdefault("file_chat_files", None)
+    st.session_state.setdefault("file_summary", "")
     default_model = api.get_default_llm_model()[0]
     llm_model = "chatglm3-6b-32k"
     
@@ -94,11 +95,28 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     You are an AI programming assistant. Follow the user's instructions carefully. Respond using markdown.
     '''.strip()
 
+    def gen_relate_qa(text: str):
+        chat_box.ai_say([
+            f"AI猜您想问 ..."
+        ])
+        text = "对此文档提问如下，可进一步了解:\n"
+        for d in api.gen_relate_qa(doc=text,
+                                stream=True):
+            if error_msg := check_error_msg(d):  # check whether error occured
+                st.error(error_msg)
+            elif chunk := d.get("answer"):
+                text += chunk
+                chat_box.update_msg(text, element_index=0)
+            chat_box.update_msg(text, element_index=0, streaming=False)
+
     def auto_summary(file_chat_files: List[str],
                         seg: int = 0):
         for tmp_file_name in file_chat_files:
+            info_msg = f"正在总结 `{tmp_file_name}` ..."
+            if seg > 0:
+                info_msg = f"正在总结 `{tmp_file_name}`第{seg+1}段 ..."
             chat_box.ai_say([
-                f"正在总结 `{tmp_file_name}` ...",
+                info_msg,
                 Markdown("...", in_expander=True, title="文件内容", state="complete"),
             ])
             text = ""
@@ -113,10 +131,13 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
                     text += chunk
                     chat_box.update_msg(text, element_index=0)
                 chat_box.update_msg(text, element_index=0, streaming=False)
+                st.session_state["file_summary"] += "\n" + text
                 if src_info := d.get("src_info"):
                     chat_box.update_msg(src_info.get("doc", ""), element_index=1, streaming=False)
                     if src_info.get("next_seg"):
                         auto_summary([tmp_file_name], src_info.get("next_seg"))
+                    else:
+                        gen_relate_qa(st.session_state["file_summary"])
 
     now = datetime.now()
     with st.sidebar:
