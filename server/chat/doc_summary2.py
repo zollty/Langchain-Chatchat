@@ -74,7 +74,7 @@ async def doc_chat_iterator(doc: str,
         # 计算总长度
         total_length = len(doc)
         # 计算分段数量
-        num_segments = total_length // max_length
+        num_segments = (total_length // max_length) + 1
 
         # 初始化分段列表
         segments = []
@@ -106,7 +106,7 @@ async def doc_chat_iterator(doc: str,
             print(segment)
             # Begin a task that runs in the background.
             task = asyncio.create_task(wrap_done(
-                chain.acall(docs),
+                chain.acall([Document(page_content=segments[idx-1])]),
                 callback.done),
             )
 
@@ -131,5 +131,36 @@ async def doc_chat_iterator(doc: str,
             await task
         
 
+async def inner_iterator(idx: int,
+                            segments: str[],
+                            stream: bool,
+                            src_info=None,
+                            ) -> AsyncIterable[str]:
+    # Begin a task that runs in the background.
+    task = asyncio.create_task(wrap_done(
+        chain.acall([Document(page_content=segments[idx-1])]),
+        callback.done),
+    )
 
+    yield json.dumps({"answer": f"第{idx}段（{(idx - 1)*max_length}~{idx*max_length}字符）总结===\n\n"}, ensure_ascii=False)
+    if stream:
+        async for token in callback.aiter():
+                # Use server-sent-events to stream the response
+                yield json.dumps({"answer": token}, ensure_ascii=False)
+        if idx==len(segments): 
+            yield json.dumps({"answer": "\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
+        else:
+            yield json.dumps({"answer": "\n\n"}, ensure_ascii=False)
+            inner_iterator(idx+1, segments, stream, src_info)
+    else:
+        answer = ""
+        async for token in callback.aiter():
+                answer += token
+        if idx==len(segments): 
+            yield json.dumps({"answer": answer+"\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
+        else:
+            yield json.dumps({"answer": answer+"\n\n"}, ensure_ascii=False)
+            inner_iterator(idx+1, segments, stream, src_info)
+    
+    await task
 
