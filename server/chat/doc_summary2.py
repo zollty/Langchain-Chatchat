@@ -201,20 +201,18 @@ async def doc_chat_iterator(doc: str,
             segment = doc[start:end]
             segments.append(segment)
 
-        async inner_iterator(1, segments, stream, src_info)
+        yield inner_iterator(1, segments, stream, src_info)
 
 
 
 async def inner_iterator(idx: int,
                             segments: List[str],
                             stream: bool,
+                            chain: LLMChain,
                             src_info=None,
                             ) -> AsyncIterable[str]:
     # Begin a task that runs in the background.
-    task = asyncio.create_task(wrap_done(
-        chain.acall([Document(page_content=segments[idx-1])]),
-        callback.done),
-    )
+    task = asyncio.create_task(chain.run([Document(page_content=segments[idx-1])]))
 
     yield json.dumps({"answer": f"第{idx}段（{(idx - 1)*max_length}~{idx*max_length}字符）总结===\n\n"}, ensure_ascii=False)
     if stream:
@@ -225,7 +223,7 @@ async def inner_iterator(idx: int,
             yield json.dumps({"answer": "\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
         else:
             yield json.dumps({"answer": "\n\n"}, ensure_ascii=False)
-            async inner_iterator(idx+1, segments, stream, src_info)
+            yield inner_iterator(idx+1, segments, stream, chain, src_info)
     else:
         answer = ""
         async for token in callback.aiter():
@@ -234,7 +232,7 @@ async def inner_iterator(idx: int,
             yield json.dumps({"answer": answer+"\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
         else:
             yield json.dumps({"answer": answer+"\n\n"}, ensure_ascii=False)
-            async inner_iterator(idx+1, segments, stream, src_info)
+            yield inner_iterator(idx+1, segments, stream, chain, src_info)
     
     await task
 
