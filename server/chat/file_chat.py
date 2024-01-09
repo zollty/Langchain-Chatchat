@@ -27,7 +27,7 @@ def do_clear(doc_id):
         nonlocal doc_id
         print(f"---------------------------------del mem doc: {doc_id}")
         del STATIC_DOCUMENTS[doc_id]
-    t = threading.Timer(300, action) #延时x秒后执行action函数
+    t = threading.Timer(600, action) #延时x秒后执行action函数
     t.start()  
 
 
@@ -40,7 +40,6 @@ async def summary_docs(kid: str = Body(..., description="临时知识库ID"),
     org_docs = STATIC_DOCUMENTS.get(doc_id)
     if not org_docs:
         return BaseResponse(code=404, msg=f"未找到临时文档 {doc_id}，请检查或重试")
-    do_clear(doc_id)
 
     model_name = LONG_CONTEXT_MODEL
     if not model_name:
@@ -163,6 +162,7 @@ def upload_temp_docs(
             documents += docs
             fileNames.append(file)
             STATIC_DOCUMENTS[id + file] = org_docs
+            do_clear(id + file)
         else:
             failed_files.append({file: msg})
 
