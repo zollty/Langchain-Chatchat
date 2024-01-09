@@ -103,7 +103,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             text = ""
             for d in api.summary_docs(kid=st.session_state["file_chat_id"],
                                     file_name=tmp_file_name,
-                                    stream=False):
+                                    stream=True):
                 if error_msg := check_error_msg(d):  # check whether error occured
                     st.error(error_msg)
                     break
