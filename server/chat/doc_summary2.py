@@ -43,7 +43,7 @@ async def doc_chat_iterator(doc: str,
     # chat_prompt = ChatPromptTemplate.from_messages([input_msg])
     # chain = LLMChain(prompt=chat_prompt, llm=model)
 
-    prompt = PromptTemplate.from_template(get_prompt_template("doc_chat", prompt_name))
+    prompt = PromptTemplate.from_template(get_prompt_template("doc_chat", "summary_lc_zh"))
     # 注意这里是load_summarize_chain
     chain = load_summarize_chain(llm=model, chain_type="stuff", verbose=True, prompt=prompt)
 
