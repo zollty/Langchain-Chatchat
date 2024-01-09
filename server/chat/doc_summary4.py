@@ -15,6 +15,9 @@ import json
 from langchain.docstore.document import Document
 from langchain.chains.summarize import load_summarize_chain
 
+
+MAX_LENGTH = 30000
+
 async def doc_chat_iterator(doc: str,
                             query: str = None,
                             stream: bool = False,
@@ -24,12 +27,57 @@ async def doc_chat_iterator(doc: str,
                             prompt_name: str = "summary1",
                             src_info=None,
                             ) -> AsyncIterable[str]:
-    use_max_tokens = 30000
+    # 计算总长度
+    total_length = len(doc)
+    # 计算分段数量
+    num_segments = (total_length // MAX_LENGTH) + 1
+
+    # 初始化分段列表
+    segments = []
+
+    # 遍历字符串，切割分段
+    for i in range(num_segments):
+        start = i * MAX_LENGTH
+        end = min((i + 1) * MAX_LENGTH, total_length)
+        segment = doc[start:end]
+        segments.append(segment)
+
+    # 打印分段
+    idx = 0
+    for segment in segments:
+        idx += 1
+        print("------------------------------------------------------")
+        print(f"第{idx}段（{(idx - 1)*max_length}~{idx*max_length}字符）总结===\n\n")
+        print(segment)
+        yield json.dumps({"answer": f"第{idx}段（{(idx - 1)*max_length}~{idx*max_length}字符）总结===\n\n"}, ensure_ascii=False)
+        yield doc_chat_iterator2(doc=segment,
+                            stream=stream,
+                            model_name=model_name,
+                            max_tokens=max_tokens,
+                            temperature=temperature,
+                            prompt_name=prompt_name,
+                            src_info=src_info)
+        if idx==len(segments): 
+            yield json.dumps({"answer": "\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
+        else:
+            yield json.dumps({"answer": "\n\n"}, ensure_ascii=False)
+
+
+async def doc_chat_iterator2(doc: str,
+                            query: str = None,
+                            stream: bool = False,
+                            model_name: str = LLM_MODELS[0],
+                            max_tokens: int = 0,
+                            temperature: float = TEMPERATURE,
+                            prompt_name: str = "summary1",
+                            src_info=None,
+                            ) -> AsyncIterable[str]:
+    use_max_tokens = MAX_LENGTH
     if max_tokens > 0:
         use_max_tokens = max_tokens
 
-    if len(doc) > use_max_tokens:
-        doc = doc[:use_max_tokens]
+    if len(doc) > MAX_LENGTH:
+        doc = doc[:MAX_LENGTH]
 
     callback = AsyncIteratorCallbackHandler()
     model = get_ChatOpenAI(
