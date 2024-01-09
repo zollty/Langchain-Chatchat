@@ -199,6 +199,8 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
                                 [i for ls in LOADER_DICT.values() for i in ls],
                                 accept_multiple_files=True,
                                 )
+
+        enable_summary = st.checkbox(label="开启总结", value=True, key="enable_summary")
         kb_top_k = st.number_input("匹配知识条数：", 1, 20, VECTOR_SEARCH_TOP_K)
 
         ## Bge 模型会超过1
@@ -293,7 +295,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
                 chat_box.update_msg(text, element_index=0, streaming=False)
                 chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
 
-    if st.session_state.get("need_summary"):
+    if st.session_state.get("need_summary") and st.session_state.enable_summary:
         st.session_state["need_summary"] = False
         auto_summary(st.session_state["file_chat_files"])
 
