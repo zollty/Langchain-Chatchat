@@ -41,42 +41,44 @@ async def doc_chat_iterator(doc: str,
                             prompt_name=prompt_name,
                             src_info=src_info)
         yield json.dumps({"src_info": src_info}, ensure_ascii=False)
+    
+    else:
 
-    # 初始化分段列表
-    segments = []
+        # 初始化分段列表
+        segments = []
 
-    # 遍历字符串，切割分段
-    for i in range(num_segments):
-        start = i * MAX_LENGTH
-        end = min((i + 1) * MAX_LENGTH, total_length)
-        segment = doc[start:end]
-        segments.append(segment)
+        # 遍历字符串，切割分段
+        for i in range(num_segments):
+            start = i * MAX_LENGTH
+            end = min((i + 1) * MAX_LENGTH, total_length)
+            segment = doc[start:end]
+            segments.append(segment)
 
-    # 打印分段
-    idx = 0
-    for segment in segments:
-        idx += 1
-        print("------------------------------------------------------")
-        print(f"第{idx}段（{(idx - 1)*MAX_LENGTH}~{idx*MAX_LENGTH}字符）总结===\n\n")
-        print(segment)
-        yield json.dumps({"answer": f"第{idx}段（{(idx - 1)*MAX_LENGTH}~{idx*MAX_LENGTH}字符）总结===\n\n"}, ensure_ascii=False)
-        yield doc_chat_iterator2(doc=segment,
-                            stream=stream,
-                            model_name=model_name,
-                            max_tokens=max_tokens,
-                            temperature=temperature,
-                            prompt_name=prompt_name,
-                            src_info=src_info)
-        if stream:
-            if idx==len(segments): 
-                yield json.dumps({"answer": "\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
+        # 打印分段
+        idx = 0
+        for segment in segments:
+            idx += 1
+            print("------------------------------------------------------")
+            print(f"第{idx}段（{(idx - 1)*MAX_LENGTH}~{idx*MAX_LENGTH}字符）总结===\n\n")
+            print(segment)
+            yield json.dumps({"answer": f"第{idx}段（{(idx - 1)*MAX_LENGTH}~{idx*MAX_LENGTH}字符）总结===\n\n"}, ensure_ascii=False)
+            yield doc_chat_iterator2(doc=segment,
+                                stream=stream,
+                                model_name=model_name,
+                                max_tokens=max_tokens,
+                                temperature=temperature,
+                                prompt_name=prompt_name,
+                                src_info=src_info)
+            if stream:
+                if idx==len(segments): 
+                    yield json.dumps({"answer": "\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
+                else:
+                    yield json.dumps({"answer": "\n\n"}, ensure_ascii=False)
             else:
-                yield json.dumps({"answer": "\n\n"}, ensure_ascii=False)
-        else:
-            if idx==len(segments): 
-                yield json.dumps({"answer": "\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
-            else:
-                yield json.dumps({"answer": "\n\n"}, ensure_ascii=False)
+                if idx==len(segments): 
+                    yield json.dumps({"answer": "\n\n总结完成", "src_info": src_info}, ensure_ascii=False)
+                else:
+                    yield json.dumps({"answer": "\n\n"}, ensure_ascii=False)
 
 
 async def doc_chat_iterator2(doc: str,
