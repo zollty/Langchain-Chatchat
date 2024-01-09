@@ -12,7 +12,7 @@ import asyncio
 from langchain.prompts.chat import ChatPromptTemplate
 from server.utils import torch_gc
 from server.chat.utils import History
-from server.chat.doc_summary3 import doc_chat_iterator
+from server.chat.doc_summary4 import doc_chat_iterator
 from server.knowledge_base.kb_service.base import EmbeddingsFunAdapter
 from server.knowledge_base.utils import KnowledgeFile
 import json
