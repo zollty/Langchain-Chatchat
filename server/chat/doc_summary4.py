@@ -32,6 +32,16 @@ async def doc_chat_iterator(doc: str,
     # 计算分段数量
     num_segments = (total_length // MAX_LENGTH) + 1
 
+    if total_length < MAX_LENGTH:
+        yield doc_chat_iterator2(doc=doc,
+                            stream=stream,
+                            model_name=model_name,
+                            max_tokens=max_tokens,
+                            temperature=temperature,
+                            prompt_name=prompt_name,
+                            src_info=src_info)
+        yield json.dumps({"src_info": src_info}, ensure_ascii=False)
+
     # 初始化分段列表
     segments = []
 
