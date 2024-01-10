@@ -23,6 +23,9 @@ from strsimpy.normalized_levenshtein import NormalizedLevenshtein
 from markdownify import markdownify
 import requests
 
+from langchain.document_loaders import TextLoader
+import chardet
+
 
 # 读取原始文档
 raw_documents_sanguo = TextLoader('/ai/apps/data/园博园参考资料.txt', encoding='utf-8').load()
