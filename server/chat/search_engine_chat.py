@@ -39,10 +39,10 @@ def duckduckgo_search(text, result_len=SEARCH_ENGINE_TOP_K, **kwargs):
 
 def yuque_search(text, result_len=SEARCH_ENGINE_TOP_K, **kwargs):
 
-    url = 'https://www.yuque.com/api/v2/repos/lvcto2/project_doc/docs/gpn4a7'
+    url = 'https://www.yuque.com/api/v2/repos/ftc8lc/project_doc/docs/ze3x0u'
     data = {}       
     headers={
-        "X-Auth-Token": "QLErUdVHGs3SGJ8dblK3zkjMgHH6XCg5DvqYxH3a",
+        "X-Auth-Token": "cME11GOh3zGblbVKVBF8xwJg8GBYcrc8NhWHJsK3",
         "Content-Type": "application/json"
     }
     # 发起请求并获取响应
