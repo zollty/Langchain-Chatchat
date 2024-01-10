@@ -247,6 +247,8 @@ MODEL_PATH = {
         "Chinese-Alpaca-2-7B":"/ai/models/chinese-alpaca-2-7b-hf",
         "Chinese-Alpaca-2-13B":"/ai/models/chinese-alpaca-2-13b-16k-hf",
         "Llama2-Chinese-13b-Chat":"/ai/models/Llama2-Chinese-13b-Chat",
+        "Qwen-72B-Chat-Int8": "/ai/models/Qwen-72B-Chat-Int8",
+        "Yi-34B-Chat-8bits": "/ai/models/Yi-34B-Chat-8bits",
     },
 }
 
@@ -338,6 +340,8 @@ VLLM_MODEL_DICT = {
     "Chinese-Alpaca-2-7B":"/ai/models/chinese-alpaca-2-7b-hf",
     "Chinese-Alpaca-2-13B":"/ai/models/chinese-alpaca-2-13b-16k-hf",
     "Llama2-Chinese-13b-Chat":"/ai/models/Llama2-Chinese-13b-Chat",
+    "Qwen-72B-Chat-Int8": "/ai/models/Qwen-72B-Chat-Int8",
+    "Yi-34B-Chat-8bits": "/ai/models/Yi-34B-Chat-8bits",
 }
 
 # 你认为支持Agent能力的模型，可以在这里添加，添加后不会出现可视化界面的警告
