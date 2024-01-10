@@ -88,7 +88,8 @@ def stop_llm_model(
 def change_llm_model(
     model_name: str = Body(..., description="当前运行模型", examples=[LLM_MODELS[0]]),
     new_model_name: str = Body(..., description="要切换的新模型", examples=[LLM_MODELS[0]]),
-    controller_address: str = Body(None, description="Fastchat controller服务器地址", examples=[fschat_controller_address()])
+    controller_address: str = Body(None, description="Fastchat controller服务器地址", examples=[fschat_controller_address()]),
+    keep_origin: bool = Body(True, description="不释放原模型，加载新模型")
 ):
     '''
     向fastchat controller请求切换LLM模型。
@@ -98,7 +99,7 @@ def change_llm_model(
         with get_httpx_client() as client:
             r = client.post(
                 controller_address + "/release_worker",
-                json={"model_name": model_name, "new_model_name": new_model_name},
+                json={"model_name": model_name, "new_model_name": new_model_name, "keep_origin": keep_origin},
                 timeout=HTTPX_DEFAULT_TIMEOUT, # wait for new worker_model
             )
             return r.json()

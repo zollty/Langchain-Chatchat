@@ -49,7 +49,7 @@ def yby_page(api: ApiRequest, is_lite: bool = False):
     st.session_state["conversation_ids"].setdefault(chat_box.cur_chat_name, uuid.uuid4().hex)
     st.session_state.setdefault("file_chat_id", None)
     default_model = api.get_default_llm_model()[0]
-    llm_model = "Yi-34B-Chat-8bits" #"Qwen-7B-Chat"
+    llm_model = "Qwen-72B-Chat-Int8" #"Qwen-7B-Chat"
     
     if not chat_box.chat_inited:
         st.toast(
