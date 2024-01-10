@@ -166,8 +166,8 @@ FSCHAT_MODEL_WORKERS = {
        "infer_turbo": True,
        "gpus": None,
 	   #"gpus": "0", # 使用的GPU，以str的格式指定，如"0,1"，如失效请使用CUDA_VISIBLE_DEVICES="0,1"等形式指定
-       "num_gpus": 5, # 使用GPU的数量
-       "max_gpu_memory": "6GiB", # 每个GPU占用的最大显存
+       "num_gpus": 4, # 使用GPU的数量
+       "max_gpu_memory": "10GiB", # 每个GPU占用的最大显存
     },
     "Qwen-1.8B-Chat": { # 3gb
        "port": 20010,
