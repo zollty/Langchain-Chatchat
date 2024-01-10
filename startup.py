@@ -299,6 +299,11 @@ def run_controller(log_level: str = "INFO", started_event: mp.Event = None):
             new_model_name: str = Body(..., description="释放后加载该模型")
     ) -> Dict:
         available_models = app._controller.list_models()
+        worker_address = app._controller.get_worker_address(available_models[0])
+        print("-------------------------------------------------------")
+        for xx in available_models:
+            print(app._controller.get_worker_address(xx))
+
         if new_model_name in available_models:
             msg = f"要切换的LLM模型 {new_model_name} 已经存在"
             logger.info(msg)
