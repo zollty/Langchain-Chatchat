@@ -74,7 +74,7 @@ def stop_llm_model(
         with get_httpx_client() as client:
             r = client.post(
                 controller_address + "/release_worker",
-                json={"model_name": model_name},
+                json={"model_name": model_name, "keep_origin": False},
             )
             return r.json()
     except Exception as e:
