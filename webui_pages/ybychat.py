@@ -141,7 +141,7 @@ def yby_page(api: ApiRequest, is_lite: bool = False):
             chat_box.user_say(prompt)
 
             chat_box.ai_say([
-                f"正在查询知识库...",
+                f"正在查询知识库（请稍等）.....",
                 # Markdown("...", in_expander=True, title="知识库匹配结果", state="complete"),
             ])
             text = ""

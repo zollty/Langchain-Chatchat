@@ -239,7 +239,7 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
             st.session_state.prompt_template_select = prompt_templates_kb_list[0]
 
         def prompt_change():
-            text = f"已切换为 {prompt_template_name} 模板。"
+            text = f"已切换为 {st.session_state.prompt_template_select} 模板。"
             st.toast(text)
 
         prompt_template_select = st.selectbox(
