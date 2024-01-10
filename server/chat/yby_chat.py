@@ -24,6 +24,12 @@ from markdownify import markdownify
 import requests
 
 
+# 读取原始文档
+raw_documents_sanguo = TextLoader('/ai/apps/data/园博园参考资料.txt', encoding='utf-8').load()
+raw_documents_xiyou = TextLoader('/ai/apps/data/园博园介绍.txt', encoding='utf-8').load()
+raw_documents_fw = TextLoader('/ai/apps/data/园博园服务.txt', encoding='utf-8').load()
+yby_src = raw_documents_sanguo + raw_documents_xiyou + raw_documents_fw
+
 def knowledge_search(text, result_len=SEARCH_ENGINE_TOP_K, **kwargs):
 
     url = 'https://www.yuque.com/api/v2/repos/lvcto2/cf_records/docs/ke0oveoeianiemry'
@@ -128,7 +134,7 @@ def search_result2docs(search_results):
     return docs
 
 
-async def lookup_search_engine(
+async def lookup_search_engine2(
         query: str,
         top_k: int = SEARCH_ENGINE_TOP_K,
         split_result: bool = False,
@@ -137,6 +143,12 @@ async def lookup_search_engine(
     docs = search_result2docs(results)
     return docs
 
+async def lookup_search_engine(
+        query: str,
+        top_k: int = SEARCH_ENGINE_TOP_K,
+        split_result: bool = False,
+):
+    return yby_src
 
 async def yby_chat(query: str = Body(..., description="用户输入", examples=["你好"]),
                             top_k: int = Body(SEARCH_ENGINE_TOP_K, description="检索结果数量"),

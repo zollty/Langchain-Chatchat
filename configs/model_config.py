@@ -139,6 +139,7 @@ ONLINE_LLM_MODEL2 = {
 #       2.2 如果以上本地路径不存在，则使用huggingface模型
 MODEL_PATH = {
     "embed_model": {
+        "bce-embedding-base_v1":"/ai/models/bce-embedding-base_v1",
         "nlp_corom_sentence-embedding_chinese-base": "/ai/models/nlp_corom_sentence-embedding_chinese-base",
         "nlp_gte_sentence-embedding_chinese-large": "/ai/models/nlp_gte_sentence-embedding_chinese-large",
         "bge-large-zh-v1.5": "/ai/models/BAAI_bge-large-zh-v1.5", # "BAAI/bge-large-zh-v1.5",
