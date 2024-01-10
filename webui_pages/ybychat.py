@@ -80,6 +80,32 @@ def yby_page(api: ApiRequest, is_lite: bool = False):
 
     now = datetime.now()
     with st.sidebar:
+        
+        prompt_templates_kb_list = list(PROMPT_TEMPLATES["yby_chat"].keys())
+        prompt_template_name = prompt_templates_kb_list[0]
+        if "prompt_template_select" not in st.session_state:
+            st.session_state.prompt_template_select = prompt_templates_kb_list[0]
+
+        def prompt_change():
+            text = f"已切换为 {prompt_template_name} 模板。"
+            st.toast(text)
+
+        prompt_template_select = st.selectbox(
+            "请选择Prompt模板：",
+            prompt_templates_kb_list,
+            index=0,
+            on_change=prompt_change,
+            key="prompt_template_select",
+        )
+        prompt_template_name = st.session_state.prompt_template_select
+        prompt_template = get_prompt_template("yby_chat", prompt_template_name)
+        system_prompt = st.text_area(
+            label="System Prompt",
+            height=200,
+            value=prompt_template,
+            key="system_prompt",
+        )
+        
         temperature = st.slider(
             'temperature', 0.0, 1.5, 0.95, step=0.01
         )
@@ -122,7 +148,7 @@ def yby_page(api: ApiRequest, is_lite: bool = False):
                                             top_k=kb_top_k,
                                             history=history,
                                             model=llm_model,
-                                            prompt_name="youdao",
+                                            prompt_name=prompt_template_name,
                                             temperature=temperature,
                                             split_result=False):
                 if error_msg := check_error_msg(d):  # check whether error occured
