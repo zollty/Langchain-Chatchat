@@ -208,7 +208,7 @@ async def yby_chat(query: str = Body(..., description="用户输入", examples=[
         )
 
         source_documents = [
-            f"""出处 [{inum + 1}] [{doc.metadata["source"]}]({doc.metadata["source"]}) \n\n{doc.page_content}\n\n"""
+            f"""出处 [{inum + 1}] [{doc.metadata["source"]}]({doc.metadata["source"]}) \n\n{doc.page_content[:1000]}\n\n"""
             for inum, doc in enumerate(docs)
         ]
 
