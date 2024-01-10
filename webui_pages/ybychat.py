@@ -115,14 +115,14 @@ def yby_page(api: ApiRequest, is_lite: bool = False):
 
             chat_box.ai_say([
                 f"正在查询知识库...",
-                Markdown("...", in_expander=True, title="知识库匹配结果", state="complete"),
+                # Markdown("...", in_expander=True, title="知识库匹配结果", state="complete"),
             ])
             text = ""
             for d in api.yby_chat(prompt,
                                             top_k=kb_top_k,
                                             history=history,
                                             model=llm_model,
-                                            prompt_name="default",
+                                            prompt_name="youdao",
                                             temperature=temperature,
                                             split_result=False):
                 if error_msg := check_error_msg(d):  # check whether error occured
@@ -131,7 +131,7 @@ def yby_page(api: ApiRequest, is_lite: bool = False):
                     text += chunk
                     chat_box.update_msg(text, element_index=0)
                 chat_box.update_msg(text, element_index=0, streaming=False)
-                chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
+                # chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
 
 
 
