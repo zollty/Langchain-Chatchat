@@ -293,6 +293,44 @@ def run_controller(log_level: str = "INFO", started_event: mp.Event = None):
     _set_app_event(app, started_event)
 
     # add interface to release and load model worker
+    @app.post("/start_worker")
+    def start_worker(
+            # worker_address: str = Body(None, description="要释放模型的地址，与名称二选一", samples=[FSCHAT_CONTROLLER_address()]),
+            new_model_name: str = Body(..., description="释放后加载该模型")
+    ) -> Dict:
+        available_models = app._controller.list_models()
+        if new_model_name in available_models:
+            msg = f"要切换的LLM模型 {new_model_name} 已经存在"
+            logger.info(msg)
+            return {"code": 500, "msg": msg}
+
+        logger.info(f"开始切换LLM模型：从 {model_name} 到 {new_model_name}")
+
+        with get_httpx_client() as client:
+            r = client.post(worker_address + "/release",
+                        json={"new_model_name": new_model_name, "keep_origin": True})
+            if r.status_code != 200:
+                msg = f"failed to release model: {model_name}"
+                logger.error(msg)
+                return {"code": 500, "msg": msg}
+
+        timer = HTTPX_DEFAULT_TIMEOUT  # wait for new model_worker register
+        while timer > 0:
+            models = app._controller.list_models()
+            if new_model_name in models:
+                break
+            time.sleep(1)
+            timer -= 1
+        if timer > 0:
+            msg = f"sucess change model from {model_name} to {new_model_name}"
+            logger.info(msg)
+            return {"code": 200, "msg": msg}
+        else:
+            msg = f"failed change model from {model_name} to {new_model_name}"
+            logger.error(msg)
+            return {"code": 500, "msg": msg}
+
+    # add interface to release and load model worker
     @app.post("/release_worker")
     def release_worker(
             model_name: str = Body(..., description="要释放模型的名称", samples=["chatglm-6b"]),
