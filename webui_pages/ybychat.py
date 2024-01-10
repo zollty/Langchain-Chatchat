@@ -72,7 +72,7 @@ def yby_page(api: ApiRequest, is_lite: bool = False):
     # Set the title of the demo
     st.title("💬 园博园Chat")
     # Add your custom text here, with smaller font size
-    st.markdown("<sub>园博园专用聊天（左边设置参数），例如： </sub> \n\n <sub> 例1：介绍一下园博园</sub> \n\n <sub> 例2：介绍一下国际园林展区</sub>", unsafe_allow_html=True)
+    st.markdown("<sub>园博园专用聊天（左边设置参数），例如： </sub> \n\n <sub> 例1：介绍一下园博园</sub> \n\n <sub> 例2：龙景书院</sub>", unsafe_allow_html=True)
 
     DEFAULT_SYSTEM_PROMPT = '''
     You are an AI programming assistant. Follow the user's instructions carefully. Respond using markdown.
@@ -122,7 +122,7 @@ def yby_page(api: ApiRequest, is_lite: bool = False):
                                             top_k=kb_top_k,
                                             history=history,
                                             model=llm_model,
-                                            prompt_name="youdao",
+                                            prompt_name="default",
                                             temperature=temperature,
                                             split_result=False):
                 if error_msg := check_error_msg(d):  # check whether error occured
