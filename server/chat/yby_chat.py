@@ -193,6 +193,7 @@ async def yby_chat(query: str = Body(..., description="用户输入", examples=[
 
         docs = await lookup_search_engine(query, top_k, split_result=split_result)
         context = "\n".join([doc.page_content for doc in docs])
+        print(f"---------------------------------------------------------------{len(context)}")
 
         prompt_template = get_prompt_template("yby_chat", prompt_name)
         input_msg = History(role="user", content=prompt_template).to_msg_template(False)
@@ -211,6 +212,9 @@ async def yby_chat(query: str = Body(..., description="用户输入", examples=[
             f"""出处 [{inum + 1}] [{doc.metadata["source"]}]({doc.metadata["source"]}) \n\n{doc.page_content[:1000]}\n\n"""
             for inum, doc in enumerate(docs)
         ]
+
+        print(f"-------------------------source_documents--------------------------------------")
+        print(source_documents)
 
         if len(source_documents) == 0:  # 没有找到相关资料（不太可能）
             source_documents.append(f"""<span style='color:red'>未找到相关文档,该回答为大模型自身能力解答！</span>""")
