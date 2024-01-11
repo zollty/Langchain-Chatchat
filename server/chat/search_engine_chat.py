@@ -39,7 +39,7 @@ def duckduckgo_search(text, result_len=SEARCH_ENGINE_TOP_K, **kwargs):
 
 def yuque_search(text, result_len=SEARCH_ENGINE_TOP_K, **kwargs):
 
-    url = 'https://www.yuque.com/api/v2/repos/ftc8lc/project_doc/docs/ze3x0u'
+    url = 'https://www.yuque.com/api/v2/repos/ftc8lc/project_doc/docs/zn335qb5gzu3y1vk'
     data = {}       
     headers={
         "X-Auth-Token": "cME11GOh3zGblbVKVBF8xwJg8GBYcrc8NhWHJsK3",
