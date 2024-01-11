@@ -313,6 +313,7 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                     index=index,
                 )
                 se_top_k = st.number_input("匹配搜索结果条数：", 1, 20, SEARCH_ENGINE_TOP_K)
+                docid = st.text_input(label="语雀文档ID", value="zn335qb5gzu3y1vk")
 
     # Display chat messages from history on app rerun
     chat_box.output_messages()
@@ -466,7 +467,8 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                                                 model=llm_model,
                                                 prompt_name=prompt_template_name,
                                                 temperature=temperature,
-                                                split_result=se_top_k > 1):
+                                                split_result=se_top_k > 1,
+                                                docid=docid):
                     if error_msg := check_error_msg(d):  # check whether error occured
                         st.error(error_msg)
                     elif chunk := d.get("answer"):

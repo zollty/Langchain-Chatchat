@@ -563,6 +563,7 @@ class ApiRequest:
         max_tokens: int = None,
         prompt_name: str = "default",
         split_result: bool = False,
+        docid: str = None,
     ):
         '''
         对应api.py/chat/search_engine_chat接口
@@ -578,6 +579,7 @@ class ApiRequest:
             "max_tokens": max_tokens,
             "prompt_name": prompt_name,
             "split_result": split_result,
+            "docid": docid,
         }
 
         # print(f"received input message:")

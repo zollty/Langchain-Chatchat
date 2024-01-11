@@ -37,9 +37,9 @@ def duckduckgo_search(text, result_len=SEARCH_ENGINE_TOP_K, **kwargs):
     search = DuckDuckGoSearchAPIWrapper()
     return search.results(text, result_len)
 
-def yuque_search(text, result_len=SEARCH_ENGINE_TOP_K, **kwargs):
+def yuque_search(text, result_len=SEARCH_ENGINE_TOP_K, docid, **kwargs):
 
-    url = 'https://www.yuque.com/api/v2/repos/ftc8lc/project_doc/docs/zn335qb5gzu3y1vk'
+    url = f'https://www.yuque.com/api/v2/repos/ftc8lc/project_doc/docs/{docid}'
     data = {}       
     headers={
         "X-Auth-Token": "cME11GOh3zGblbVKVBF8xwJg8GBYcrc8NhWHJsK3",
@@ -53,7 +53,7 @@ def yuque_search(text, result_len=SEARCH_ENGINE_TOP_K, **kwargs):
     print(data)
 
     docs = [{
-        "snippet": data["body"],
+        "snippet": data["body"][:30000],
         "link":url,
         "title":data["title"],
     }]
@@ -132,9 +132,10 @@ async def lookup_search_engine(
         search_engine_name: str,
         top_k: int = SEARCH_ENGINE_TOP_K,
         split_result: bool = False,
+        docid: str = None,
 ):
     search_engine = SEARCH_ENGINES[search_engine_name]
-    results = await run_in_threadpool(search_engine, query, result_len=top_k, split_result=split_result)
+    results = await run_in_threadpool(search_engine, query, result_len=top_k, split_result=split_result, docid= docid)
     docs = search_result2docs(results)
     return docs
 
@@ -155,7 +156,8 @@ async def search_engine_chat(query: str = Body(..., description="用户输入", 
                             temperature: float = Body(TEMPERATURE, description="LLM 采样温度", ge=0.0, le=1.0),
                             max_tokens: Optional[int] = Body(None, description="限制LLM生成Token数量，默认None代表模型最大值"),
                             prompt_name: str = Body("default",description="使用的prompt模板名称(在configs/prompt_config.py中配置)"),
-                            split_result: bool = Body(False, description="是否对搜索结果进行拆分（主要用于metaphor搜索引擎）")
+                            split_result: bool = Body(False, description="是否对搜索结果进行拆分（主要用于metaphor搜索引擎）"),
+                            docid: str = Body(None, description="语雀文档ID"),
                        ):
     if search_engine_name not in SEARCH_ENGINES.keys():
         return BaseResponse(code=404, msg=f"未支持搜索引擎 {search_engine_name}")
