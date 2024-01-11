@@ -137,7 +137,7 @@ async def lookup_search_engine(
         docid: str = None,
 ):
     search_engine = SEARCH_ENGINES[search_engine_name]
-    results = await run_in_threadpool(search_engine, query, result_len=top_k, split_result=split_result, docid= docid)
+    results = await run_in_threadpool(search_engine, query, result_len=top_k, split_result=split_result, docid=docid)
     docs = search_result2docs(results)
     return docs
 
@@ -188,7 +188,7 @@ async def search_engine_chat(query: str = Body(..., description="用户输入", 
             callbacks=[callback],
         )
 
-        docs = await lookup_search_engine(query, search_engine_name, top_k, split_result=split_result)
+        docs = await lookup_search_engine(query, search_engine_name, top_k, split_result=split_result, docid)
         context = "\n".join([doc.page_content for doc in docs])
 
         prompt_template = get_prompt_template("search_engine_chat", prompt_name)
