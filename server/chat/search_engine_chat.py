@@ -37,7 +37,7 @@ def duckduckgo_search(text, result_len=SEARCH_ENGINE_TOP_K, **kwargs):
     search = DuckDuckGoSearchAPIWrapper()
     return search.results(text, result_len)
 
-def yuque_search(text, result_len=SEARCH_ENGINE_TOP_K, docid, **kwargs):
+def yuque_search(text, result_len=SEARCH_ENGINE_TOP_K, docid=None, **kwargs):
 
     url = f'https://www.yuque.com/api/v2/repos/ftc8lc/project_doc/docs/{docid}'
     data = {}       
