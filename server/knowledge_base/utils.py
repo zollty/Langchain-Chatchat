@@ -313,6 +313,11 @@ class KnowledgeFile:
                     break
                 count = newlen
         
+        print("↓↓↓↓↓↓↓↓↓↓↓原始文档---------------------------------------------------------------")
+        for doc in self.docs:
+            print(len(doc.page_content))
+            print(doc.page_content)
+        print("↑↑↑↑↑↑↑↑↑↑↑原始文档---------------------------------------------------------------")
         return self.docs
 
     def docs2texts(
