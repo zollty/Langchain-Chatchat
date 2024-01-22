@@ -300,33 +300,37 @@ class KnowledgeFile:
                                 file_path=self.filepath,
                                 loader_kwargs=self.loader_kwargs)
             self.docs = loader.load()
+            target_docs = []
             if start_length > 0:
-                count = 0
-                idx = 0
-                s_idx = -1
-                e_idx = 0
+                min_sta = start_length
+                max_end = start_length + 30000
+                t0 = 0
+                t1 = 0
+                not_start = True
                 for doc in self.docs:
                     doc_len = len(doc.page_content)
-                    newlen = count + doc_len
-                    if s_idx == -1 and newlen > start_length:
-                        s_idx = idx
+                    t1 = t1 + doc_len
+                    if not_start:
+                        if t1 > min_sta:
+                            start = min_sta - t0
+                            print(f"截断文档-------------------------------------------start={start}, more={more}--------------------\n\n\n\n{doc.page_content}")
+                            if t1 > max_end:
+                                doc.page_content = doc.page_content[start:max_end-t0]
+                            else:
+                                doc.page_content = doc.page_content[start:]
+                            
+                            not_start = False
+                            target_docs.append(doc)
+                    else:
+                        if t1 > max_end:
+                            doc.page_content = doc.page_content[0:max_end-t0]
+                            target_docs.append(doc)
+                            break
+                        else:
+                            target_docs.append(doc)
 
-                    if newlen > 3000: # max_length = 30000
-                        more = 3000 - count
-                        start = start_length - count
-                        if start < 0:
-                            start = 0
-                        doc.page_content = doc.page_content[start:more]
-                        print(f"截断文档-------------------------------------------start={start}, more={more}--------------------\n\n\n\n{doc.page_content}")
-                        e_idx = idx + 1
-                        if s_idx == -1:
-                            s_idx = 0
-                        self.docs = self.docs[s_idx:e_idx]
-                        break
-                    
-                    idx += 1 
-                    count = newlen
-        
+                    t0 = t0 + doc_len
+                self.docs = target_docs
             print(f"↓↓↓↓↓↓↓↓↓↓↓原始文档-------------------------------------------start_length={start_length}, refresh={refresh}--------------------")
             for doc in self.docs:
                 print(len(doc.page_content))
