@@ -15,7 +15,6 @@ import time
 import json
 
 def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
-    st.session_state.setdefault("s_clicked", False)
     st.set_page_config(layout="wide")
     # 上传文件
     files = st.file_uploader("上传知识文件：",
@@ -39,21 +38,16 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
             # use_container_width=True,
             disabled=(files == None),
     ):
-        if st.session_state["s_clicked"]:
-            print("---------------------------正在处理中，请勿操作……")
-            return
-        st.session_state["s_clicked"] = True
         print("---------------------------开始上传…………")
+        submit_info = st.text("正在处理中…………请稍等（勿重复点击）")
         ret = api.test_parse_docs([files],
                                     chunk_size=chunk_size,
                                     chunk_overlap=chunk_overlap,
                                     zh_title_enhance=zh_title_enhance)
-        st.session_state["s_clicked"] = False
         print("---------------------------上传成功…………")
+        submit_info = ""
         if msg := check_success_msg(ret):
             st.toast(msg, icon="✔")
-            print("----------------============================")
-            print(ret.get("data").get("files"))
             docs = [file["d"] for file in ret.get("data").get("files")]
             dtext = []
             for d in docs:
@@ -69,7 +63,3 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
             st.divider()
             doc_info = st.text_area("出错的文档:", max_chars=None, key="doc_info", value=vak, help=None, on_change=None, args=None, kwargs=None)
 
-    
-
-    # st.text("解析后的文档:")
-    # doc_info = st.text_area("解析后的文档:", max_chars=None, key="doc_info", help=None, on_change=None, args=None, kwargs=None)
