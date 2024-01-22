@@ -15,6 +15,7 @@ import time
 import json
 
 def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
+    st.session_state.setdefault("s_clicked", False)
     st.set_page_config(layout="wide")
     # 上传文件
     files = st.file_uploader("上传知识文件：",
@@ -33,20 +34,22 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
         cols[2].write("")
         zh_title_enhance = cols[2].checkbox("开启中文标题加强", ZH_TITLE_ENHANCE)
 
-    clicked = False
     if st.button(
             "上传进行解析测试",
             # use_container_width=True,
-            disabled=(files == None),
+            disabled=(files == None or st.session_state["s_clicked"]),
     ):
-        if clicked:
+        if st.session_state["s_clicked"]:
+            print("---------------------------正在处理中，请勿操作……")
             return
-        clicked = True
+        st.session_state["s_clicked"] = True
+        print("---------------------------开始上传…………")
         ret = api.test_parse_docs([files],
                                     chunk_size=chunk_size,
                                     chunk_overlap=chunk_overlap,
                                     zh_title_enhance=zh_title_enhance)
-        clicked = False
+        st.session_state["s_clicked"] = False
+        print("---------------------------上传成功…………")
         if msg := check_success_msg(ret):
             st.toast(msg, icon="✔")
             print("----------------============================")
