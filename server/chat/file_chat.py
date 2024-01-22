@@ -121,7 +121,7 @@ def _parse_files_in_thread(
                 f.write(file_content)
             kb_file = KnowledgeFile(filename=filename, knowledge_base_name="temp")
             kb_file.filepath = file_path
-            org_docs = kb_file.file2docs()
+            org_docs = kb_file.file2docs(max_length=max_length)
             docs = kb_file.file2text(zh_title_enhance=zh_title_enhance,
                                      chunk_size=chunk_size,
                                      chunk_overlap=chunk_overlap)
