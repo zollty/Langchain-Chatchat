@@ -311,12 +311,13 @@ class KnowledgeFile:
                     if s_idx == -1 and newlen > start_length:
                         s_idx = idx
 
-                    if newlen > 30000: # max_length = 30000
-                        more = 30000 - count
+                    if newlen > 3000: # max_length = 30000
+                        more = 3000 - count
                         start = start_length - count
                         if start < 0:
                             start = 0
                         doc.page_content = doc.page_content[start:more]
+                        print(f"截断文档-------------------------------------------start={start}, more={more}--------------------\n\n\n\n{doc.page_content}")
                         e_idx = idx + 1
                         if s_idx == -1:
                             s_idx = 0
