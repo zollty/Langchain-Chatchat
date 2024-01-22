@@ -27,12 +27,12 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
             expanded=True,
     ):
         cols = st.columns(4)
-        start_size = cols[0].number_input("解析开始字符位置：", 0)
-        chunk_size = cols[1].number_input("单段文本最大长度：", 1, 2000, 500)
-        chunk_overlap = cols[2].number_input("相邻文本重合长度：", 0, chunk_size, OVERLAP_SIZE)
-        cols[3].write("")
-        cols[3].write("")
-        zh_title_enhance = cols[3].checkbox("开启中文标题加强", ZH_TITLE_ENHANCE)
+        chunk_size = cols[0].number_input("单段文本最大长度：", 1, 2000, 500)
+        chunk_overlap = cols[1].number_input("相邻文本重合长度：", 0, chunk_size, OVERLAP_SIZE)
+        cols[2].write("")
+        cols[2].write("")
+        zh_title_enhance = cols[2].checkbox("开启中文标题加强", ZH_TITLE_ENHANCE)
+        start_size = cols[3].number_input("解析开始字符位置：", 0)
 
     if st.button(
             "上传进行解析测试",
@@ -56,7 +56,7 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
                 dtext += [id["page_content"] for id in d]
             st.divider()
             total_len = len("".join(dtext))
-            st.text(f"解析后的文档: （起止字符：{start_size} ~ {start_size + total_len}）")
+            st.subheader(f"解析后的文档: （起止字符：{start_size} ~ {start_size + total_len}）")
             idx = 0
             for vak in dtext:
                 # vak = "\n\n\n\n".join(dtext)
