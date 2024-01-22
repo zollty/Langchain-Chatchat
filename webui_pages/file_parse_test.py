@@ -36,7 +36,7 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
     if st.button(
             "上传进行解析测试",
             # use_container_width=True,
-            disabled=len(files) == 0,
+            disabled=(files == None),
     ):
         ret = api.test_parse_docs(files,
                                     chunk_size=chunk_size,
