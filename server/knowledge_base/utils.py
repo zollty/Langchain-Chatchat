@@ -307,7 +307,7 @@ class KnowledgeFile:
                     newlen = count + len(doc.page_content)
                     idx += 1
                     if newlen > max_length:
-                        more = newlen - max_length
+                        more = max_length - count
                         doc.page_content = doc.page_content[:more]
                         self.docs = self.docs[:idx]
                         break
