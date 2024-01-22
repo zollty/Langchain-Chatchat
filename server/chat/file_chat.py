@@ -100,7 +100,7 @@ def _parse_files_in_thread(
     zh_title_enhance: bool,
     chunk_size: int,
     chunk_overlap: int,
-    start_length: int = 0,
+    start_length: int = -1,
 ):
     """
     通过多线程将上传的文件保存到对应目录内。

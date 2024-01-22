@@ -293,7 +293,7 @@ class KnowledgeFile:
         if self.kb_name[-3:] == "_md":
             self.text_splitter_name = "MarkdownHeaderTextSplitter"
 
-    def file2docs(self, refresh: bool = False, start_length: int = 0):
+    def file2docs(self, refresh: bool = False, start_length: int = -1):
         if self.docs is None or refresh:
             logger.info(f"{self.document_loader_name} used for {self.filepath}")
             loader = get_loader(loader_name=self.document_loader_name,
@@ -301,7 +301,7 @@ class KnowledgeFile:
                                 loader_kwargs=self.loader_kwargs)
             self.docs = loader.load()
             target_docs = []
-            if start_length > 0:
+            if start_length >= 0:
                 min_sta = start_length
                 max_end = start_length + 30000
                 t0 = 0
