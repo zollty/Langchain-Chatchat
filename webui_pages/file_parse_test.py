@@ -37,7 +37,7 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
     if st.button(
             "上传进行解析测试",
             # use_container_width=True,
-            disabled=(files == None or st.session_state["s_clicked"]),
+            disabled=(files == None),
     ):
         if st.session_state["s_clicked"]:
             print("---------------------------正在处理中，请勿操作……")
