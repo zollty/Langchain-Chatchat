@@ -302,6 +302,7 @@ class KnowledgeFile:
             self.docs = loader.load()
             if start_length > 0:
                 count = 0
+                idx = 0
                 s_idx = -1
                 e_idx = 0
                 for doc in self.docs:
