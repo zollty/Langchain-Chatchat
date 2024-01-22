@@ -38,7 +38,7 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
             # use_container_width=True,
             disabled=(files == None),
     ):
-        ret = api.test_parse_docs(files,
+        ret = api.test_parse_docs([files],
                                     chunk_size=chunk_size,
                                     chunk_overlap=chunk_overlap,
                                     zh_title_enhance=zh_title_enhance)
