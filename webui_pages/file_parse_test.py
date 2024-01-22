@@ -40,7 +40,7 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
     ):
         submit_info = st.empty()
         print("---------------------------开始上传…………")
-        submit_info.text("\t\t\t\t正在处理中…………请稍等（勿重复点击）")
+        submit_info.text("               正在处理中…………请稍等（勿重复点击）")
         ret = api.test_parse_docs([files],
                                     chunk_size=chunk_size,
                                     chunk_overlap=chunk_overlap,
