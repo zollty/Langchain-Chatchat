@@ -50,7 +50,7 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
             docs = [file["d"] for file in ret.get("data").get("files")]
             dtext = []
             for d in docs:
-                dtext += d
+                dtext += [id["page_content"] for id in d]
             st.session_state.doc_info = "\n\n\n\n".join(dtext)
         elif msg := check_error_msg(ret):
             st.toast(msg, icon="✖")
