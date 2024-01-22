@@ -293,30 +293,39 @@ class KnowledgeFile:
         if self.kb_name[-3:] == "_md":
             self.text_splitter_name = "MarkdownHeaderTextSplitter"
 
-    def file2docs(self, refresh: bool = False, max_length: int = -1):
+    def file2docs(self, refresh: bool = False, start_length: int = 0):
         if self.docs is None or refresh:
             logger.info(f"{self.document_loader_name} used for {self.filepath}")
             loader = get_loader(loader_name=self.document_loader_name,
                                 file_path=self.filepath,
                                 loader_kwargs=self.loader_kwargs)
             self.docs = loader.load()
-            if max_length > 0:
+            if start_length > 0:
                 count = 0
-                idx = 0
+                s_idx = -1
+                e_idx = 0
                 for doc in self.docs:
-                    newlen = count + len(doc.page_content)
-                    idx += 1
-                    if newlen > max_length:
-                        more = max_length - count
+                    doc_len = len(doc.page_content)
+                    newlen = count + doc_len
+                    if s_idx == -1 and newlen > start_length:
+                        s_idx = idx
+
+                    if newlen > 30000: # max_length = 30000
+                        more = 30000 - count
                         doc.page_content = doc.page_content[:more]
-                        self.docs = self.docs[:idx]
+                        e_idx = idx + 1
+                        if s_idx == -1:
+                            s_idx = 0
+                        self.docs = self.docs[s_idx:e_idx]
                         break
+                    
+                    idx += 1 
                     count = newlen
         
             print(f"↓↓↓↓↓↓↓↓↓↓↓原始文档-------------------------------------------max_length={max_length}, refresh={refresh}--------------------")
             for doc in self.docs:
                 print(len(doc.page_content))
-                print(doc.page_content)
+                print(doc.page_content[:200] + "……………………" + doc.page_content[-200:])
             print(f"↑↑↑↑↑↑↑↑↑↑↑原始文档-------------------------------------------max_length={max_length}, refresh={refresh}--------------------")
         return self.docs
 

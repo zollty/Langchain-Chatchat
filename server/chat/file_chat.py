@@ -100,7 +100,7 @@ def _parse_files_in_thread(
     zh_title_enhance: bool,
     chunk_size: int,
     chunk_overlap: int,
-    max_length: int = -1,
+    start_length: int = 0,
 ):
     """
     通过多线程将上传的文件保存到对应目录内。
@@ -121,7 +121,7 @@ def _parse_files_in_thread(
                 f.write(file_content)
             kb_file = KnowledgeFile(filename=filename, knowledge_base_name="temp")
             kb_file.filepath = file_path
-            org_docs = kb_file.file2docs(max_length=max_length)
+            org_docs = kb_file.file2docs(start_length=start_length)
             docs = kb_file.file2text(zh_title_enhance=zh_title_enhance,
                                      chunk_size=chunk_size,
                                      chunk_overlap=chunk_overlap)
@@ -154,7 +154,7 @@ def test_parse_docs(
                                                         zh_title_enhance=zh_title_enhance,
                                                         chunk_size=chunk_size,
                                                         chunk_overlap=chunk_overlap,
-                                                        max_length=start_size + 3000):
+                                                        start_length=start_size):
         if success:
             fileDocs.append({"f":file, "d": docs})
             print(f"{file}--------------------------update file success: ")
