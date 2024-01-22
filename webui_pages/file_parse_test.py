@@ -38,14 +38,15 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
             # use_container_width=True,
             disabled=(files == None),
     ):
+        submit_info = st.empty()
         print("---------------------------开始上传…………")
-        submit_info = st.text("正在处理中…………请稍等（勿重复点击）")
+        submit_info.text("正在处理中…………请稍等（勿重复点击）")
         ret = api.test_parse_docs([files],
                                     chunk_size=chunk_size,
                                     chunk_overlap=chunk_overlap,
                                     zh_title_enhance=zh_title_enhance)
         print("---------------------------上传成功…………")
-        submit_info = ""
+        submit_info.empty()
         if msg := check_success_msg(ret):
             st.toast(msg, icon="✔")
             docs = [file["d"] for file in ret.get("data").get("files")]
