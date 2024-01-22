@@ -14,12 +14,7 @@ import os
 import time
 import json
 
-class DDD:
-  def __init__(doc_info):
-    self.doc_info = doc_info
-
 def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
-    doc_infos = DDD(None)
     # 上传文件
     files = st.file_uploader("上传知识文件：",
                                 [i for ls in LOADER_DICT.values() for i in ls],
@@ -54,15 +49,16 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
             dtext = []
             for d in docs:
                 dtext += [id["page_content"] for id in d]
-            # st.session_state.doc_info = "\n\n\n\n".join(dtext)
-            doc_infos.doc_info.text("\n\n\n\n".join(dtext))
+            vak = "\n\n\n\n".join(dtext)
+            st.divider()
+            doc_info = st.text_area("解析后的文档:", max_chars=None, key="doc_info", value=vak, help=None, on_change=None, args=None, kwargs=None)
         elif msg := check_error_msg(ret):
             st.toast(msg, icon="✖")
-            st.session_state.doc_info = json.dumps(ret.get("data").get("failed_files"))
+            vak = json.dumps(ret.get("data").get("failed_files")
+            st.divider()
+            doc_info = st.text_area("出错的文档:", max_chars=None, key="doc_info", value=vak, help=None, on_change=None, args=None, kwargs=None)
 
-    st.divider()
+    
 
-    st.text("解析后的文档:")
+    # st.text("解析后的文档:")
     # doc_info = st.text_area("解析后的文档:", max_chars=None, key="doc_info", help=None, on_change=None, args=None, kwargs=None)
-    doc_info = st.empty()
-    doc_infos.doc_info = doc_info
