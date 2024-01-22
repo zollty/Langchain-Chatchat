@@ -46,7 +46,10 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
         if msg := check_success_msg(ret):
             st.toast(msg, icon="✔")
             docs = [file["d"] for file in ret.get("data").get("files")]
-            st.session_state.doc_info = "\n\n\n\n".join(docs)
+            dtext = []
+            for d in docs:
+                dtext += d
+            st.session_state.doc_info = "\n\n\n\n".join(dtext)
         elif msg := check_error_msg(ret):
             st.toast(msg, icon="✖")
             st.session_state.doc_info = json.dumps(ret.get("data").get("failed_files"))
