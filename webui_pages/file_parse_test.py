@@ -45,6 +45,7 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
         ret = api.test_parse_docs([files],
                                     chunk_size=chunk_size,
                                     chunk_overlap=chunk_overlap,
+                                    start_size=start_size,
                                     zh_title_enhance=zh_title_enhance)
         print("---------------------------上传成功…………")
         submit_info.empty()

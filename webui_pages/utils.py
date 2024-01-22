@@ -516,6 +516,7 @@ class ApiRequest:
         files: List[Union[str, Path, bytes]],
         chunk_size=CHUNK_SIZE,
         chunk_overlap=OVERLAP_SIZE,
+        start_size=0,
         zh_title_enhance=ZH_TITLE_ENHANCE,
     ):
         '''
@@ -535,6 +536,7 @@ class ApiRequest:
         data={
             "chunk_size": chunk_size,
             "chunk_overlap": chunk_overlap,
+            "start_size": start_size,
             "zh_title_enhance": zh_title_enhance,
         }
 
