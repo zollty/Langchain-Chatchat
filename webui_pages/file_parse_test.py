@@ -33,15 +33,20 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
         cols[2].write("")
         zh_title_enhance = cols[2].checkbox("开启中文标题加强", ZH_TITLE_ENHANCE)
 
+    clicked = False
     if st.button(
             "上传进行解析测试",
             # use_container_width=True,
             disabled=(files == None),
     ):
+        if clicked:
+            return
+        clicked = True
         ret = api.test_parse_docs([files],
                                     chunk_size=chunk_size,
                                     chunk_overlap=chunk_overlap,
                                     zh_title_enhance=zh_title_enhance)
+        clicked = False
         if msg := check_success_msg(ret):
             st.toast(msg, icon="✔")
             print("----------------============================")
