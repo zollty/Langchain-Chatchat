@@ -16,7 +16,7 @@ import json
 
 
 def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
-    doc_info = st.empty()
+    doc_infos = []
     # 上传文件
     files = st.file_uploader("上传知识文件：",
                                 [i for ls in LOADER_DICT.values() for i in ls],
@@ -52,7 +52,7 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
             for d in docs:
                 dtext += [id["page_content"] for id in d]
             # st.session_state.doc_info = "\n\n\n\n".join(dtext)
-            doc_info.text("\n\n\n\n".join(dtext))
+            doc_infos[0].text("\n\n\n\n".join(dtext))
         elif msg := check_error_msg(ret):
             st.toast(msg, icon="✖")
             st.session_state.doc_info = json.dumps(ret.get("data").get("failed_files"))
@@ -62,3 +62,4 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
     st.text("解析后的文档:")
     # doc_info = st.text_area("解析后的文档:", max_chars=None, key="doc_info", help=None, on_change=None, args=None, kwargs=None)
     doc_info = st.empty()
+    doc_infos.append(doc_info)
