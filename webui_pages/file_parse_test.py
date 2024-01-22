@@ -49,7 +49,7 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
             dtext = []
             for d in docs:
                 dtext += [id["page_content"] for id in d]
-            vak = "\n\n\n\n".join(dtext)
+            vak = "\n\n\n\n".join(dtext) + 4
             het = len(vak.split("\n"))
             print(f"---------------------------------------het: {het}")
             st.divider()
