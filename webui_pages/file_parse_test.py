@@ -45,6 +45,8 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
                                     zh_title_enhance=zh_title_enhance)
         if msg := check_success_msg(ret):
             st.toast(msg, icon="✔")
+            print("----------------============================")
+            print(ret.get("data").get("files"))
             docs = [file["d"] for file in ret.get("data").get("files")]
             dtext = []
             for d in docs:
