@@ -313,7 +313,10 @@ class KnowledgeFile:
 
                     if newlen > 30000: # max_length = 30000
                         more = 30000 - count
-                        doc.page_content = doc.page_content[:more]
+                        start = start_length - count
+                        if start < 0:
+                            start = 0
+                        doc.page_content = doc.page_content[start:more]
                         e_idx = idx + 1
                         if s_idx == -1:
                             s_idx = 0
