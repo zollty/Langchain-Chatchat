@@ -26,7 +26,8 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
             "文件处理配置",
             expanded=True,
     ):
-        cols = st.columns(3)
+        cols = st.columns(4)
+        start_size = cols[0].number_input("解析开始字符位置：", 0)
         chunk_size = cols[0].number_input("单段文本最大长度：", 1, 2000, 500)
         chunk_overlap = cols[1].number_input("相邻文本重合长度：", 0, chunk_size, OVERLAP_SIZE)
         cols[2].write("")
@@ -40,7 +41,7 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
     ):
         submit_info = st.empty()
         print("---------------------------开始上传…………")
-        submit_info.text("               正在处理中…………请稍等（勿重复点击）")
+        submit_info.text("▒▒▒▒▒▒▒▒▒▒▒▒▒░░░░░░░░░░░░正在处理中…………请稍等（勿重复点击）")
         ret = api.test_parse_docs([files],
                                     chunk_size=chunk_size,
                                     chunk_overlap=chunk_overlap,
@@ -54,11 +55,13 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
             for d in docs:
                 dtext += [id["page_content"] for id in d]
             st.divider()
-            st.text("解析后的文档:")
+            total_len = len("".join(dtext))
+            st.text("解析后的文档: （起止字符：{start_size} ~ {start_size + total_len}）")
             idx = 0
             for vak in dtext:
                 # vak = "\n\n\n\n".join(dtext)
-                st.text(f"==第 {++idx} 段==")
+                idx += 1
+                st.text(f"==第 {idx} 段==")
                 st.code(vak, language="None", line_numbers=True)
             # doc_info = st.text_area("解析后的文档:", max_chars=None, key="doc_info", value=vak, height=het*40, help=None, on_change=None, args=None, kwargs=None)
         elif msg := check_error_msg(ret):
