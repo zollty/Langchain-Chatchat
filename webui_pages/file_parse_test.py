@@ -53,10 +53,12 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
             dtext = []
             for d in docs:
                 dtext += [id["page_content"] for id in d]
-            vak = "\n\n\n\n".join(dtext)
             st.divider()
             st.text("解析后的文档:")
-            st.code(vak, language="None", line_numbers=True)
+            for idx, vak in dtext:
+                # vak = "\n\n\n\n".join(dtext)
+                st.text(f"==第 {idx} 段==")
+                st.code(vak, language="None", line_numbers=True)
             # doc_info = st.text_area("解析后的文档:", max_chars=None, key="doc_info", value=vak, height=het*40, help=None, on_change=None, args=None, kwargs=None)
         elif msg := check_error_msg(ret):
             st.toast(msg, icon="✖")
