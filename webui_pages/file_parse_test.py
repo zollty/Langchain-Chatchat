@@ -16,7 +16,7 @@ import json
 
 
 def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
-
+    doc_info = None
     # 上传文件
     files = st.file_uploader("上传知识文件：",
                                 [i for ls in LOADER_DICT.values() for i in ls],
