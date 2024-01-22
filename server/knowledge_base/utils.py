@@ -313,7 +313,6 @@ class KnowledgeFile:
                     if not_start:
                         if t1 > min_sta:
                             start = min_sta - t0
-                            print(f"截断文档-------------------------------------------start={start}, more={more}--------------------\n\n\n\n{doc.page_content}")
                             if t1 > max_end:
                                 doc.page_content = doc.page_content[start:max_end-t0]
                             else:
