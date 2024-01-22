@@ -322,11 +322,11 @@ class KnowledgeFile:
                     idx += 1 
                     count = newlen
         
-            print(f"↓↓↓↓↓↓↓↓↓↓↓原始文档-------------------------------------------max_length={max_length}, refresh={refresh}--------------------")
+            print(f"↓↓↓↓↓↓↓↓↓↓↓原始文档-------------------------------------------start_length={start_length}, refresh={refresh}--------------------")
             for doc in self.docs:
                 print(len(doc.page_content))
                 print(doc.page_content[:200] + "……………………" + doc.page_content[-200:])
-            print(f"↑↑↑↑↑↑↑↑↑↑↑原始文档-------------------------------------------max_length={max_length}, refresh={refresh}--------------------")
+            print(f"↑↑↑↑↑↑↑↑↑↑↑原始文档-------------------------------------------start_length={start_length}, refresh={refresh}--------------------")
         return self.docs
 
     def docs2texts(
