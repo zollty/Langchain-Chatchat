@@ -19,7 +19,7 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
     # 上传文件
     files = st.file_uploader("上传知识文件：",
                                 [i for ls in LOADER_DICT.values() for i in ls],
-                                accept_multiple_files=True,
+                                accept_multiple_files=False,
                                 )
     # with st.sidebar:
     with st.expander(
@@ -51,8 +51,6 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
             for d in docs:
                 dtext += [id["page_content"] for id in d]
             vak = "\n\n\n\n".join(dtext)
-            het = len(vak.split("\n"))
-            print(f"---------------------------------------het: {het}")
             st.divider()
             st.text("解析后的文档:")
             st.code(vak, language="None", line_numbers=True)

@@ -126,6 +126,7 @@ def _parse_files_in_thread(
                                      chunk_overlap=chunk_overlap)
             return True, filename, f"成功上传文件 {filename}", docs, org_docs
         except Exception as e:
+            print(e)
             msg = f"{filename} 文件上传失败，报错信息为: {e}"
             return False, filename, msg, [], []
 
