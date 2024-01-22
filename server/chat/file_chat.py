@@ -134,6 +134,38 @@ def _parse_files_in_thread(
         yield result
 
 
+def test_parse_docs(
+    files: List[UploadFile] = File(..., description="上传文件，支持多文件"),
+    chunk_size: int = Form(CHUNK_SIZE, description="知识库中单段文本最大长度"),
+    chunk_overlap: int = Form(OVERLAP_SIZE, description="知识库中相邻文本重合长度"),
+    zh_title_enhance: bool = Form(ZH_TITLE_ENHANCE, description="是否开启中文标题加强"),
+) -> BaseResponse:
+
+    failed_files = []
+    fileDocs = []
+    path, id = get_temp_dir()
+    print("--------------------------update file, save dir: ")
+    print(id)
+    rt_success = False
+    for success, file, msg, docs, org_docs in _parse_files_in_thread(files=files,
+                                                        dir=path,
+                                                        zh_title_enhance=zh_title_enhance,
+                                                        chunk_size=chunk_size,
+                                                        chunk_overlap=chunk_overlap):
+        if success:
+            fileDocs.append({"f":file, "d": docs})
+            print(f"{file}--------------------------update file success: ")
+            # print(docs)
+            rt_success = True
+        else:
+            failed_files.append({file: msg})
+            print(f"{file}--------------------------update file failed: ")
+            print(msg)
+    if rt_success:
+        return BaseResponse(code=200, msg="文件解析成功", data={"id": id, "files": fileDocs, "failed_files": failed_files})
+    return BaseResponse(code=500, msg="解析文件失败", data={"id": id, "failed_files": failed_files})
+
+
 def upload_temp_docs(
     files: List[UploadFile] = File(..., description="上传文件，支持多文件"),
     prev_id: str = Form(None, description="前知识库ID"),
