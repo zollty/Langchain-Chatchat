@@ -56,7 +56,7 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
                 dtext += [id["page_content"] for id in d]
             st.divider()
             total_len = len("".join(dtext))
-            st.text("解析后的文档: （起止字符：{start_size} ~ {start_size + total_len}）")
+            st.text(f"解析后的文档: （起止字符：{start_size} ~ {start_size + total_len}）")
             idx = 0
             for vak in dtext:
                 # vak = "\n\n\n\n".join(dtext)
