@@ -53,7 +53,7 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
             het = len(vak.split("\n"))
             print(f"---------------------------------------het: {het}")
             st.divider()
-            doc_info = st.text_area("解析后的文档:", max_chars=None, key="doc_info", value=vak, height=het*24, help=None, on_change=None, args=None, kwargs=None)
+            doc_info = st.text_area("解析后的文档:", max_chars=None, key="doc_info", value=vak, height=het*28, help=None, on_change=None, args=None, kwargs=None)
         elif msg := check_error_msg(ret):
             st.toast(msg, icon="✖")
             vak = json.dumps(ret.get("data").get("failed_files"))
