@@ -1,5 +1,5 @@
 name: wolfram
-description: Useful for when you need to calculate difficult math formulas
+description: 使用wolfram对公式进行计算，Useful for when you need to calculate difficult math formulas
 parameters:
   type: object
   properties:
