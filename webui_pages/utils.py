@@ -1003,6 +1003,7 @@ class ApiRequest:
         self,
         model_name: str,
         new_model_name: str,
+        keep_origin: bool = True,
         controller_address: str = None,
     ):
         '''
@@ -1039,6 +1040,7 @@ class ApiRequest:
                 "model_name": model_name,
                 "new_model_name": new_model_name,
                 "controller_address": controller_address,
+                "keep_origin": keep_origin,
             }
 
             response = self.post(

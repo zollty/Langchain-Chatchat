@@ -6,6 +6,7 @@ from webui_pages.knowledge_base.knowledge_base import knowledge_base_page
 from webui_pages.ybychat import yby_page
 from webui_pages.file_chat import file_chat_page
 from webui_pages.file_parse_test import test_file_parse_page
+from webui_pages.model_manage import model_management_page
 import os
 import sys
 from configs import VERSION
@@ -93,6 +94,10 @@ def test_fileparse_page(router):
 	is_lite = "lite" in sys.argv
 	test_file_parse_page(api=api, is_lite=is_lite)
 
+def model_manage_page(router):
+	is_lite = "lite" in sys.argv
+	model_management_page(api=api, is_lite=is_lite)
+
 if __name__ == "__main__":
     router = StreamlitRouter()
     router.register(index, '/')
@@ -100,6 +105,7 @@ if __name__ == "__main__":
     router.register(yby_chat_page, '/yby')
     router.register(filechat_page, '/fchat')
     router.register(test_fileparse_page, '/ftest')
+    router.register(model_manage_page, '/modelmg')
     # index(router)
     router.serve()
     
