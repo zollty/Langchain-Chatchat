@@ -15,6 +15,7 @@ import time
 import json
 
 def model_management_page(api: ApiRequest, is_lite: bool = None):
+    st.subheader("一、切换运行中的模型")
     st.markdown("<h4>使用说明：</h4>\n\n <sub>1、自定义Agent问答：为保证问答质量，需要手动切换成Qwen-14B模型</sub>\n\n <sub>2、知识库、园博园、搜索引擎问答：为保证问答质量，需要手动切换成chatglm3-6B-32k模型</sub>", unsafe_allow_html=True)
     default_model = api.get_default_llm_model()[0]
     def on_llm_change():
@@ -68,3 +69,4 @@ def model_management_page(api: ApiRequest, is_lite: bool = None):
                 st.session_state["prev_llm_model"] = llm_model
 
     st.markdown("<h4>注意事项：</h4>\n\n<sub>1、模型切换停止后，要稍等5~15秒才会变更Running状态</sub>", unsafe_allow_html=True)
+    st.divider()
