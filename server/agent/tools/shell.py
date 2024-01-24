@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 from langchain.tools import ShellTool
 def shell(query: str):
     tool = ShellTool()
+    query = query.rstrip("\"").lstrip("\"").rstrip("`").lstrip("`")
     return tool.run(tool_input=query)
 
 class ShellInput(BaseModel):
