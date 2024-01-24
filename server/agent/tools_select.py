@@ -7,19 +7,19 @@ tools = [
     Tool.from_function(
         func=calculate,
         name="calculate", #"计算器工具",
-        description="进行简单的数学运算, 只是简单的, 使用Wolfram数学工具进行更复杂的运算",
+        description="进行简单的数学运算, 只是简单的, 如果是复杂的数学公式，不要使用此工具，请使用另一个wolfram数学工具",
         args_schema=CalculatorInput,
     ),
     Tool.from_function(
         func=arxiv,
         name="arxiv",
-        description="A wrapper around Arxiv.org for searching and retrieving scientific articles in various fields.",
+        description="来查询论文信息，使用此arxiv工具。for searching and retrieving scientific articles and papers",
         args_schema=ArxivInput,
     ),
     Tool.from_function(
         func=translate,
         name="translate", #"翻译工具",
-        description="如果你无法访问互联网，并且需要翻译各种语言，应该使用这个工具",
+        description="如果你需要翻译各种语言，应该使用这个工具",
         args_schema=TranslateInput,
     ),
     Tool.from_function(
@@ -31,7 +31,7 @@ tools = [
     Tool.from_function(
         func=shell,
         name="shell", #"shell工具",
-        description="使用命令行工具输出",
+        description="使用Linux shell命令行工具输出",
         args_schema=ShellInput,
     ),
     Tool.from_function(
@@ -43,13 +43,13 @@ tools = [
     Tool.from_function(
         func=search_internet,
         name="search_internet", #"互联网查询工具",
-        description="如果你无法访问互联网，这个工具可以帮助你访问Bing互联网来解答问题",
+        description="这个工具可以帮助你访问Bing互联网来解答问题",
         args_schema=SearchInternetInput,
     ),
     Tool.from_function(
         func=wolfram,
         name="wolfram", #"Wolfram数学工具",
-        description="高级的数学运算工具，能够完成非常复杂的数学问题",
+        description="高级的数学运算工具，能够完成非常复杂的数学问题和数学公式",
         args_schema=WolframInput,
     ),
     Tool.from_function(
