@@ -20,11 +20,11 @@ EMBEDDING_MODEL_OUTPUT_PATH = "output"
 # 在这里，我们使用目前主流的两个离线模型，其中，chatglm3-6b 为默认加载模型。
 # 如果你的显存不足，可使用 Qwen-1_8B-Chat, 该模型 FP16 仅需 3.8G显存。
 # 第一个将作为 API 和 WEBUI 的默认模型  "Chinese-Alpaca-2-13B", , "Llama2-Chinese-13b-Chat", "chatglm3-6b", , "chatglm3-6b-32k" "Qwen-7B-Chat", "Chinese-Alpaca-2-13B"
-LLM_MODELS = ["chatglm3-6b-32k", "Qwen-1.8B-Chat"] # ["chatglm2-6b", "zhipu-api", "openai-api"] "Qwen-14B-Chat",, "chatglm3-6b"
+LLM_MODELS = ["Qwen-14B-Chat", "Qwen-1.8B-Chat"] # ["chatglm2-6b", "zhipu-api", "openai-api"] "Qwen-14B-Chat",, "chatglm3-6b"
 
 
 # AgentLM模型的名称 (可以不指定，指定之后就锁定进入Agent之后的Chain的模型，不指定就是LLM_MODELS[0])
-Agent_MODEL = "chatglm3-6b-32k"
+Agent_MODEL = "Qwen-14B-Chat"
 LONG_CONTEXT_MODEL = "chatglm3-6b-32k"
 
 # LLM 运行设备。设为"auto"会自动检测，也可手动设定为"cuda","mps","cpu"其中之一。
