@@ -147,7 +147,6 @@ def yby_qa_page(api: ApiRequest, is_lite: bool = False):
             ])
             text = ""
             d = api.chat_ydqa(prompt).json()
-            d = json.load(d)
             print("--------------------------------------------")
             print(d)
             print(d["response"])
