@@ -4,6 +4,7 @@ from streamlit_option_menu import option_menu
 from webui_pages.dialogue.dialogue import dialogue_page, chat_box
 from webui_pages.knowledge_base.knowledge_base import knowledge_base_page
 from webui_pages.ybychat import yby_page
+from webui_pages.ybychat_qa import yby_qa_page
 from webui_pages.file_chat import file_chat_page
 from webui_pages.file_parse_test import test_file_parse_page
 from webui_pages.model_manage import model_management_page
@@ -86,6 +87,11 @@ def yby_chat_page(router):
 	is_lite = "lite" in sys.argv
 	yby_page(api=api, is_lite=is_lite)
 
+def ybyqa_page(router):
+	is_lite = "lite" in sys.argv
+    api2 = ApiRequest(base_url="http://172.16.8.91:8777")
+	yby_qa_page(api=api2, is_lite=is_lite)
+
 def filechat_page(router):
 	is_lite = "lite" in sys.argv
 	file_chat_page(api=api, is_lite=is_lite)
@@ -106,6 +112,7 @@ if __name__ == "__main__":
     router.register(filechat_page, '/fchat')
     router.register(test_fileparse_page, '/ftest')
     router.register(model_manage_page, '/modelmg')
+    router.register(ybyqa_page, '/ybyqa')
     # index(router)
     router.serve()
     

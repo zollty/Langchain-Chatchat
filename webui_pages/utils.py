@@ -287,6 +287,35 @@ class ApiRequest:
         )
         return self._httpx_stream2generator(response)
 
+    def chat_ydqa(
+        self,
+        question: str,
+        stream: bool = True,
+        user_id: str = "zzp",
+        kb_ids: List[str] = ["KB41aa2190fc3e48adad90697eee4dd1de"],
+        **kwargs: Any,
+    ):
+        '''
+        对应 http://172.16.8.91:8777/api/local_doc_qa/local_doc_chat 接口
+        '''
+        data = {
+            "question": question,
+            "stream": stream,
+            "user_id": "zzp",
+            "kb_ids": kb_ids,
+        }
+
+        # print(f"received input message:")
+        # pprint(data)
+
+        response = self.post(
+            "/api/local_doc_qa/local_doc_chat",
+            json=data,
+            stream=True,
+            **kwargs,
+        )
+        return self._httpx_stream2generator(response)
+
     def chat_chat(
             self,
             query: str,
