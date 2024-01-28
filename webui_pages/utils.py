@@ -314,7 +314,7 @@ class ApiRequest:
             stream=True,
             **kwargs,
         )
-        return self._httpx_stream2generator(response)
+        return self._httpx_stream2generator(response, as_json=True)
 
     def chat_chat(
             self,
