@@ -143,7 +143,7 @@ def yby_qa_page(api: ApiRequest, is_lite: bool = False):
 
             chat_box.ai_say([
                 f"正在查询知识库（请稍等）.....",
-                # Markdown("...", in_expander=True, title="知识库匹配结果", state="complete"),
+                Markdown("...", in_expander=True, title="知识库匹配结果", state="complete"),
             ])
             text = ""
             d = api.chat_ydqa(prompt).json()
