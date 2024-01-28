@@ -8,6 +8,7 @@ from datetime import datetime
 import os
 import re
 import time
+import json
 from configs import (TEMPERATURE, HISTORY_LEN, PROMPT_TEMPLATES,
                      DEFAULT_KNOWLEDGE_BASE, DEFAULT_SEARCH_ENGINE, SUPPORT_AGENT_MODEL)
 from server.knowledge_base.utils import LOADER_DICT
@@ -148,6 +149,9 @@ def yby_qa_page(api: ApiRequest, is_lite: bool = False):
             d = api.chat_ydqa(prompt)
             print("--------------------------------------------")
             print(d)
+            print(json.dumps(d))
+            print(d["response"])
+            print(d["data"])
             if error_msg := check_error_msg(d):  # check whether error occured
                 st.error(error_msg)
             elif chunk := d.get("response"):
