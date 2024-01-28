@@ -290,7 +290,7 @@ class ApiRequest:
     def chat_ydqa(
         self,
         question: str,
-        stream: bool = True,
+        stream: bool = False,
         user_id: str = "zzp",
         kb_ids: List[str] = ["KB41aa2190fc3e48adad90697eee4dd1de"],
         **kwargs: Any,
@@ -300,7 +300,7 @@ class ApiRequest:
         '''
         data = {
             "question": question,
-            "stream": False,
+            "stream": stream,
             "user_id": "zzp",
             "kb_ids": kb_ids,
         }
@@ -311,7 +311,7 @@ class ApiRequest:
         response = self.post(
             "/api/local_doc_qa/local_doc_chat",
             json=data,
-            stream=False,
+            stream=stream,
             **kwargs,
         )
         return self._httpx_stream2generator(response, as_json=True)
