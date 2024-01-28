@@ -148,15 +148,15 @@ def yby_qa_page(api: ApiRequest, is_lite: bool = False):
             for d in api.chat_ydqa(prompt):
                 print("--------------------------------------------")
                 print(d)
-                if error_msg := check_error_msg(d):  # check whether error occured
-                    st.error(error_msg)
-                elif chunk := d.get("response"):
-                    text += chunk
-                    chat_box.update_msg(text, element_index=0)
-                chat_box.update_msg(text, element_index=0, streaming=False)
-                if sd := d.get("source_documents", []):
-                    sdc = [s["content"] for s in sd]
-                    chat_box.update_msg("\n\n".join(sdc), element_index=1, streaming=False)
+                # if error_msg := check_error_msg(d):  # check whether error occured
+                #     st.error(error_msg)
+                # elif chunk := d.get("response"):
+                #     text += chunk
+                #     chat_box.update_msg(text, element_index=0)
+                # chat_box.update_msg(text, element_index=0, streaming=False)
+                # if sd := d.get("source_documents", []):
+                #     sdc = [s["content"] for s in sd]
+                #     chat_box.update_msg("\n\n".join(sdc), element_index=1, streaming=False)
 
 
 
