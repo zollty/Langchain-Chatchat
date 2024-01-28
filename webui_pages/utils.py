@@ -311,10 +311,10 @@ class ApiRequest:
         response = self.post(
             "/api/local_doc_qa/local_doc_chat",
             json=data,
-            stream=True,
+            stream=False,
             **kwargs,
         )
-        return self._httpx_stream2generator(response)
+        return self._httpx_stream2generator(response, as_json=True)
 
     def chat_chat(
             self,
