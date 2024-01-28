@@ -313,7 +313,7 @@ class ApiRequest:
             json=data,
             **kwargs,
         )
-        return self._get_response_value(response, as_json=True)
+        return self._get_response_value(response, as_json=True, value_func=lambda r: r["data"])
         # return self._httpx_stream2generator(response, as_json=True)
 
     def chat_chat(
