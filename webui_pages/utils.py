@@ -300,7 +300,7 @@ class ApiRequest:
         '''
         data = {
             "question": question,
-            "stream": stream,
+            "stream": False,
             "user_id": "zzp",
             "kb_ids": kb_ids,
         }
