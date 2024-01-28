@@ -89,7 +89,7 @@ def yby_chat_page(router):
 
 def ybyqa_page(router):
 	is_lite = "lite" in sys.argv
-	api2 = ApiRequest(base_url="http://172.16.8.91:8777")
+	api2 = ApiRequest(base_url="http://192.168.33.104:8777")
 	yby_qa_page(api=api2, is_lite=is_lite)
 
 def filechat_page(router):
