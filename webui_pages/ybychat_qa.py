@@ -148,7 +148,6 @@ def yby_qa_page(api: ApiRequest, is_lite: bool = False):
             text = ""
             d = api.chat_ydqa(prompt).json()
             print("--------------------------------------------")
-            print(d)
             print(d["response"])
             if error_msg := check_error_msg(d):  # check whether error occured
                 st.error(error_msg)
