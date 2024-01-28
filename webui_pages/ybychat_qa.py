@@ -146,7 +146,7 @@ def yby_qa_page(api: ApiRequest, is_lite: bool = False):
                 # Markdown("...", in_expander=True, title="知识库匹配结果", state="complete"),
             ])
             text = ""
-            d = api.chat_ydqa(prompt)
+            d = api.chat_ydqa(prompt).json()
             print("--------------------------------------------")
             print(d)
             print(d["response"])
