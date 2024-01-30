@@ -146,7 +146,8 @@ def yby_qa_page(api: ApiRequest, is_lite: bool = False):
                 Markdown("...", in_expander=True, title="知识库匹配结果", state="complete"),
             ])
             text = ""
-            d = api.chat_ydqa(prompt).json()
+            d = api.chat_ydqa(prompt,
+                    kb_ids=["KB0083395488d9411c9638e1c57f874d6d"]).json()
             print("--------------------------------------------")
             print(d["response"])
             if error_msg := check_error_msg(d):  # check whether error occured
