@@ -147,7 +147,7 @@ def yby_qa_page(api: ApiRequest, is_lite: bool = False):
             ])
             text = ""
             d = api.chat_ydqa(prompt,
-                    kb_ids=["KB0083395488d9411c9638e1c57f874d6d"]).json()
+                    kb_ids=["KB89a2bf69bb6d4849bdf069e39eb79164"]).json()
             print("--------------------------------------------")
             print(d["response"])
             if error_msg := check_error_msg(d):  # check whether error occured
