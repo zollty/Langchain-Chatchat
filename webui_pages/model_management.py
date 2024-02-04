@@ -20,8 +20,8 @@ def config_aggrid(
         use_checkbox: bool = False,
 ) -> GridOptionsBuilder:
     gb = GridOptionsBuilder.from_dataframe(df)
-    gb.configure_column("desc", wrapText =  True, autoHeight = True, editable=True, width=320, cellStyle={"white-space": 'normal'})
-    gb.configure_column("usage", wrapText =  True, autoHeight = True, editable=True, width=240, cellStyle={"white-space": 'normal'})
+    gb.configure_column("desc", wrapText =  True, autoHeight = True, editable=True, width=320, cellStyle={"white-space": 'pre'})
+    gb.configure_column("usage", wrapText =  True, autoHeight = True, editable=True, width=240, cellStyle={"white-space": 'pre'})
     for (col, header), kw in columns.items():
         gb.configure_column(col, header, wrapHeaderText=True, **kw)
     gb.configure_selection(
