@@ -57,6 +57,19 @@ def file_exists(kb: str, selected_rows: List) -> Tuple[str, str]:
 
 def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
     # st.set_page_config(layout="wide")
+    st.markdown(
+        """
+    <style>
+        [data-testid="stSidebarUserContent"] {
+            padding: 30px 20px 20px 20px;
+        }
+        [data-testid="block-container"] {
+            padding-top: 40px;
+        }
+    </style>
+    """,
+        unsafe_allow_html=True,
+    )
     try:
         kb_list = {x["kb_name"]: x for x in get_kb_details()}
     except Exception as e:
