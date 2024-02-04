@@ -28,8 +28,8 @@ def config_aggrid(
     return params.value.replaceAll("\\n","<br/>"); // here is the key point
     }
     """)
-    gb.configure_column("desc", editable=True, maxWidth=400, cellRenderer=cell_renderer) #cellStyle={"white-space": 'pre'}
-    gb.configure_column("usage", editable=True, maxWidth=240, cellRenderer=cell_renderer)
+    gb.configure_column("desc", editable=True, width=400, cellRenderer=cell_renderer, cellStyle={"white-space": 'normal'}) #cellStyle={"white-space": 'pre'}
+    gb.configure_column("usage", editable=True, width=240, cellRenderer=cell_renderer, cellStyle={"white-space": 'normal'})
     for (col, header), kw in columns.items():
         gb.configure_column(col, header, wrapHeaderText=True, **kw)
     gb.configure_selection(
