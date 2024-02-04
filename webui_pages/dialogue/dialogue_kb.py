@@ -129,6 +129,25 @@ def kb_dialogue_page(api: ApiRequest, is_lite: bool = False):
         chat_box.use_chat_name(conversation_name)
         conversation_id = st.session_state["conversation_ids"][conversation_name]
 
+        def on_kb_change():
+            st.toast(f"已加载知识库： {st.session_state.selected_kb}")
+
+        kb_list = api.list_knowledge_bases()
+        index = 0
+        if DEFAULT_KNOWLEDGE_BASE in kb_list:
+            index = kb_list.index(DEFAULT_KNOWLEDGE_BASE)
+        selected_kb = st.selectbox(
+            "请选择知识库：",
+            kb_list,
+            index=index,
+            on_change=on_kb_change,
+            key="selected_kb",
+        )
+        kb_top_k = st.number_input("匹配知识条数：", 1, 20, VECTOR_SEARCH_TOP_K)
+
+        ## Bge 模型会超过1
+        score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
+
         def on_llm_change():
             if llm_model:
                 config = api.get_model_config(llm_model)
@@ -206,24 +225,6 @@ def kb_dialogue_page(api: ApiRequest, is_lite: bool = False):
         temperature = st.slider("Temperature：", 0.0, 1.0, TEMPERATURE, 0.05)
         history_len = st.number_input("历史对话轮数：", 0, 20, HISTORY_LEN)
 
-        def on_kb_change():
-            st.toast(f"已加载知识库： {st.session_state.selected_kb}")
-
-        kb_list = api.list_knowledge_bases()
-        index = 0
-        if DEFAULT_KNOWLEDGE_BASE in kb_list:
-            index = kb_list.index(DEFAULT_KNOWLEDGE_BASE)
-        selected_kb = st.selectbox(
-            "请选择知识库：",
-            kb_list,
-            index=index,
-            on_change=on_kb_change,
-            key="selected_kb",
-        )
-        kb_top_k = st.number_input("匹配知识条数：", 1, 20, VECTOR_SEARCH_TOP_K)
-
-        ## Bge 模型会超过1
-        score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
 
     # Display chat messages from history on app rerun
     chat_box.output_messages()
