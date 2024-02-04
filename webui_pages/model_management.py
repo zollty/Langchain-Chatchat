@@ -200,9 +200,9 @@ def model_portal_page(api: ApiRequest, is_lite: bool = None):
             "multiple",
         )
 
-        MIN_HEIGHT = 150
+        MIN_HEIGHT = 200
         MAX_HEIGHT = 1000
-        ROW_HEIGHT = 164
+        ROW_HEIGHT = 166
 
         doc_grid = AgGrid(
             doc_details,
