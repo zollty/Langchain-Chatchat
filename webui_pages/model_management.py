@@ -20,8 +20,13 @@ def config_aggrid(
         use_checkbox: bool = False,
 ) -> GridOptionsBuilder:
     gb = GridOptionsBuilder.from_dataframe(df)
-    gb.configure_column("desc", wrapText =  True, autoHeight = True, editable=True, width=320, cellStyle={"white-space": 'pre'})
-    gb.configure_column("usage", wrapText =  True, autoHeight = True, editable=True, width=240, cellStyle={"white-space": 'pre'})
+    cell_renderer = JsCode("""
+    function(params) {
+    return params.value.replaceAll("\\n","<br>"); // here is the key point
+    }
+    """)
+    gb.configure_column("desc", wrapText =  True, autoHeight = True, editable=True, width=400, cellRenderer=cell_renderer) #cellStyle={"white-space": 'pre'}
+    gb.configure_column("usage", wrapText =  True, autoHeight = True, editable=True, width=240, cellRenderer=cell_renderer)
     for (col, header), kw in columns.items():
         gb.configure_column(col, header, wrapHeaderText=True, **kw)
     gb.configure_selection(
@@ -44,8 +49,8 @@ def get_kb_file_details() -> List[Dict]:
             "status": "Running",
             "gpm_mem": "14G ~ 26G",
             "desc": """1、更强大的基础模型：使用了 GLM 混合目标函数，经过了人类偏好对齐训练等，评测性能大幅提升，在语义、数学、推理、代码、知识等不同角度的数据集上均有很好表现。
-2、更高效的推理、更低的显存占用：几乎可以秒回，速度比ChatGPT还快！\n
-3、更长的上下文：基座上下文长度（Context Length）由 初代的 2K 扩展到了 32K，支持8K上下文多轮对话！长对话模型增加到了32K！\n
+2、更高效的推理、更低的显存占用：几乎可以秒回，速度比ChatGPT还快！
+3、更长的上下文：基座上下文长度（Context Length）由 初代的 2K 扩展到了 32K，支持8K上下文多轮对话！长对话模型增加到了32K！
 4、更优秀的模型特性：原生支持工具调用……等复杂场景，胜任AI编程助手……
 """,
             "usage": """1、综合能力均匀
