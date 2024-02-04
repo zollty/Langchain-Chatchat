@@ -200,7 +200,7 @@ def model_portal_page(api: ApiRequest, is_lite: bool = None):
             "multiple",
         )
 
-        MIN_HEIGHT = 50
+        MIN_HEIGHT = 150
         MAX_HEIGHT = 1000
         ROW_HEIGHT = 164
 
