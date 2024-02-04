@@ -29,7 +29,7 @@ def config_aggrid(
     }
     """)
     # , cellRenderer=cell_renderer
-    gb.configure_column("desc", editable=True, maxWidth=400, cellStyle={"white-space": 'pre'}) #cellStyle={"white-space": 'pre'}
+    gb.configure_column("desc", editable=True, maxWidth=500, cellStyle={"white-space": 'pre'}) #cellStyle={"white-space": 'pre'}
     gb.configure_column("usage", editable=True, maxWidth=240, cellStyle={"white-space": 'pre'})
     for (col, header), kw in columns.items():
         gb.configure_column(col, header, wrapHeaderText=True, **kw)
@@ -200,6 +200,10 @@ def model_portal_page(api: ApiRequest, is_lite: bool = None):
             "multiple",
         )
 
+        MIN_HEIGHT = 50
+        MAX_HEIGHT = 1000
+        ROW_HEIGHT = 164
+
         doc_grid = AgGrid(
             doc_details,
             gb.build(),
@@ -209,6 +213,7 @@ def model_portal_page(api: ApiRequest, is_lite: bool = None):
                 "#gridToolBar": {"display": "none"},
             },
             allow_unsafe_jscode=True,
-            enable_enterprise_modules=False
+            enable_enterprise_modules=False,
+            height=min(MIN_HEIGHT + len(doc_details) * ROW_HEIGHT, MAX_HEIGHT),
         )
 
