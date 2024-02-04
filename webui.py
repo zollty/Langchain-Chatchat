@@ -48,6 +48,7 @@ def kb_manage_page(router):
         "FenghouAI-Chat WebUI",
         os.path.join("img", "chatchat_icon_blue_square_v2.png"),
         initial_sidebar_state="expanded",
+        layout="wide",
         menu_items={
             'Get Help': 'https://github.com',
             'Report a bug': "https://github.com",
