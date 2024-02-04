@@ -100,6 +100,16 @@ def parse_command(text: str, modal: Modal) -> bool:
 
 
 def dialogue_page(api: ApiRequest, is_lite: bool = False):
+    st.markdown(
+        """
+    <style>
+        [data-testid="stSidebarUserContent"] {
+            padding: 30px 20px 20px 20px;
+        }
+    </style>
+    """,
+        unsafe_allow_html=True,
+    )
     st.session_state.setdefault("conversation_ids", {})
     st.session_state["conversation_ids"].setdefault(chat_box.cur_chat_name, uuid.uuid4().hex)
     st.session_state.setdefault("file_chat_id", None)

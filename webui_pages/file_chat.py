@@ -77,7 +77,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             display: none
         }
         [data-testid="stSidebarUserContent"] {
-            padding-top: 3rem;
+            padding: 30px 20px 20px 20px;
         }
     </style>
     """,

@@ -2,6 +2,7 @@ import streamlit as st
 from webui_pages.utils import *
 from streamlit_option_menu import option_menu
 from webui_pages.dialogue.dialogue import dialogue_page, chat_box
+from webui_pages.dialogue.dialogue_normal import normal_dialogue_page
 from webui_pages.knowledge_base.knowledge_base import knowledge_base_page
 from webui_pages.ybychat import yby_page
 from webui_pages.ybychat_qa import yby_qa_page
@@ -21,6 +22,39 @@ api = ApiRequest(base_url=api_address())
 def index2(router):
     st.text(f"xxxxxx fron page create task")
     st.text("others on page create task")
+
+def index3(router):
+    is_lite = "lite" in sys.argv
+
+    st.set_page_config(
+        "FenghouAI-Chat WebUI",
+        os.path.join("img", "chatchat_icon_blue_square_v2.png"),
+        initial_sidebar_state="expanded",
+        menu_items={
+            'Get Help': 'https://github.com',
+            'Report a bug': "https://github.com",
+            'About': f"""欢迎使用 FenghouAI-Chat WebUI {VERSION}！"""
+        }
+    )
+	
+    dialogue_page(api=api, is_lite=is_lite)
+
+
+def kb_page(router):
+    is_lite = "lite" in sys.argv
+
+    st.set_page_config(
+        "FenghouAI-Chat WebUI",
+        os.path.join("img", "chatchat_icon_blue_square_v2.png"),
+        initial_sidebar_state="expanded",
+        menu_items={
+            'Get Help': 'https://github.com',
+            'Report a bug': "https://github.com",
+            'About': f"""欢迎使用 FenghouAI-Chat WebUI {VERSION}！"""
+        }
+    )
+	
+    knowledge_base_page(api=api, is_lite=is_lite)
 
 
 def index(router):
@@ -103,10 +137,16 @@ def test_fileparse_page(router):
 def model_manage_page(router):
 	is_lite = "lite" in sys.argv
 	model_management_page(api=api, is_lite=is_lite)
+      
+def r_normal_dialogue_page():
+      is_lite = "lite" in sys.argv
+      normal_dialogue_page(api=api, is_lite=is_lite)
 
 if __name__ == "__main__":
     router = StreamlitRouter()
-    router.register(index, '/')
+    router.register(index3, '/')
+    router.register(kb_page, '/kb')
+    router.register(r_normal_dialogue_page, '/nm')
     router.register(test_page2, "/tasks/<int:x>", methods=['POST'])
     router.register(yby_chat_page, '/yby')
     router.register(filechat_page, '/fchat')

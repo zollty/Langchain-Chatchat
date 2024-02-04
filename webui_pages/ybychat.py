@@ -64,6 +64,9 @@ def yby_page(api: ApiRequest, is_lite: bool = False):
         [data-testid="stSidebarNav"] {
             display: none
         }
+        [data-testid="stSidebarUserContent"] {
+            padding: 30px 20px 20px 20px;
+        }
     </style>
     """,
         unsafe_allow_html=True,
