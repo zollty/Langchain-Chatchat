@@ -173,7 +173,7 @@ if __name__ == "__main__":
     router.register(yby_chat_page, '/yby')
     router.register(test_fileparse_page, '/ftest')
     router.register(model_manage_page, '/modelmg')
-    router.register(model_portal_page, '/modelpt')
+    router.register(model_portalmg_page, '/modelpt')
     router.register(ybyqa_page, '/ybyqa')
     # index(router)
     router.serve()
