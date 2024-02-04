@@ -214,6 +214,6 @@ def model_portal_page(api: ApiRequest, is_lite: bool = None):
             },
             allow_unsafe_jscode=True,
             enable_enterprise_modules=False,
-            height=min(MIN_HEIGHT + len(doc_details) * ROW_HEIGHT, MAX_HEIGHT),
+            height=MIN_HEIGHT + len(doc_details) * ROW_HEIGHT,
         )
 
