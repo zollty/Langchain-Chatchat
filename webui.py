@@ -10,6 +10,7 @@ from webui_pages.ybychat_qa import yby_qa_page
 from webui_pages.file_chat import file_chat_page
 from webui_pages.file_parse_test import test_file_parse_page
 from webui_pages.model_manage import model_management_page
+from webui_pages.model_management import model_portal_page
 import os
 import sys
 from configs import VERSION
@@ -57,6 +58,19 @@ def kb_manage_page(router):
     )
 	
     knowledge_base_page(api=api, is_lite=is_lite)
+
+
+def model_portalmg_page(router):
+    is_lite = "lite" in sys.argv
+    
+    st.set_page_config(
+        "FenghouAI-Chat WebUI",
+        os.path.join("img", "chatchat_icon_blue_square_v2.png"),
+        initial_sidebar_state="expanded",
+        layout="wide",
+    )
+	
+    model_portal_page(api=api, is_lite=is_lite)
 
 
 def index(router):
@@ -159,6 +173,7 @@ if __name__ == "__main__":
     router.register(yby_chat_page, '/yby')
     router.register(test_fileparse_page, '/ftest')
     router.register(model_manage_page, '/modelmg')
+    router.register(model_portal_page, '/modelpt')
     router.register(ybyqa_page, '/ybyqa')
     # index(router)
     router.serve()
