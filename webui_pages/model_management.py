@@ -20,13 +20,16 @@ def config_aggrid(
         use_checkbox: bool = False,
 ) -> GridOptionsBuilder:
     gb = GridOptionsBuilder.from_dataframe(df)
+    gb.configure_default_column(
+        wrapText=True, autoHeight=True
+    )
     cell_renderer = JsCode("""
     function(params) {
-    return params.value.replaceAll("\\n","<br>"); // here is the key point
+    return params.value.replaceAll("\\n","<br/>"); // here is the key point
     }
     """)
-    gb.configure_column("desc", wrapText =  True, autoHeight = True, editable=True, width=400, cellRenderer=cell_renderer) #cellStyle={"white-space": 'pre'}
-    gb.configure_column("usage", wrapText =  True, autoHeight = True, editable=True, width=240, cellRenderer=cell_renderer)
+    gb.configure_column("desc", editable=True, maxWidth=400, cellRenderer=cell_renderer) #cellStyle={"white-space": 'pre'}
+    gb.configure_column("usage", editable=True, maxWidth=240, cellRenderer=cell_renderer)
     for (col, header), kw in columns.items():
         gb.configure_column(col, header, wrapHeaderText=True, **kw)
     gb.configure_selection(
