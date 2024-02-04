@@ -29,8 +29,8 @@ def config_aggrid(
     }
     """)
     # , cellRenderer=cell_renderer
-    gb.configure_column("desc", editable=True, width=400, cellStyle={"white-space": 'pre'}) #cellStyle={"white-space": 'pre'}
-    gb.configure_column("usage", editable=True, width=240, cellStyle={"white-space": 'pre'})
+    gb.configure_column("desc", editable=True, maxWidth=400, cellStyle={"white-space": 'pre'}) #cellStyle={"white-space": 'pre'}
+    gb.configure_column("usage", editable=True, maxWidth=240, cellStyle={"white-space": 'pre'})
     for (col, header), kw in columns.items():
         gb.configure_column(col, header, wrapHeaderText=True, **kw)
     gb.configure_selection(
@@ -52,7 +52,8 @@ def get_kb_file_details() -> List[Dict]:
             "name": "chatglm3-6b-32k",
             "status": "Running",
             "gpm_mem": "14G ~ 26G",
-            "desc": """1、更强大的基础模型：使用了 GLM 混合目标函数，经过了人类偏好对齐训练等，评测性能大幅提升，在语义、数学、推理、代码、知识等不同角度的数据集上均有很好表现。
+            "desc": """1、更强大的基础模型：使用了 GLM 混合目标函数，经过了人类偏好对齐训练等，评测性能大幅提升，
+            在语义、数学、推理、代码、知识等不同角度的数据集上均有很好表现。
 2、更高效的推理、更低的显存占用：几乎可以秒回，速度比ChatGPT还快！
 3、更长的上下文：基座上下文长度（Context Length）由 初代的 2K 扩展到了 32K，支持8K上下文多轮对话！长对话模型增加到了32K！
 4、更优秀的模型特性：原生支持工具调用……等复杂场景，胜任AI编程助手……
@@ -118,7 +119,8 @@ def get_kb_file_details() -> List[Dict]:
             "name": "Qwen-14B-Chat-Int8",
             "status": "Ready",
             "gpm_mem": "26G ~ 40G",
-            "desc": """1、更强大的基础模型：使用了 GLM 混合目标函数，经过了人类偏好对齐训练等，评测性能大幅提升，在语义、数学、推理、代码、知识等不同角度的数据集上均有很好表现。
+            "desc": """1、更强大的基础模型：使用了 GLM 混合目标函数，经过了人类偏好对齐训练等，评测性能大幅提升，
+            在语义、数学、推理、代码、知识等不同角度的数据集上均有很好表现。
 2、更高效的推理、更低的显存占用：几乎可以秒回，速度比ChatGPT还快！
 3、更长的上下文：基座上下文长度（Context Length）由 初代的 2K 扩展到了 32K，支持8K上下文多轮对话！长对话模型增加到了32K！
 4、更优秀的模型特性：原生支持工具调用……等复杂场景，胜任AI编程助手……
@@ -135,7 +137,8 @@ def get_kb_file_details() -> List[Dict]:
             "name": "Qwen-72B-Chat-Int8",
             "status": "Support",
             "gpm_mem": "65G ~ 90+G",
-            "desc": """1、更强大的基础模型：使用了 GLM 混合目标函数，经过了人类偏好对齐训练等，评测性能大幅提升，在语义、数学、推理、代码、知识等不同角度的数据集上均有很好表现。
+            "desc": """1、更强大的基础模型：使用了 GLM 混合目标函数，经过了人类偏好对齐训练等，评测性能大幅提升，
+            在语义、数学、推理、代码、知识等不同角度的数据集上均有很好表现。
 2、Qwen-72B在所有任务上均超越了LLaMA2-70B的性能，同时在10项任务中的7项任务中超越GPT-3.5！
 3、更长的上下文：基座上下文长度（Context Length）由 初代的 2K 扩展到了 32K，支持8K上下文多轮对话！长对话模型增加到了32K！
 4、最新推出了 Qwen-72B 和 Qwen-72B-Chat，它们在 3T tokens上进行训练，并支持 32k 上下文。
