@@ -191,7 +191,7 @@ def model_portal_page(api: ApiRequest, is_lite: bool = None):
         doc_grid = AgGrid(
             doc_details,
             gb.build(),
-            columns_auto_size_mode="FIT_CONTENTS",
+            # columns_auto_size_mode="FIT_CONTENTS",
             theme="alpine",
             custom_css={
                 "#gridToolBar": {"display": "none"},
