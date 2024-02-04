@@ -28,8 +28,9 @@ def config_aggrid(
     return params.value.replaceAll("\\n","<br/>"); // here is the key point
     }
     """)
-    gb.configure_column("desc", editable=True, width=400, cellRenderer=cell_renderer, cellStyle={"white-space": 'normal'}) #cellStyle={"white-space": 'pre'}
-    gb.configure_column("usage", editable=True, width=240, cellRenderer=cell_renderer, cellStyle={"white-space": 'normal'})
+    # , cellRenderer=cell_renderer
+    gb.configure_column("desc", editable=True, width=400, cellStyle={"white-space": 'pre'}) #cellStyle={"white-space": 'pre'}
+    gb.configure_column("usage", editable=True, width=240, cellStyle={"white-space": 'pre'})
     for (col, header), kw in columns.items():
         gb.configure_column(col, header, wrapHeaderText=True, **kw)
     gb.configure_selection(
@@ -199,7 +200,7 @@ def model_portal_page(api: ApiRequest, is_lite: bool = None):
         doc_grid = AgGrid(
             doc_details,
             gb.build(),
-            # columns_auto_size_mode="FIT_CONTENTS",
+            columns_auto_size_mode="FIT_CONTENTS",
             theme="alpine",
             custom_css={
                 "#gridToolBar": {"display": "none"},
