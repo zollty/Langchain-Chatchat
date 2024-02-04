@@ -3,6 +3,7 @@ from webui_pages.utils import *
 from streamlit_option_menu import option_menu
 from webui_pages.dialogue.dialogue import dialogue_page, chat_box
 from webui_pages.dialogue.dialogue_normal import normal_dialogue_page
+from webui_pages.dialogue.dialogue_kb import kb_dialogue_page
 from webui_pages.knowledge_base.knowledge_base import knowledge_base_page
 from webui_pages.ybychat import yby_page
 from webui_pages.ybychat_qa import yby_qa_page
@@ -40,7 +41,7 @@ def index3(router):
     dialogue_page(api=api, is_lite=is_lite)
 
 
-def kb_page(router):
+def kb_manage_page(router):
     is_lite = "lite" in sys.argv
 
     st.set_page_config(
@@ -142,14 +143,19 @@ def r_normal_dialogue_page():
       is_lite = "lite" in sys.argv
       normal_dialogue_page(api=api, is_lite=is_lite)
 
+def r_kb_dialogue_page():
+      is_lite = "lite" in sys.argv
+      kb_dialogue_page(api=api, is_lite=is_lite)
+
 if __name__ == "__main__":
     router = StreamlitRouter()
-    router.register(index3, '/')
-    router.register(kb_page, '/kb')
-    router.register(r_normal_dialogue_page, '/nm')
+    router.register(r_normal_dialogue_page, '/') # index3
+    router.register(r_kb_dialogue_page, '/kb')
+    router.register(filechat_page, '/fchat')
+    router.register(index3, '/tt')
+    router.register(kb_manage_page, '/kbmg')
     router.register(test_page2, "/tasks/<int:x>", methods=['POST'])
     router.register(yby_chat_page, '/yby')
-    router.register(filechat_page, '/fchat')
     router.register(test_fileparse_page, '/ftest')
     router.register(model_manage_page, '/modelmg')
     router.register(ybyqa_page, '/ybyqa')

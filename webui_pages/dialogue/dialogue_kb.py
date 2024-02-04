@@ -7,7 +7,8 @@ import os
 import re
 import time
 import json
-from configs import (TEMPERATURE, HISTORY_LEN, PROMPT_TEMPLATES)
+from configs import (TEMPERATURE, HISTORY_LEN, PROMPT_TEMPLATES,
+                     DEFAULT_KNOWLEDGE_BASE)
 from server.utils import get_prompt_template
 import uuid
 from typing import List, Dict, Optional
@@ -19,7 +20,6 @@ chat_box = ChatBox(
         "chatchat_icon_blue_square_v2.png"
     )
 )
-
 
 def get_messages_history(history_len: int, content_in_expander: bool = False) -> List[Dict]:
     '''
@@ -88,7 +88,7 @@ def parse_command(text: str, modal: Modal) -> bool:
     return False
 
 
-def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
+def kb_dialogue_page(api: ApiRequest, is_lite: bool = False):
     st.markdown(
         """
     <style>
@@ -118,7 +118,6 @@ def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
             st.write("\n\n".join(cmds))
     
     # info_placeholder = st.empty()
-
 
     with st.sidebar:
         # 多会话
@@ -180,8 +179,7 @@ def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
                     st.success(msg)
                     st.session_state["prev_llm_model"] = llm_model
 
-
-        prompt_templates_kb_list = list(PROMPT_TEMPLATES["llm_chat"].keys())
+        prompt_templates_kb_list = list(PROMPT_TEMPLATES["knowledge_base_chat"].keys())
         prompt_template_name = prompt_templates_kb_list[0]
         if "prompt_template_select" not in st.session_state:
             st.session_state.prompt_template_select = prompt_templates_kb_list[0]
@@ -198,7 +196,7 @@ def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
             key="prompt_template_select",
         )
         prompt_template_name = st.session_state.prompt_template_select
-        prompt_template = get_prompt_template("llm_chat", prompt_template_name)
+        prompt_template = get_prompt_template("knowledge_base_chat", prompt_template_name)
         system_prompt = st.text_area(
             label="System Prompt",
             height=300,
@@ -207,6 +205,25 @@ def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
         )
         temperature = st.slider("Temperature：", 0.0, 1.0, TEMPERATURE, 0.05)
         history_len = st.number_input("历史对话轮数：", 0, 20, HISTORY_LEN)
+
+        def on_kb_change():
+            st.toast(f"已加载知识库： {st.session_state.selected_kb}")
+
+        kb_list = api.list_knowledge_bases()
+        index = 0
+        if DEFAULT_KNOWLEDGE_BASE in kb_list:
+            index = kb_list.index(DEFAULT_KNOWLEDGE_BASE)
+        selected_kb = st.selectbox(
+            "请选择知识库：",
+            kb_list,
+            index=index,
+            on_change=on_kb_change,
+            key="selected_kb",
+        )
+        kb_top_k = st.number_input("匹配知识条数：", 1, 20, VECTOR_SEARCH_TOP_K)
+
+        ## Bge 模型会超过1
+        score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
 
     # Display chat messages from history on app rerun
     chat_box.output_messages()
@@ -236,33 +253,27 @@ def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
         else:
             history = get_messages_history(history_len)
             chat_box.user_say(prompt)
-            # if dialogue_mode == "LLM 对话":
-            chat_box.ai_say("正在思考...")
-            text = ""
-            message_id = ""
-            r = api.chat_chat(prompt,
-                            history=history,
-                            conversation_id=conversation_id,
-                            model=llm_model,
-                            prompt_name=prompt_template_name,
-                            system_prompt=system_prompt,
-                            temperature=temperature)
-            for t in r:
-                if error_msg := check_error_msg(t):  # check whether error occured
-                    st.error(error_msg)
-                    break
-                text += t.get("text", "")
-                chat_box.update_msg(text)
-                message_id = t.get("message_id", "")
 
-            metadata = {
-                "message_id": message_id,
-                }
-            chat_box.update_msg(text, streaming=False, metadata=metadata)  # 更新最终的字符串，去除光标
-            chat_box.show_feedback(**feedback_kwargs,
-                                key=message_id,
-                                on_submit=on_feedback,
-                                kwargs={"message_id": message_id, "history_index": len(chat_box.history) - 1})
+            chat_box.ai_say([
+                f"正在查询知识库 `{selected_kb}` ...",
+                Markdown("...", in_expander=True, title="知识库匹配结果", state="complete"),
+            ])
+            text = ""
+            for d in api.knowledge_base_chat(prompt,
+                                            knowledge_base_name=selected_kb,
+                                            top_k=kb_top_k,
+                                            score_threshold=score_threshold,
+                                            history=history,
+                                            model=llm_model,
+                                            prompt_name=prompt_template_name,
+                                            temperature=temperature):
+                if error_msg := check_error_msg(d):  # check whether error occured
+                    st.error(error_msg)
+                elif chunk := d.get("answer"):
+                    text += chunk
+                    chat_box.update_msg(text, element_index=0)
+                chat_box.update_msg(text, element_index=0, streaming=False)
+                chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
 
 
     if st.session_state.get("need_rerun"):
