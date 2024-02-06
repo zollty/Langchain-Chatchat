@@ -179,13 +179,13 @@ def model_portal_page(api: ApiRequest, is_lite: bool = None):
                                  label_visibility="collapsed"
                                  )
     
-    cols[1].write("")
-    cols[2].text_input(label="", value="",
+    cols[1].text_input(label="", value="",
                        label_visibility="collapsed")
-    cols[3].button(
+    cols[2].button(
                 "查询",
                 use_container_width=False,
         )
+    cols[3].write("")
 
     kb = "test_yby"
 
