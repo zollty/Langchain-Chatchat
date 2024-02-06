@@ -171,6 +171,21 @@ def model_portal_page(api: ApiRequest, is_lite: bool = None):
         unsafe_allow_html=True,
     )
 
+    cols = st.columns(4)
+    llm_status_list = ["Running", "Ready", "Support"]
+    llm_status = cols[0].selectbox(llm_status_list,
+                                 key="llm_status",
+                                 label_visibility="collapsed"
+                                 )
+    
+    cols[1].write("")
+    cols[2].text_input(value="",
+                       label_visibility="collapsed")
+    cols[3].button(
+                "查询",
+                use_container_width=False,
+        )
+
     kb = "test_yby"
 
     # 知识库详情
