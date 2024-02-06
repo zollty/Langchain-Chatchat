@@ -173,7 +173,7 @@ def model_portal_page(api: ApiRequest, is_lite: bool = None):
 
     cols = st.columns(4)
     llm_status_list = ["Running", "Ready", "Support"]
-    llm_status = cols[0].selectbox(llm_status_list,
+    llm_status = cols[0].selectbox(options=llm_status_list,
                                  key="llm_status",
                                  label_visibility="collapsed"
                                  )
