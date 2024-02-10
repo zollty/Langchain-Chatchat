@@ -23,7 +23,7 @@ def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
                                 )
     # with st.sidebar:
     with st.expander(
-            "文件处理配置",
+            "文本内容处理配置",
             expanded=True,
     ):
         cols = st.columns(4)

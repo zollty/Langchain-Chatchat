@@ -68,6 +68,7 @@ def create_app(run_mode: str = None):
 
 def mount_app_routes(app: FastAPI, run_mode: str = None):
     from server.chat.file_chat import test_parse_docs
+    from server.langchain_utils import test_parse_url
     app.get("/",
             response_model=BaseResponse,
             summary="swagger 文档")(document)
@@ -174,6 +175,11 @@ def mount_app_routes(app: FastAPI, run_mode: str = None):
              tags=["Other"],
              summary="解析文件并分段，返回分段文本内容"
              )(test_parse_docs)
+
+    app.post("/other/test_parse_url",
+             tags=["Other"],
+             summary="解析url并分段，返回分段文本内容"
+             )(test_parse_url)
 
 
 def mount_knowledge_routes(app: FastAPI):

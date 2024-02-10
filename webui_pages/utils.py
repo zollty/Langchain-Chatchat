@@ -577,6 +577,28 @@ class ApiRequest:
         return self._get_response_value(response, as_json=True)
 
 
+    def test_parse_url(
+        self,
+        url: str,
+        chunk_size=CHUNK_SIZE,
+        chunk_overlap=OVERLAP_SIZE,
+        start_size=0,
+        zh_title_enhance=ZH_TITLE_ENHANCE,
+    ):
+        data={
+            "url": url,
+            "chunk_size": chunk_size,
+            "chunk_overlap": chunk_overlap,
+            "start_size": start_size,
+            "zh_title_enhance": zh_title_enhance,
+        }
+        response = self.post(
+            "/other/test_parse_url",
+            data=data,
+        )
+        return self._get_response_value(response, as_json=True)
+
+
     def file_chat(
         self,
         query: str,
