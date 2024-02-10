@@ -2,7 +2,7 @@ import streamlit as st
 from webui_pages.utils import *
 from configs import (OVERLAP_SIZE, ZH_TITLE_ENHANCE)
 
-def test_file_parse_page(api: ApiRequest, is_lite: bool = None):
+def test_url_parse_page(api: ApiRequest, is_lite: bool = None):
     st.set_page_config(layout="wide")
     files = st.text_input(label="可解析的URL", value="")
     # cols = st.columns(4)

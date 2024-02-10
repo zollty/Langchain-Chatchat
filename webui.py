@@ -11,6 +11,7 @@ from webui_pages.file_chat import file_chat_page
 from webui_pages.file_parse_test import test_file_parse_page
 from webui_pages.model_manage import model_management_page
 from webui_pages.model_management import model_portal_page
+from webui_pages.url_parse_test import test_url_parse_page
 import os
 import sys
 from configs import VERSION
@@ -162,6 +163,10 @@ def r_kb_dialogue_page():
       is_lite = "lite" in sys.argv
       kb_dialogue_page(api=api, is_lite=is_lite)
 
+def test_urlparse_page():
+      is_lite = "lite" in sys.argv
+      test_url_parse_page(api=api, is_lite=is_lite)
+
 if __name__ == "__main__":
     router = StreamlitRouter()
     router.register(r_normal_dialogue_page, '/') # index3
@@ -175,6 +180,7 @@ if __name__ == "__main__":
     router.register(model_manage_page, '/modelmg')
     router.register(model_portalmg_page, '/modelpt')
     router.register(ybyqa_page, '/ybyqa')
+    router.register(test_urlparse_page, '/utest')
     # index(router)
     router.serve()
     
