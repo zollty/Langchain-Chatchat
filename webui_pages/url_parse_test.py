@@ -35,7 +35,7 @@ def test_url_parse_page(api: ApiRequest, is_lite: bool = None):
         submit_info = st.empty()
         print("---------------------------开始上传…………")
         submit_info.text("▒▒▒▒▒▒▒▒▒▒▒▒▒░░░░░░░░░░░░正在处理中…………请稍等（勿重复点击）")
-        ret = api.test_parse_docs([files],
+        ret = api.test_parse_url([files],
                                     chunk_size=chunk_size,
                                     chunk_overlap=chunk_overlap,
                                     start_size=start_size,
