@@ -85,9 +85,9 @@ def tool_chat_page(api: ApiRequest, is_lite: bool = False):
     with st.sidebar:
 
         options = st.multiselect(
-            '请选择使用的插件',
+            '请选择使用的插件：',
             tool_names,
-            tool_names)
+            ["shell", "translate"])
 
         def on_llm_change():
             if llm_model:
