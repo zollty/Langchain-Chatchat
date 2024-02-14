@@ -76,9 +76,8 @@ def tool_chat_page(api: ApiRequest, is_lite: bool = False):
     # Set the title of the demo
     st.title("💬 插件Chat")
     # Add your custom text here, with smaller font size
-    st.markdown("<sub>插件专用聊天（左边选择插件）</sub>", unsafe_allow_html=True)
+    st.markdown("<sub>插件专用聊天（左边选择插件，建议使用Qwen-14B-Chat）</sub>", unsafe_allow_html=True)
     #info_placeholder = st.empty()
-
 
 
     now = datetime.now()
@@ -129,7 +128,7 @@ def tool_chat_page(api: ApiRequest, is_lite: bool = False):
                 and llm_model not in running_models):
             with st.spinner(f"正在加载模型： {llm_model}，请勿进行操作或刷新页面"):
                 prev_model = st.session_state.get("prev_llm_model")
-                r = api.change_llm_model(prev_model, llm_model)
+                r = api.change_llm_model(prev_model, llm_model, keep_origin=False)
                 if msg := check_error_msg(r):
                     st.error(msg)
                 elif msg := check_success_msg(r):
