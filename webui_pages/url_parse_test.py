@@ -43,9 +43,12 @@ def test_url_parse_page(api: ApiRequest, is_lite: bool = None):
         print("---------------------------解析成功…………")
         submit_info.empty()
         if msg := check_success_msg(ret):
+            datatxt = ret.get("data")[start_size:]
             st.toast(msg, icon="✔")
             st.divider()
-            st.code(ret.get("data"), language="None", line_numbers=True)
+            total_len = len(datatxt)
+            st.subheader(f"解析成功: （起止字符：{start_size} ~ {start_size + total_len}）")
+            st.code(datatxt, language="None", line_numbers=True)
         elif msg := check_error_msg(ret):
             st.toast(msg, icon="✖")
             st.divider()

@@ -8,6 +8,7 @@ from webui_pages.knowledge_base.knowledge_base import knowledge_base_page
 from webui_pages.ybychat import yby_page
 from webui_pages.ybychat_qa import yby_qa_page
 from webui_pages.file_chat import file_chat_page
+from webui_pages.tool_chat import tool_chat_page
 from webui_pages.file_parse_test import test_file_parse_page
 from webui_pages.model_manage import model_management_page
 from webui_pages.model_management import model_portal_page
@@ -147,6 +148,10 @@ def filechat_page(router):
 	is_lite = "lite" in sys.argv
 	file_chat_page(api=api, is_lite=is_lite)
 
+def toolchat_page(router):
+	is_lite = "lite" in sys.argv
+	tool_chat_page(api=api, is_lite=is_lite)
+
 def test_fileparse_page(router):
 	is_lite = "lite" in sys.argv
 	test_file_parse_page(api=api, is_lite=is_lite)
@@ -172,6 +177,7 @@ if __name__ == "__main__":
     router.register(r_normal_dialogue_page, '/') # index3
     router.register(r_kb_dialogue_page, '/kb')
     router.register(filechat_page, '/fchat')
+    router.register(toolchat_page, '/tchat')
     router.register(index3, '/tt')
     router.register(kb_manage_page, '/kbmg')
     router.register(test_page2, "/tasks/<int:x>", methods=['POST'])

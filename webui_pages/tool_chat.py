@@ -24,15 +24,6 @@ chat_box = ChatBox(
 )
 
 
-# @st.cache_data
-def upload_temp_docs(files, _api: ApiRequest) -> str:
-    '''
-    将文件上传到临时目录，用于文件对话
-    返回临时向量库ID
-    '''
-    return _api.upload_temp_docs(files).get("data", {})
-
-
 def get_messages_history(history_len: int, content_in_expander: bool = False) -> List[Dict]:
     '''
     返回消息历史。
@@ -54,12 +45,9 @@ def get_messages_history(history_len: int, content_in_expander: bool = False) ->
 
 
 
-def file_chat_page(api: ApiRequest, is_lite: bool = False):
+def tool_chat_page(api: ApiRequest, is_lite: bool = False):
     st.session_state.setdefault("conversation_ids", {})
     st.session_state["conversation_ids"].setdefault(chat_box.cur_chat_name, uuid.uuid4().hex)
-    st.session_state.setdefault("file_chat_id", None)
-    st.session_state.setdefault("file_chat_files", None)
-    st.session_state.setdefault("file_summary", "")
     default_model = api.get_default_llm_model()[0]
     llm_model = ""
     
@@ -86,80 +74,16 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
 
 
     # Set the title of the demo
-    st.title("💬 文件Chat")
+    st.title("💬 插件Chat")
     # Add your custom text here, with smaller font size
-    st.markdown("<sub>文件专用聊天（左边上传文件）</sub>", unsafe_allow_html=True)
+    st.markdown("<sub>插件专用聊天（左边选择插件）</sub>", unsafe_allow_html=True)
     #info_placeholder = st.empty()
 
-    def gen_relate_qa(doc: str):
-        chat_box.ai_say([
-            f"AI猜您想问 ..."
-        ])
-        text = "对此文档提问如下，可进一步了解:\n\n"
-        for d in api.gen_relate_qa(doc=doc,
-                                stream=True):
-            if error_msg := check_error_msg(d):  # check whether error occured
-                st.error(error_msg)
-            elif chunk := d.get("answer"):
-                text += chunk
-                chat_box.update_msg(text, element_index=0)
-            chat_box.update_msg(text, element_index=0, streaming=False)
 
-    def auto_summary(file_chat_files: List[str],
-                        seg: int = 0):
-        for tmp_file_name in file_chat_files:
-            info_msg = f"正在总结 `{tmp_file_name}` ..."
-            if seg > 0:
-                info_msg = f"正在总结 `{tmp_file_name}`第{seg+1}段 ..."
-            else:
-                st.session_state["file_summary"] = ""
-            chat_box.ai_say([
-                info_msg,
-                Markdown("...", in_expander=True, title="文件内容", state="complete"),
-            ])
-            text = ""
-            for d in api.summary_docs(kid=st.session_state["file_chat_id"],
-                                    file_name=tmp_file_name,
-                                    seg=seg,
-                                    stream=True):
-                if error_msg := check_error_msg(d):  # check whether error occured
-                    st.error(error_msg)
-                    break
-                elif chunk := d.get("answer"):
-                    text += chunk
-                    chat_box.update_msg(text, element_index=0)
-                chat_box.update_msg(text, element_index=0, streaming=False)
-                if src_info := d.get("src_info"):
-                    st.session_state["file_summary"] += "\n" + text
-                    chat_box.update_msg(src_info.get("doc", ""), element_index=1, streaming=False)
-                    if src_info.get("next_seg"):
-                        auto_summary([tmp_file_name], src_info.get("next_seg"))
-                    else:
-                        gen_relate_qa(st.session_state["file_summary"])
 
     now = datetime.now()
     with st.sidebar:
 
-        files = st.file_uploader("上传知识文件：",
-                                [i for ls in LOADER_DICT.values() for i in ls],
-                                accept_multiple_files=True,
-                                )
-
-        enable_summary = st.checkbox(label="开启总结", value=True, key="enable_summary")
-        if st.button("开始上传", disabled=len(files)==0):
-            upret = upload_temp_docs(files, api)
-            if upret.get("files"):  # check whether error occured
-                st.session_state["file_chat_id"] = upret.get("id")
-                # info_placeholder.text(upret.get("id"))
-                st.session_state["file_chat_files"] = upret.get("files")
-                # call auto_summary
-                st.session_state["need_summary"] = True
-            elif fail_datas := upret.get("failed_files"):
-                st.error("上传或解析失败" + json.dumps(fail_datas))
-
-        kb_top_k = st.number_input("匹配知识条数：", 1, 20, VECTOR_SEARCH_TOP_K)
-        ## Bge 模型会超过1
-        score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
 
 
         def on_llm_change():
@@ -213,7 +137,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
                     st.session_state["prev_llm_model"] = llm_model
 
 
-        prompt_templates_kb_list = list(PROMPT_TEMPLATES["knowledge_base_chat"].keys())
+        prompt_templates_kb_list = list(PROMPT_TEMPLATES["agent_chat"].keys())
         prompt_template_name = prompt_templates_kb_list[0]
         if "prompt_template_select" not in st.session_state:
             st.session_state.prompt_template_select = prompt_templates_kb_list[0]
@@ -230,7 +154,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             key="prompt_template_select",
         )
         prompt_template_name = st.session_state.prompt_template_select
-        prompt_template = get_prompt_template("knowledge_base_chat", prompt_template_name)
+        prompt_template = get_prompt_template("agent_chat", prompt_template_name)
         system_prompt = st.text_area(
             label="System Prompt",
             height=200,
@@ -268,33 +192,48 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
             history = get_messages_history(history_len)
             chat_box.user_say(prompt)
 
-            if st.session_state["file_chat_id"] is None:
-                st.error("请先上传文件再进行对话")
-                st.stop()
-            chat_box.ai_say([
-                f"正在查询文件 `{st.session_state['file_chat_id']}` ...",
-                Markdown("...", in_expander=True, title="文件匹配结果", state="complete"),
-            ])
+            if not any(agent in llm_model for agent in SUPPORT_AGENT_MODEL):
+                chat_box.ai_say([
+                    f"正在思考... \n\n <span style='color:red'>该模型并没有进行Agent对齐，请更换支持Agent的模型获得更好的体验！</span>\n\n\n",
+                    Markdown("...", in_expander=True, title="思考过程", state="complete"),
+
+                ])
+            else:
+                chat_box.ai_say([
+                    f"正在思考...",
+                    Markdown("...", in_expander=True, title="思考过程", state="complete"),
+
+                ])
             text = ""
-            for d in api.file_chat(prompt,
-                                    knowledge_id=st.session_state["file_chat_id"],
-                                    top_k=kb_top_k,
-                                    score_threshold=score_threshold,
+            ans = ""
+            for d in api.agent_chat(prompt,
                                     history=history,
                                     model=llm_model,
                                     prompt_name=prompt_template_name,
-                                    temperature=temperature):
+                                    temperature=temperature,
+                                    ):
+                try:
+                    d = json.loads(d)
+                except:
+                    pass
                 if error_msg := check_error_msg(d):  # check whether error occured
                     st.error(error_msg)
-                elif chunk := d.get("answer"):
+                if chunk := d.get("answer"):
                     text += chunk
-                    chat_box.update_msg(text, element_index=0)
-                chat_box.update_msg(text, element_index=0, streaming=False)
-                chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
+                    chat_box.update_msg(text, element_index=1)
+                if chunk := d.get("final_answer"):
+                    ans += chunk
+                    chat_box.update_msg(ans, element_index=0)
+                if chunk := d.get("tools"):
+                    text += "\n\n".join(d.get("tools", []))
+                    chat_box.update_msg(text, element_index=1)
+                chat_box.update_msg(ans, element_index=0, streaming=False)
+                chat_box.update_msg(text, element_index=1, streaming=False)
 
-    if st.session_state.get("need_summary") and st.session_state.enable_summary:
-        st.session_state["need_summary"] = False
-        auto_summary(st.session_state["file_chat_files"])
+
+    if st.session_state.get("need_rerun"):
+        st.session_state["need_rerun"] = False
+        st.rerun()
 
 
 
