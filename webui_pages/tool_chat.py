@@ -13,6 +13,7 @@ from configs import (TEMPERATURE, HISTORY_LEN, PROMPT_TEMPLATES,
                      DEFAULT_KNOWLEDGE_BASE, DEFAULT_SEARCH_ENGINE, SUPPORT_AGENT_MODEL)
 from server.knowledge_base.utils import LOADER_DICT
 from server.utils import get_prompt_template
+from server.agent.tools_select import tools, tool_names
 import uuid
 from typing import List, Dict, Optional
 
@@ -83,7 +84,10 @@ def tool_chat_page(api: ApiRequest, is_lite: bool = False):
     now = datetime.now()
     with st.sidebar:
 
-
+        options = st.multiselect(
+            '请选择使用的插件',
+            tool_names,
+            tool_names)
 
         def on_llm_change():
             if llm_model:
