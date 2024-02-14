@@ -99,6 +99,13 @@ def kb_dialogue_page(api: ApiRequest, is_lite: bool = False):
     """,
         unsafe_allow_html=True,
     )
+
+    # Set the title of the demo
+    st.title("💬 知识库Chat")
+    # Add your custom text here, with smaller font size
+    st.markdown("<sub>知识库专用聊天（左边选择知识库）</sub>", unsafe_allow_html=True)
+    #info_placeholder = st.empty()
+
     st.session_state.setdefault("conversation_ids", {})
     st.session_state["conversation_ids"].setdefault(chat_box.cur_chat_name, uuid.uuid4().hex)
     default_model = api.get_default_llm_model()[0]
