@@ -13,6 +13,7 @@ from webui_pages.file_parse_test import test_file_parse_page
 from webui_pages.model_manage import model_management_page
 from webui_pages.model_management import model_portal_page
 from webui_pages.url_parse_test import test_url_parse_page
+from webui_pages.skills import *
 import os
 import sys
 from configs import VERSION
@@ -187,6 +188,7 @@ if __name__ == "__main__":
     router.register(model_portalmg_page, '/modelpt')
     router.register(ybyqa_page, '/ybyqa')
     router.register(test_urlparse_page, '/utest')
+    router.register(skill_shell_page, '/skshell')
     # index(router)
     router.serve()
     
