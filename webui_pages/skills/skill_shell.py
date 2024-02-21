@@ -13,7 +13,8 @@ def skill_shell_page(api: ApiRequest = None, is_lite: bool = None):
                 use_container_width=False,
         ):
         print("-------------------------")
-        shell(args)
+        ret = shell(args)
+        st.code(ret, language="None", line_numbers=True)
 
     st.text("↑↑↑↑↑↑")
     st.markdown("<h4>注意事项：</h4>\n\n<sub>1、请勿执行危险命令</sub>", unsafe_allow_html=True)
