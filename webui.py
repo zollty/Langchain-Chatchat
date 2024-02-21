@@ -190,6 +190,9 @@ if __name__ == "__main__":
     router.register(test_urlparse_page, '/utest')
     router.register(skill_shell_page, '/skshell')
     router.register(skill_calculate_page, '/skcalc')
+    router.register(skill_weather_page, '/skwea')
+    router.register(skill_arxiv_page, '/skarxiv')
+    router.register(skill_wolfram_page, '/skwolf')
     # index(router)
     router.serve()
     
