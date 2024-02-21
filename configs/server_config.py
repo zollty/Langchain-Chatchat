@@ -106,8 +106,17 @@ FSCHAT_MODEL_WORKERS = {
        "num_gpus": 5, # 使用GPU的数量
        "max_gpu_memory": "12GiB", # 每个GPU占用的最大显存
     },
-    "chatglm2-6b": {
+    "Qwen1.5-7B-Chat": { # (4577 + 6089 + 7077=17743) mem <3*6GiB
        "port": 20003,
+       "device": LLM_DEVICE,
+       "infer_turbo": True,
+       "gpus": None,
+       #"gpus": "1,2,3,4", # 使用的GPU，以str的格式指定，如"0,1"，如失效请使用CUDA_VISIBLE_DEVICES="0,1"等形式指定
+       "num_gpus": 5, # 使用GPU的数量
+       "max_gpu_memory": "12GiB", # 每个GPU占用的最大显存
+    },
+    "chatglm2-6b": {
+       "port": 20004,
        "device": LLM_DEVICE,
        "infer_turbo": True,
        "gpus": None,
@@ -116,7 +125,7 @@ FSCHAT_MODEL_WORKERS = {
        "max_gpu_memory": "4GiB", # 每个GPU占用的最大显存
     },
     "chatglm3-6b": { # (3867 + 4529 + 4507=12903) <13G mem <3*5GiB
-       "port": 20004,
+       "port": 20005,
        "device": LLM_DEVICE,
        "infer_turbo": True,
        "gpus": None,
@@ -125,7 +134,7 @@ FSCHAT_MODEL_WORKERS = {
        "max_gpu_memory": "4GiB", # 每个GPU占用的最大显存
     },
     "chatglm3-6b-32k": {
-       "port": 20005,
+       "port": 20006,
        "device": LLM_DEVICE,
        "infer_turbo": True,
        "gpus": None,
@@ -134,7 +143,7 @@ FSCHAT_MODEL_WORKERS = {
        "max_gpu_memory": "16GiB", # 每个GPU占用的最大显存
     },
     "Chinese-Alpaca-2-7B": {
-       "port": 20006,
+       "port": 20007,
        "device": LLM_DEVICE,
        "infer_turbo": True,
        "gpus": None,
@@ -143,7 +152,7 @@ FSCHAT_MODEL_WORKERS = {
        "max_gpu_memory": "5GiB", # 每个GPU占用的最大显存
     },
     "Chinese-Alpaca-2-13B": {
-       "port": 20007,
+       "port": 20008,
        "device": LLM_DEVICE,
        "infer_turbo": True,
        "gpus": None,
@@ -152,7 +161,7 @@ FSCHAT_MODEL_WORKERS = {
        "max_gpu_memory": "6GiB", # 每个GPU占用的最大显存
     },
     "Llama2-Chinese-13b-Chat": { # (8483 + 8779 + 8733=25995) <26G mem <3*9GiB
-       "port": 20008,
+       "port": 20009,
        "device": LLM_DEVICE,
        "infer_turbo": True,
        "gpus": None,
@@ -161,7 +170,7 @@ FSCHAT_MODEL_WORKERS = {
        "max_gpu_memory": "6GiB", # 每个GPU占用的最大显存
     },
     "Qwen-14B-Chat": { # 
-       "port": 20009,
+       "port": 20010,
        "device": LLM_DEVICE,
        "infer_turbo": True,
        "gpus": None,
@@ -170,7 +179,7 @@ FSCHAT_MODEL_WORKERS = {
        "max_gpu_memory": "10GiB", # 每个GPU占用的最大显存
     },
     "Qwen-1.8B-Chat": { # 3gb
-       "port": 20010,
+       "port": 20011,
        "device": LLM_DEVICE,
        "infer_turbo": True,
        "gpus": None,
@@ -179,7 +188,7 @@ FSCHAT_MODEL_WORKERS = {
        "max_gpu_memory": "4GiB", # 每个GPU占用的最大显存
     },
     "Yi-34B-Chat-8bits": { # 
-       "port": 20011,
+       "port": 20012,
        "device": LLM_DEVICE,
        "infer_turbo": True,
        "gpus": None,
@@ -188,7 +197,7 @@ FSCHAT_MODEL_WORKERS = {
        "max_gpu_memory": "16GiB", # 每个GPU占用的最大显存
     },
     "Qwen-72B-Chat-Int8": { # 
-       "port": 20012,
+       "port": 20013,
        "device": LLM_DEVICE,
        "infer_turbo": True,
        "gpus": None,
