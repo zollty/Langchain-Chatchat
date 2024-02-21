@@ -189,6 +189,7 @@ if __name__ == "__main__":
     router.register(ybyqa_page, '/ybyqa')
     router.register(test_urlparse_page, '/utest')
     router.register(skill_shell_page, '/skshell')
+    router.register(skill_calculate_page, '/skcalc')
     # index(router)
     router.serve()
     
