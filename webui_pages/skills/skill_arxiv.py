@@ -1,6 +1,6 @@
 import streamlit as st
 from webui_pages.utils import *
-from server.agent.tools.shell import arxiv
+from server.agent.tools.arxiv import arxiv
 
 def skill_arxiv_page(api: ApiRequest = None, is_lite: bool = None):
     st.subheader("arxiv文献查询工具")

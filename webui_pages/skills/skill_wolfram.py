@@ -1,6 +1,6 @@
 import streamlit as st
 from webui_pages.utils import *
-from server.agent.tools.shell import wolfram
+from server.agent.tools.wolfram import wolfram
 
 def skill_wolfram_page(api: ApiRequest = None, is_lite: bool = None):
     st.subheader("在线科学计算（wolfram）工具")
