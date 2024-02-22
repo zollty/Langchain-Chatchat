@@ -16,10 +16,11 @@ def skill_weather_page(api: ApiRequest = None, is_lite: bool = None):
     model_container.MODEL = get_ChatOpenAI(model_name=model_name, temperature=TEMPERATURE)
 
     st.subheader("天气查询(weather)工具")
-    st.markdown("<h5>使用说明：</h5>\n\n <sub>1、依赖Agent模型：建议用（Qwen）</sub>\n\n <sub>2、用法示例1：四川省成都市</sub>\n\n <sub>2、用法示例2：重庆市渝北区</sub> \n\n", unsafe_allow_html=True)
+    st.text("依赖Agent模型：建议用（Qwen")
+    st.markdown("<h5>使用说明：</h5>\n\n 1、用法示例1：四川省成都市\n\n 2、用法示例2：重庆市渝北区\n\n 3、格式：xx省xx市，或xx市xx区 \n\n", unsafe_allow_html=True)
     st.text("↓↓↓↓↓")
 
-    args = st.text_input(label="执行的命令：（xx省xx市，或xx市xx区）", value="重庆市渝北区", key="args")
+    args = st.text_input(label="执行的命令：", value="重庆市渝北区", key="args")
     if st.button(
                 "运行",
                 disabled=(args == None),
