@@ -1,7 +1,9 @@
 import streamlit as st
 from webui_pages.utils import *
 from server.chat.search_engine_chat import duckduckgo_search
+from langchain.tools import DuckDuckGoSearchResults
 
+search = DuckDuckGoSearchResults()
 def skill_search_duckduckgo_page(api: ApiRequest = None, is_lite: bool = None):
     st.markdown(
         """
@@ -19,13 +21,17 @@ def skill_search_duckduckgo_page(api: ApiRequest = None, is_lite: bool = None):
     st.text("↓↓↓↓↓")
 
     args = st.text_input(label="执行的命令：", value="Transformer", key="args")
+    wron = st.toggle('使用Wrapper接口')
     if st.button(
                 "运行",
                 disabled=(args == None),
                 use_container_width=False,
         ):
         print("-------------------------")
-        ret = duckduckgo_search(args)
+        if wron:
+            ret = search.run("args")
+        else:
+            ret = duckduckgo_search(args)
         st.code(ret, language="javascript", line_numbers=False)
 
     st.text("↑↑↑↑↑↑")
