@@ -30,7 +30,7 @@ def skill_search_duckduckgo_page(api: ApiRequest = None, is_lite: bool = None):
         if wron:
             ret = duckduckgo_search(args)
         else:
-            search = DuckDuckGoSearchResults()
+            search = DuckDuckGoSearchResults(backend="news")
             ret = search.run("args")
         st.code(ret, language="javascript", line_numbers=False)
 
