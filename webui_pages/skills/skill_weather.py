@@ -1,6 +1,6 @@
 import streamlit as st
 from webui_pages.utils import *
-from server.agent.tools.calculate import calculate
+from server.agent.tools.weather_check import weathercheck
 from configs import LLM_MODELS, TEMPERATURE, Agent_MODEL
 from server.utils import get_ChatOpenAI
 from server.agent import model_container
@@ -25,7 +25,7 @@ def skill_weather_page(api: ApiRequest = None, is_lite: bool = None):
                 use_container_width=False,
         ):
         print("-------------------------")
-        ret = calculate(args)
+        ret = weathercheck(args)
         st.code(ret, language="None", line_numbers=True)
 
     st.text("↑↑↑↑↑↑")
