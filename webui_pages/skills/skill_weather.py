@@ -16,7 +16,7 @@ def skill_weather_page(api: ApiRequest = None, is_lite: bool = None):
     model_container.MODEL = get_ChatOpenAI(model_name=model_name, temperature=TEMPERATURE)
 
     st.subheader("天气查询(weather)工具")
-    st.text("依赖Agent模型：建议用（Qwen")
+    st.text("依赖Agent模型：建议用（Qwen）")
     st.markdown("<h5>使用说明：</h5>\n\n 1、用法示例1：四川省成都市\n\n 2、用法示例2：重庆市渝北区\n\n 3、格式：xx省xx市，或xx市xx区 \n\n", unsafe_allow_html=True)
     st.text("↓↓↓↓↓")
 
@@ -31,5 +31,5 @@ def skill_weather_page(api: ApiRequest = None, is_lite: bool = None):
         st.code(ret, language="None", line_numbers=True)
 
     st.text("↑↑↑↑↑↑")
-    st.markdown("<h4>注意事项：</h4>\n\n<sub>1、请勿执行危险命令</sub>", unsafe_allow_html=True)
+    st.markdown("<h4>注意事项：</h4>\n\n<sub>1、请勿频繁使用，免费API每日限制100次</sub>", unsafe_allow_html=True)
     st.divider()
