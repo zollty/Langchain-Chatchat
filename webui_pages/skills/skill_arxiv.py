@@ -4,7 +4,7 @@ from server.agent.tools.arxiv import arxiv
 
 def skill_arxiv_page(api: ApiRequest = None, is_lite: bool = None):
     st.subheader("arxiv文献查询工具")
-    st.markdown("<h5>使用说明：</h5>\n\n 1、用法示例1：1.234^5\n\n 2、用法示例2：10*23+12\n\n 3、用法示例3：sin(45) \n\n", unsafe_allow_html=True)
+    st.markdown("<h5>使用说明：</h5>\n\n 1、用法示例1：HDFS\n\n 2、用法示例2：Transformer\n\n 3、输入文献关键字 \n\n", unsafe_allow_html=True)
     st.text("↓↓↓↓↓")
 
     args = st.text_input(label="执行的命令：", value="Transformer", key="args")
