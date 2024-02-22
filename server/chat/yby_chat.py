@@ -184,7 +184,7 @@ async def yby_chat(query: str = Body(..., description="用户输入", examples=[
         if isinstance(max_tokens, int) and max_tokens <= 0:
             max_tokens = None
 
-        print(f"----------------------------------------------------get model {model_name}, max_tokens={max_tokens}, text len={len(context)}")
+        print(f"----------------------------------------------------get model {model_name}, max_tokens={max_tokens}")
         model = get_ChatOpenAI(
             model_name=model_name,
             temperature=temperature,
