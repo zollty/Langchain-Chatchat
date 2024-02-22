@@ -3,6 +3,7 @@ from webui_pages.utils import *
 from server.chat.search_engine_chat import duckduckgo_search
 from langchain.tools import DuckDuckGoSearchResults
 
+search = DuckDuckGoSearchResults()
 def skill_search_duckduckgo_page(api: ApiRequest = None, is_lite: bool = None):
     st.markdown(
         """
@@ -19,7 +20,7 @@ def skill_search_duckduckgo_page(api: ApiRequest = None, is_lite: bool = None):
     st.markdown("<h5>使用说明：</h5>\n\n 1、输入搜索关键字 \n\n", unsafe_allow_html=True)
     st.text("↓↓↓↓↓")
 
-    args = st.text_input(label="执行的命令：", value="Transformer", key="args")
+    args = st.text_input(label="执行的命令：", value="OpenAI CEO", key="args")
     wron = st.toggle('使用Wrapper接口')
     if st.button(
                 "运行",
@@ -30,8 +31,7 @@ def skill_search_duckduckgo_page(api: ApiRequest = None, is_lite: bool = None):
         if wron:
             ret = duckduckgo_search(args)
         else:
-            search = DuckDuckGoSearchResults(backend="news")
-            ret = search.run("args")
+            ret = search.run(args)
         st.code(ret, language="javascript", line_numbers=False)
 
     st.text("↑↑↑↑↑↑")
