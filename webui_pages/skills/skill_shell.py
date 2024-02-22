@@ -10,6 +10,7 @@ def skill_shell_page(api: ApiRequest = None, is_lite: bool = None):
     args = st.text_input(label="执行的命令", value="", key="args")
     if st.button(
                 "运行",
+                disabled=(args == None),
                 use_container_width=False,
         ):
         print("-------------------------")
