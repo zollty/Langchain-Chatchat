@@ -26,7 +26,7 @@ def skill_search_duckduckgo_page(api: ApiRequest = None, is_lite: bool = None):
         ):
         print("-------------------------")
         ret = duckduckgo_search(args)
-        st.code(ret, language="json", line_numbers=False)
+        st.code(ret, language="javascript", line_numbers=False)
 
     st.text("↑↑↑↑↑↑")
     st.markdown("<h4>注意事项：</h4>\n\n1、请勿频繁使用，免费API每日限制100次！！", unsafe_allow_html=True)
