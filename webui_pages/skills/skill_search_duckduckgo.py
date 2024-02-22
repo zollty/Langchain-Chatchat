@@ -20,8 +20,8 @@ def skill_search_duckduckgo_page(api: ApiRequest = None, is_lite: bool = None):
     st.markdown("<h5>使用说明：</h5>\n\n 1、输入搜索关键字 \n\n", unsafe_allow_html=True)
     st.text("↓↓↓↓↓")
 
-    args = st.text_input(label="执行的命令：", value="OpenAI CEO", key="args")
-    wron = st.toggle('使用Wrapper接口')
+    args = st.text_input(label="执行的命令：", value="周传雄长沙演唱会", key="args")
+    wron = st.toggle('使用Wrapper接口', value=True)
     if st.button(
                 "运行",
                 disabled=(args == None),
