@@ -8,6 +8,7 @@ from .skill_calculate import skill_calculate_page
 from .skill_weather import skill_weather_page
 from .skill_arxiv import skill_arxiv_page
 from .skill_wolfram import skill_wolfram_page
+from .skill_search_duckduckgo import skill_search_duckduckgo_page
 # from .search_internet import search_internet, SearchInternetInput
 # from .wolfram import wolfram, WolframInput
 # from .search_youtube import search_youtube, YoutubeInput

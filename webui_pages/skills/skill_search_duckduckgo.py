@@ -1,10 +1,10 @@
 import streamlit as st
 from webui_pages.utils import *
-from server.agent.tools.arxiv import arxiv
+from server.chat.search_engine_chat import duckduckgo_search
 
-def skill_arxiv_page(api: ApiRequest = None, is_lite: bool = None):
-    st.subheader("arxiv文献查询工具")
-    st.markdown("<h5>使用说明：</h5>\n\n 1、用法示例1：HDFS\n\n 2、用法示例2：Transformer\n\n 3、输入文献关键字 \n\n", unsafe_allow_html=True)
+def skill_search_duckduckgo_page(api: ApiRequest = None, is_lite: bool = None):
+    st.subheader("免费互联网搜索引擎工具")
+    st.markdown("<h5>使用说明：</h5>\n\n 1、输入搜索关键字 \n\n", unsafe_allow_html=True)
     st.text("↓↓↓↓↓")
 
     args = st.text_input(label="执行的命令：", value="Transformer", key="args")
@@ -14,7 +14,7 @@ def skill_arxiv_page(api: ApiRequest = None, is_lite: bool = None):
                 use_container_width=False,
         ):
         print("-------------------------")
-        ret = arxiv(args)
+        ret = duckduckgo_search(args)
         st.code(ret, language="None", line_numbers=True)
 
     st.text("↑↑↑↑↑↑")

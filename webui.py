@@ -193,6 +193,7 @@ if __name__ == "__main__":
     router.register(skill_weather_page, '/skwea')
     router.register(skill_arxiv_page, '/skarxiv')
     router.register(skill_wolfram_page, '/skwolf')
+    router.register(skill_search_duckduckgo_page, '/skshd')
     # index(router)
     router.serve()
     

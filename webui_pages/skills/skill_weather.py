@@ -31,5 +31,5 @@ def skill_weather_page(api: ApiRequest = None, is_lite: bool = None):
         st.code(ret, language="None", line_numbers=True)
 
     st.text("↑↑↑↑↑↑")
-    st.markdown("<h4>注意事项：</h4>\n\n<sub>1、请勿频繁使用，免费API每日限制100次</sub>", unsafe_allow_html=True)
+    st.markdown("<h4>注意事项：</h4>\n\n1、请勿频繁使用，免费API每日限制100次！！", unsafe_allow_html=True)
     st.divider()
