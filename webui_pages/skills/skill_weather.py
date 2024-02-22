@@ -16,7 +16,7 @@ def skill_weather_page(api: ApiRequest = None, is_lite: bool = None):
     model_container.MODEL = get_ChatOpenAI(model_name=model_name, temperature=TEMPERATURE)
 
     st.subheader("天气查询(weather)工具")
-    st.markdown("<h5>使用说明：</h5>\n\n <sub>1、自定义Agent问答：为保证问答质量，需要手动切换成Qwen-14B模型</sub>\n\n <sub>2、知识库、园博园、搜索引擎问答：为保证问答质量，需要手动切换成chatglm3-6B-32k模型</sub> \n\n", unsafe_allow_html=True)
+    st.markdown("<h5>使用说明：</h5>\n\n <sub>1、依赖Agent模型：建议用（Qwen）</sub>\n\n <sub>2、用法示例1：四川省成都市</sub>\n\n <sub>2、用法示例2：重庆市渝北区</sub> \n\n", unsafe_allow_html=True)
     st.text("↓↓↓↓↓")
 
     args = st.text_input(label="执行的命令：（xx省xx市，或xx市xx区）", value="重庆市渝北区", key="args")
