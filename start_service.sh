@@ -27,8 +27,8 @@ echo "current llm: $llmname"
 #pip3 install -r /langchain-ChatGLM-dev/requirements.txt -i https://pypi.mirrors.ustc.edu.cn/simple/
 
 echo "Starting Chatchat Service..."
-cd /langchain-chatchat/
-python3 /langchain-chatchat/startup.py -a
+cd /ai/apps/Fenghou-Chat/
+python3 /ai/apps/Fenghou-Chat/startup.py -a
 #nohup python3 /langchain-chatchat/startup.py > /logs/chatchat.log 2>&1 &
 #while [ `grep -E 'Application startup complete.' /logs/chatchat.log | wc -l` -eq 0 ]; do
 #    echo ">> Waiting for Chatchat Service to start up."
