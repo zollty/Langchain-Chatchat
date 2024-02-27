@@ -331,7 +331,7 @@ def weathercheck(query: str):
     return ans
 
 
-class WhetherSchema(BaseModel):
+class WeatherSchema(BaseModel):
     location: str = Field(description="应该是一个地区的名称，用空格隔开，例如：上海 浦东，如果没有区的信息，可以只输入上海")
 
 if __name__ == '__main__':

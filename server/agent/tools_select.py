@@ -26,7 +26,7 @@ tools = [
         func=weathercheck,
         name="weather_check", #"天气查询工具",
         description="无需访问互联网，使用这个工具查询中国各地未来24小时的天气",
-        args_schema=WhetherSchema,
+        args_schema=WeatherSchema,
     ),
     Tool.from_function(
         func=shell,
