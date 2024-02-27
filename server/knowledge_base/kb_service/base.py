@@ -161,6 +161,8 @@ class KBService(ABC):
         如果指定了docs，则使用自定义docs，并将数据库对应条目标为custom_docs=True
         """
         if os.path.exists(kb_file.filepath):
+            fff = kb_file.filepath
+            print(f"---------------------------del: {fff}")
             self.delete_doc(kb_file, **kwargs)
             return self.add_doc(kb_file, docs=docs, **kwargs)
 
