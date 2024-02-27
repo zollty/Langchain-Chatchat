@@ -1,5 +1,5 @@
 from fastapi import Body, File, Form, UploadFile
-from fastapi.responses import EventSourceResponse
+from sse_starlette.sse import EventSourceResponse
 from configs import (LLM_MODELS, VECTOR_SEARCH_TOP_K, SCORE_THRESHOLD, TEMPERATURE,
                      CHUNK_SIZE, OVERLAP_SIZE, ZH_TITLE_ENHANCE, LONG_CONTEXT_MODEL)
 from server.utils import (wrap_done, get_ChatOpenAI,

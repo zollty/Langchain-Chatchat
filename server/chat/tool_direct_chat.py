@@ -6,7 +6,7 @@ from server.agent.callbacks import CustomAsyncIteratorCallbackHandler, Status
 from langchain.agents import LLMSingleActionAgent, AgentExecutor
 from server.agent.custom_template import CustomOutputParser, CustomPromptTemplate
 from fastapi import Body
-from fastapi.responses import EventSourceResponse
+from sse_starlette.sse import EventSourceResponse
 from configs import LLM_MODELS, TEMPERATURE, HISTORY_LEN, Agent_MODEL
 from server.utils import wrap_done, get_ChatOpenAI, get_prompt_template
 from langchain.chains import LLMChain

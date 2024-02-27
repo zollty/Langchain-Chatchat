@@ -29,7 +29,7 @@ echo "current llm: $llmname"
 echo "Starting Chatchat Service..."
 cd /ai/apps/Fenghou-Chat/
 python3 /ai/apps/Fenghou-Chat/startup.py -a
-#nohup python3 /langchain-chatchat/startup.py > /logs/chatchat.log 2>&1 &
+#nohup python3 /ai/apps/Fenghou-Chat/startup.py > /logs/chatchat.log 2>&1 &
 #while [ `grep -E 'Application startup complete.' /logs/chatchat.log | wc -l` -eq 0 ]; do
 #    echo ">> Waiting for Chatchat Service to start up."
 #    sleep 3
