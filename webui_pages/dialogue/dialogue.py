@@ -118,7 +118,7 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
 
     if not chat_box.chat_inited:
         st.toast(
-            f"欢迎使用 [`FenghouAI-Chat`](https://github.com) ! \n\n"
+            f"欢迎使用 [`FenghouAI-Chat`](https://shudi.yuque.com/ftc8lc/wiki) ! \n\n"
             f"当前运行的模型`{default_model}`, 您可以开始提问了."
         )
         chat_box.init_session()

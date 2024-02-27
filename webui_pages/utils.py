@@ -364,7 +364,7 @@ class ApiRequest:
 
     @deprecated(
         since="0.3.0",
-        message="自定义Agent问答将于 Langchain-Chatchat 0.3.x重写, 0.2.x中相关功能将废弃",
+        message="自定义Agent问答将于 0.3.x重写, 0.2.x中相关功能将废弃",
         removal="0.3.0")
     def agent_chat(
             self,
@@ -655,7 +655,7 @@ class ApiRequest:
 
     @deprecated(
         since="0.3.0",
-        message="搜索引擎问答将于 Langchain-Chatchat 0.3.x重写, 0.2.x中相关功能将废弃",
+        message="搜索引擎问答将于 0.3.x重写, 0.2.x中相关功能将废弃",
         removal="0.3.0"
     )
     def search_engine_chat(

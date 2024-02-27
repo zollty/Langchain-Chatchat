@@ -26,7 +26,7 @@ from langchain_core._api import deprecated
 
 @deprecated(
         since="0.3.0",
-        message="自定义关键词 Langchain-Chatchat 0.3.x 重写, 0.2.x中相关功能将废弃",
+        message="自定义关键词 0.3.x 重写, 0.2.x中相关功能将废弃",
         removal="0.3.0"
     )
 def get_keyword_embedding(bert_model, tokenizer, key_words):
@@ -102,7 +102,7 @@ if __name__ == '__main__':
     #
     # sentences = [
     #     '数据科学与大数据技术',
-    #     'Langchain-Chatchat'
+    #     'Langchain'
     # ]
     #
     # st_no_keywords = SentenceTransformer(input_model_name)

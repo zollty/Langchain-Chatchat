@@ -97,7 +97,7 @@ kbs_config = {
         "secure": True,
         },
     "pg": {
-        "connection_uri": "postgresql://postgres:postgres@127.0.0.1:5432/langchain_chatchat",
+        "connection_uri": "postgresql://postgres:postgres@127.0.0.1:5432/fenghou-ai",
     },
 
     "es": {

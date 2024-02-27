@@ -1,11 +1,5 @@
 
 # 实现基于ES的数据插入、检索、删除、更新
-```shell
-author: 唐国梁Tommy
-e-mail: flytang186@qq.com
-
-如果遇到任何问题，可以与我联系，我这边部署后服务是没有问题的。
-```
 
 ## 第1步：ES docker部署
 ```shell

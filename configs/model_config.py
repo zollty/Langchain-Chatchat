@@ -155,7 +155,7 @@ MODEL_PATH = {
         "nlp_corom_sentence-embedding_chinese-base": "/ai/models/nlp_corom_sentence-embedding_chinese-base",
         "nlp_gte_sentence-embedding_chinese-large": "/ai/models/nlp_gte_sentence-embedding_chinese-large",
         "bge-large-zh-v1.5": "/ai/models/BAAI_bge-large-zh-v1.5", # "BAAI/bge-large-zh-v1.5",
-        "bge-large-zh": "/ai/models/BAAI_bge-large-zh", # "BAAI/bge-large-zh", # "/langchain-chatchat/embeddings/BAAI/bge-large-zh_Merge_Keywords_20231215_132654", # BAAI/bge-large-zh
+        "bge-large-zh": "/ai/models/BAAI_bge-large-zh", # "BAAI/bge-large-zh", # "/--/embeddings/BAAI/bge-large-zh_Merge_Keywords_20231215_132654", # BAAI/bge-large-zh
         "bge-reranker-large": "/ai/models/BAAI_bge-reranker-large",
         "m3e-large": "/ai/models/moka-ai_m3e-large", # "moka-ai/m3e-large",
         "text2vec-bge-large-chinese": "/ai/models/text2vec-bge-large-chinese", # "shibing624/text2vec-bge-large-chinese",
