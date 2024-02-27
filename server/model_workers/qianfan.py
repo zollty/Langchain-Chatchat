@@ -190,19 +190,19 @@ class QianFanWorker(ApiModelWorker):
             i = 0
             batch_size = 10
             while i < len(params.texts):
-                texts = params.texts[i:i+batch_size]
+                texts = params.texts[i:i + batch_size]
                 resp = client.post(url, json={"input": texts}).json()
                 if "error_code" in resp:
                     data = {
-                                "code": resp["error_code"],
-                                "msg": resp["error_msg"],
-                                "error": {
-                                    "message": resp["error_msg"],
-                                    "type": "invalid_request_error",
-                                    "param": None,
-                                    "code": None,
-                                }
-                            }
+                        "code": resp["error_code"],
+                        "msg": resp["error_msg"],
+                        "error": {
+                            "message": resp["error_msg"],
+                            "type": "invalid_request_error",
+                            "param": None,
+                            "code": None,
+                        }
+                    }
                     self.logger.error(f"请求千帆 API 时发生错误：{data}")
                     return data
                 else:

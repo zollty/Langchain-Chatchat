@@ -1,22 +1,23 @@
-from langchain.memory import ConversationBufferWindowMemory
+import json
+import asyncio
 
+from fastapi import Body
+from sse_starlette.sse import EventSourceResponse
+from configs import LLM_MODELS, TEMPERATURE, HISTORY_LEN, Agent_MODEL
+
+from langchain.chains import LLMChain
+from langchain.memory import ConversationBufferWindowMemory
+from langchain.agents import LLMSingleActionAgent, AgentExecutor
+from typing import AsyncIterable, Optional, List
+
+from server.utils import wrap_done, get_ChatOpenAI, get_prompt_template
+from server.knowledge_base.kb_service.base import get_kb_details
 from server.agent.custom_agent.ChatGLM3Agent import initialize_glm3_agent
 from server.agent.tools_select import tools, tool_names
 from server.agent.callbacks import CustomAsyncIteratorCallbackHandler, Status
-from langchain.agents import LLMSingleActionAgent, AgentExecutor
-from server.agent.custom_template import CustomOutputParser, CustomPromptTemplate
-from fastapi import Body
-from fastapi.responses import StreamingResponse
-from configs import LLM_MODELS, TEMPERATURE, HISTORY_LEN, Agent_MODEL
-from server.utils import wrap_done, get_ChatOpenAI, get_prompt_template
-from langchain.chains import LLMChain
-from typing import AsyncIterable, Optional
-import asyncio
-from typing import List
 from server.chat.utils import History
-import json
 from server.agent import model_container
-from server.knowledge_base.kb_service.base import get_kb_details
+from server.agent.custom_template import CustomOutputParser, CustomPromptTemplate
 
 
 async def agent_chat(query: str = Body(..., description="用户输入", examples=["恼羞成怒"]),
@@ -90,7 +91,7 @@ async def agent_chat(query: str = Body(..., description="用户输入", examples
                 # 添加AI消息
                 memory.chat_memory.add_ai_message(message.content)
 
-        if "chatglm3" in model_container.MODEL.model_name:
+        if "chatglm3" in model_container.MODEL.model_name or "zhipu-api" in model_container.MODEL.model_name:
             print("--------------------------------------------use original chatglm3 agent")
             agent_executor = initialize_glm3_agent(
                 llm=model,
@@ -182,8 +183,8 @@ async def agent_chat(query: str = Body(..., description="用户输入", examples
             yield json.dumps({"answer": answer, "final_answer": final_answer}, ensure_ascii=False)
         await task
 
-    return StreamingResponse(agent_chat_iterator(query=query,
-                                                 history=history,
-                                                 model_name=model_name,
-                                                 prompt_name=prompt_name),
-                             media_type="text/event-stream")
+    return EventSourceResponse(agent_chat_iterator(query=query,
+                                                   history=history,
+                                                   model_name=model_name,
+                                                   prompt_name=prompt_name),
+                               )

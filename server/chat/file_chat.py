@@ -1,5 +1,5 @@
 from fastapi import Body, File, Form, UploadFile
-from fastapi.responses import StreamingResponse
+from fastapi.responses import EventSourceResponse
 from configs import (LLM_MODELS, VECTOR_SEARCH_TOP_K, SCORE_THRESHOLD, TEMPERATURE,
                      CHUNK_SIZE, OVERLAP_SIZE, ZH_TITLE_ENHANCE, LONG_CONTEXT_MODEL)
 from server.utils import (wrap_done, get_ChatOpenAI,
@@ -67,14 +67,13 @@ async def summary_docs(kid: str = Body(..., description="临时知识库ID"),
         src_info = {"doc": f"""原文 {file_name} \n\n{doc[:1000]}\n\n"""}
     print("==================")
     print(src_info)
-    return StreamingResponse(doc_chat_iterator(doc=doc,
+    return EventSourceResponse(doc_chat_iterator(doc=doc,
                                                 stream=stream,
                                                 model_name=model_name,
                                                 max_tokens=0,
                                                 temperature=0.1,
                                                 prompt_name=prompt_name,
-                                                src_info=src_info),
-                             media_type="text/event-stream")
+                                                src_info=src_info))
 
 
 async def gen_relate_qa(doc: str = Body(..., description="文档内容"),
@@ -86,13 +85,12 @@ async def gen_relate_qa(doc: str = Body(..., description="文档内容"),
         model_name = LLM_MODELS[0]
 
     prompt_name = "relate_qa"
-    return StreamingResponse(doc_chat_iterator(doc=doc,
+    return EventSourceResponse(doc_chat_iterator(doc=doc,
                                                 stream=stream,
                                                 model_name=model_name,
                                                 max_tokens=0,
                                                 temperature=0.1,
-                                                prompt_name=prompt_name),
-                             media_type="text/event-stream")
+                                                prompt_name=prompt_name))
 
 def _parse_files_in_thread(
     files: List[UploadFile],
@@ -244,7 +242,7 @@ async def file_chat(query: str = Body(..., description="用户输入", examples=
             callbacks=[callback],
         )
         embed_func = EmbeddingsFunAdapter()
-        embeddings = embed_func.embed_query(query)
+        embeddings = await embed_func.aembed_query(query)
         with memo_faiss_pool.acquire(knowledge_id) as vs:
             docs = vs.similarity_search_with_score_by_vector(embeddings, k=top_k, score_threshold=score_threshold)
             docs = [x[0] for x in docs]
@@ -289,4 +287,4 @@ async def file_chat(query: str = Body(..., description="用户输入", examples=
                              ensure_ascii=False)
         await task
 
-    return StreamingResponse(knowledge_base_chat_iterator(), media_type="text/event-stream")
+    return EventSourceResponse(knowledge_base_chat_iterator())

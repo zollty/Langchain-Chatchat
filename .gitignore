@@ -175,4 +175,8 @@ cython_debug/
 .pytest_cache
 .DS_Store
 
+# Test File
+test.py
+configs/*.py
+
 

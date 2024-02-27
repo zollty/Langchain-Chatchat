@@ -7,19 +7,28 @@
 保存的模型的位置位于原本嵌入模型的目录下，模型的名称为原模型名称+Merge_Keywords_时间戳
 '''
 import sys
+
 sys.path.append("..")
+import os
+import torch
+
 from datetime import datetime
 from configs import (
     MODEL_PATH,
     EMBEDDING_MODEL,
     EMBEDDING_KEYWORD_FILE,
 )
-import os
-import torch
+
 from safetensors.torch import save_model
 from sentence_transformers import SentenceTransformer
+from langchain_core._api import deprecated
 
 
+@deprecated(
+        since="0.3.0",
+        message="自定义关键词 Langchain-Chatchat 0.3.x 重写, 0.2.x中相关功能将废弃",
+        removal="0.3.0"
+    )
 def get_keyword_embedding(bert_model, tokenizer, key_words):
     tokenizer_output = tokenizer(key_words, return_tensors="pt", padding=True, truncation=True)
 
@@ -31,7 +40,6 @@ def get_keyword_embedding(bert_model, tokenizer, key_words):
 
     keyword_embedding = bert_model.embeddings.word_embeddings(input_ids)
     keyword_embedding = torch.mean(keyword_embedding, 1)
-
     return keyword_embedding
 
 

@@ -8,8 +8,14 @@ MODEL_ROOT_PATH = ""
 # 选用的 Embedding 名称
 EMBEDDING_MODEL = "bge-large-zh-v1.5"
 
-# Embedding 模型运行设备。设为"auto"会自动检测，也可手动设定为"cuda","mps","cpu"其中之一。
+# Embedding 模型运行设备。设为 "auto" 会自动检测(会有警告)，也可手动设定为 "cuda","mps","cpu","xpu" 其中之一。
 EMBEDDING_DEVICE = "auto"
+
+# 选用的reranker模型
+RERANKER_MODEL = "bge-reranker-large"
+# 是否启用reranker模型
+USE_RERANKER = False
+RERANKER_MAX_LENGTH = 1024
 
 # 如果需要在 EMBEDDING_MODEL 中增加自定义的关键字时配置
 EMBEDDING_KEYWORD_FILE = "keywords.txt"
@@ -27,14 +33,14 @@ LLM_MODELS = ["Qwen-1.8B-Chat", "chatglm3-6b"] # ["chatglm2-6b", "zhipu-api", "o
 Agent_MODEL = "chatglm3-6b-32k" #"Qwen1.5-7B-Chat"
 LONG_CONTEXT_MODEL = "chatglm3-6b-32k" #"Qwen1.5-7B-Chat"# "chatglm3-6b-32k"
 
-# LLM 运行设备。设为"auto"会自动检测，也可手动设定为"cuda","mps","cpu"其中之一。
+# LLM 模型运行设备。设为"auto"会自动检测(会有警告)，也可手动设定为 "cuda","mps","cpu","xpu" 其中之一。
 LLM_DEVICE = "cuda"
 
 # 历史对话轮数
 HISTORY_LEN = 0
 
 # 大模型最长支持的长度，如果不填写，则使用模型默认的最大长度，如果填写，则为用户设定的最大长度
-MAX_TOKENS = None
+MAX_TOKENS = 2048
 
 # LLM通用对话参数
 TEMPERATURE = 0.1
@@ -45,16 +51,16 @@ ONLINE_LLM_MODEL2 = {
     # 线上模型。请在server_config中为每个在线API设置不同的端口
 
     "openai-api": {
-        "model_name": "gpt-3.5-turbo",
+        "model_name": "gpt-4",
         "api_base_url": "https://api.openai.com/v1",
         "api_key": "",
         "openai_proxy": "",
     },
 
-    # 具体注册及api key获取请前往 http://open.bigmodel.cn
+    # 智谱AI API,具体注册及api key获取请前往 http://open.bigmodel.cn
     "zhipu-api": {
         "api_key": "",
-        "version": "chatglm_turbo",  # 可选包括 "chatglm_turbo"
+        "version": "glm-4",
         "provider": "ChatGLMWorker",
     },
 
@@ -73,7 +79,7 @@ ONLINE_LLM_MODEL2 = {
         "APPID": "",
         "APISecret": "",
         "api_key": "",
-        "version": "v1.5",  # 你使用的讯飞星火大模型版本，可选包括 "v3.0", "v1.5", "v2.0"
+        "version": "v3.5", # 你使用的讯飞星火大模型版本，可选包括 "v3.5","v3.0", "v2.0", "v1.5"
         "provider": "XingHuoWorker",
     },
 
@@ -97,9 +103,10 @@ ONLINE_LLM_MODEL2 = {
 
     # 阿里云通义千问 API，文档参考 https://help.aliyun.com/zh/dashscope/developer-reference/api-details
     "qwen-api": {
-        "version": "qwen-turbo",  # 可选包括 "qwen-turbo", "qwen-plus"
+        "version": "qwen-max",  # 可选包括 "qwen-turbo", "qwen-plus"
         "api_key": "",  # 请在阿里云控制台模型服务灵积API-KEY管理页面创建
         "provider": "QwenWorker",
+        "embed_model": "text-embedding-v1"  # embedding 模型名称
     },
 
     # 百川 API，申请方式请参考 https://www.baichuan-ai.com/home#api-enter
@@ -126,6 +133,11 @@ ONLINE_LLM_MODEL2 = {
         "secret_key": "",
         "provider": "TianGongWorker",
     },
+    # Gemini API https://makersuite.google.com/app/apikey
+    "gemini-api": {
+        "api_key": "",
+        "provider": "GeminiWorker",
+    }
 
 }
 
@@ -160,6 +172,7 @@ MODEL_PATH = {
         "bge-base-zh": "BAAI/bge-base-zh",
         "bge-large-zh-noinstruct": "BAAI/bge-large-zh-noinstruct",
         "bge-base-zh-v1.5": "BAAI/bge-base-zh-v1.5",
+        "bge-m3": "BAAI/bge-m3",
         "piccolo-base-zh": "sensenova/piccolo-base-zh",
         "piccolo-large-zh": "sensenova/piccolo-large-zh",
         "text-embedding-ada-002": "your OPENAI_API_KEY",
@@ -190,6 +203,10 @@ MODEL_PATH = {
         "Qwen-72B-Chat": "Qwen/Qwen-72B-Chat",
         "Qwen-72B-Chat-Int8": "Qwen/Qwen-72B-Chat-Int8",
         "Qwen-72B-Chat-Int4": "Qwen/Qwen-72B-Chat-Int4",
+        
+        "Orion-14B-Chat": "OrionStarAI/Orion-14B-Chat",
+        "Orion-14B-Chat-Plugin": "OrionStarAI/Orion-14B-Chat-Plugin",
+        "Orion-14B-LongChat": "OrionStarAI/Orion-14B-LongChat",
 
         "baichuan2-13b": "baichuan-inc/Baichuan2-13B-Chat",
         "baichuan2-7b": "baichuan-inc/Baichuan2-7B-Chat",
@@ -203,10 +220,32 @@ MODEL_PATH = {
 
         "internlm-7b": "internlm/internlm-7b",
         "internlm-chat-7b": "internlm/internlm-chat-7b",
+        "internlm2-chat-7b": "internlm/internlm2-chat-7b",
+        "internlm2-chat-20b": "internlm/internlm2-chat-20b",
+
+        "BlueLM-7B-Chat": "vivo-ai/BlueLM-7B-Chat",
+        "BlueLM-7B-Chat-32k": "vivo-ai/BlueLM-7B-Chat-32k",
+
+        "Yi-34B-Chat": "https://huggingface.co/01-ai/Yi-34B-Chat",
+
+        "agentlm-7b": "THUDM/agentlm-7b",
+        "agentlm-13b": "THUDM/agentlm-13b",
+        "agentlm-70b": "THUDM/agentlm-70b",
 
         "falcon-7b": "tiiuae/falcon-7b",
         "falcon-40b": "tiiuae/falcon-40b",
         "falcon-rw-7b": "tiiuae/falcon-rw-7b",
+
+        "aquila-7b": "BAAI/Aquila-7B",
+        "aquilachat-7b": "BAAI/AquilaChat-7B",
+        "open_llama_13b": "openlm-research/open_llama_13b",
+        "vicuna-13b-v1.5": "lmsys/vicuna-13b-v1.5",
+        "koala": "young-geng/koala",
+        "mpt-7b": "mosaicml/mpt-7b",
+        "mpt-7b-storywriter": "mosaicml/mpt-7b-storywriter",
+        "mpt-30b": "mosaicml/mpt-30b",
+        "opt-66b": "facebook/opt-66b",
+        "opt-iml-max-30b": "facebook/opt-iml-max-30b",
 
         "gpt2": "gpt2",
         "gpt2-xl": "gpt2-xl",
@@ -236,6 +275,10 @@ MODEL_PATH = {
         "agentlm-70b": "THUDM/agentlm-70b",
 
         "Yi-34B-Chat": "https://huggingface.co/01-ai/Yi-34B-Chat",
+    },
+    "reranker": {
+        "bge-reranker-large": "BAAI/bge-reranker-large",
+        "bge-reranker-base": "BAAI/bge-reranker-base",
     },
     "llm_model": {
         "chatglm3-6b": "/ai/models/chatglm3-6b",
@@ -274,6 +317,10 @@ VLLM333_MODEL_DICT = {
 
     "BlueLM-7B-Chat": "vivo-ai/BlueLM-7B-Chat",
     "BlueLM-7B-Chat-32k": "vivo-ai/BlueLM-7B-Chat-32k",
+    
+    "Llama-2-7b-chat-hf": "meta-llama/Llama-2-7b-chat-hf",
+    "Llama-2-13b-chat-hf": "meta-llama/Llama-2-13b-chat-hf",
+    "Llama-2-70b-chat-hf": "meta-llama/Llama-2-70b-chat-hf",
 
     # 注意：bloom系列的tokenizer与model是分离的，因此虽然vllm支持，但与fschat框架不兼容
     # "bloom": "bigscience/bloom",
@@ -284,6 +331,12 @@ VLLM333_MODEL_DICT = {
 
     "internlm-7b": "internlm/internlm-7b",
     "internlm-chat-7b": "internlm/internlm-chat-7b",
+    "internlm2-chat-7b": "internlm/Models/internlm2-chat-7b",
+    "internlm2-chat-20b": "internlm/Models/internlm2-chat-20b",
+
+    "aquila-7b": "BAAI/Aquila-7B",
+    "aquilachat-7b": "BAAI/AquilaChat-7B",
+
     "falcon-7b": "tiiuae/falcon-7b",
     "falcon-40b": "tiiuae/falcon-40b",
     "falcon-rw-7b": "tiiuae/falcon-rw-7b",
@@ -349,10 +402,11 @@ VLLM_MODEL_DICT = {
 # 你认为支持Agent能力的模型，可以在这里添加，添加后不会出现可视化界面的警告
 # 经过我们测试，原生支持Agent的模型仅有以下几个
 SUPPORT_AGENT_MODEL = [
-    "azure-api",
     "openai-api",
     "qwen-api",
-    "Qwen",
-    "chatglm3",
-    "xinghuo-api",
+    "zhipu-api",  # 智谱AI GLM4模型
+    "Qwen",  # 所有Qwen系列本地模型
+    "chatglm3-6b",
+    "internlm2-chat-20b",
+    "Orion-14B-Chat-Plugin",
 ]

@@ -4,7 +4,7 @@ from configs import (BING_SEARCH_URL, BING_SUBSCRIPTION_KEY, METAPHOR_API_KEY,
                      LLM_MODELS, SEARCH_ENGINE_TOP_K, TEMPERATURE,
                      TEXT_SPLITTER_NAME, OVERLAP_SIZE)
 from fastapi import Body
-from fastapi.responses import StreamingResponse
+from fastapi.responses import EventSourceResponse
 from fastapi.concurrency import run_in_threadpool
 from server.utils import wrap_done, get_ChatOpenAI
 from server.utils import BaseResponse, get_prompt_template
@@ -231,10 +231,9 @@ async def yby_chat(query: str = Body(..., description="用户输入", examples=[
                              ensure_ascii=False)
         await task
 
-    return StreamingResponse(yby_chat_iterator(query=query,
+    return EventSourceResponse(yby_chat_iterator(query=query,
                                                          top_k=top_k,
                                                          history=history,
                                                          model_name=model_name,
-                                                         prompt_name=prompt_name),
-                             media_type="text/event-stream")
+                                                         prompt_name=prompt_name))
 
