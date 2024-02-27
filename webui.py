@@ -66,12 +66,12 @@ def kb_manage_page(router):
 def model_portalmg_page(router):
     is_lite = "lite" in sys.argv
     
-    # st.set_page_config(
-    #     "FenghouAI-Chat WebUI",
-    #     os.path.join("img", "chatchat_icon_blue_square_v2.png"),
-    #     initial_sidebar_state="expanded",
-    #     layout="wide",
-    # )
+    st.set_page_config(
+        "FenghouAI-Chat WebUI",
+        os.path.join("img", "chatchat_icon_blue_square_v2.png"),
+        initial_sidebar_state="expanded",
+        layout="wide",
+    )
 	
     model_portal_page(api=api, is_lite=is_lite)
 
