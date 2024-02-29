@@ -324,9 +324,9 @@ def run_api(host, port, **kwargs):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(prog='langchain-ChatGLM',
-                                     description='About langchain-ChatGLM, local knowledge based ChatGLM with langchain'
-                                                 ' ｜ 基于本地知识库的 ChatGLM 问答')
+    parser = argparse.ArgumentParser(prog='fenghou-ai',
+                                     description='About FenghouAI-Chat, local knowledge QA'
+                                                 ' ｜ 基于本地知识库的问答')
     parser.add_argument("--host", type=str, default="0.0.0.0")
     parser.add_argument("--port", type=int, default=7861)
     parser.add_argument("--ssl_keyfile", type=str)

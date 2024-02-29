@@ -85,7 +85,7 @@ async def knowledge_base_chat(query: str = Body(..., description="用户输入",
                                        score_threshold=score_threshold)
 
         # 加入reranker
-        if USE_RERANKER:
+        if USE_RERANKER and docs:
             reranker_model_path = MODEL_PATH["reranker"].get(RERANKER_MODEL,"BAAI/bge-reranker-large")
             print("-----------------model path------------------")
             print(reranker_model_path)
