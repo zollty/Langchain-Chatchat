@@ -740,7 +740,7 @@ async def start_main_server():
                     kwargs=dict(model_name=model_name,
                                 controller_address=args.controller_address,
                                 log_level=log_level,
-                                q=queue,
+                                managerQueue=queue,
                                 started_event=e),
                     daemon=True,
                 )
@@ -760,7 +760,7 @@ async def start_main_server():
                     kwargs=dict(model_name=model_name,
                                 controller_address=args.controller_address,
                                 log_level=log_level,
-                                q=queue,
+                                managerQueue=queue,
                                 started_event=e),
                     daemon=True,
                 )
@@ -837,7 +837,7 @@ async def start_main_server():
                             kwargs=dict(model_name=new_model_name,
                                         controller_address=args.controller_address,
                                         log_level=log_level,
-                                        q=queue,
+                                        managerQueue=queue,
                                         started_event=e),
                             daemon=True,
                         )
@@ -867,7 +867,7 @@ async def start_main_server():
                                 kwargs=dict(model_name=new_model_name,
                                             controller_address=args.controller_address,
                                             log_level=log_level,
-                                            q=queue,
+                                            managerQueue=queue,
                                             started_event=e),
                                 daemon=True,
                             )
