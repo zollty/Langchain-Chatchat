@@ -413,7 +413,7 @@ def run_model_worker(
         model_name: str = LLM_MODELS[0],
         controller_address: str = "",
         log_level: str = "INFO",
-        q: mp.Queue = None,
+        managerQueue: mp.Queue = None,
         started_event: mp.Event = None,
 ):
     import uvicorn
@@ -445,12 +445,12 @@ def run_model_worker(
     ) -> Dict:
         if keep_origin:
             if new_model_name:
-                q.put([model_name, "start", new_model_name])
+                managerQueue.put([model_name, "start", new_model_name])
         else:
             if new_model_name:
-                q.put([model_name, "replace", new_model_name])
+                managerQueue.put([model_name, "replace", new_model_name])
             else:
-                q.put([model_name, "stop", None])
+                managerQueue.put([model_name, "stop", None])
         return {"code": 200, "msg": "done"}
 
     uvicorn.run(app, host=host, port=port, log_level=log_level.lower())
