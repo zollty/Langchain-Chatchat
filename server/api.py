@@ -246,7 +246,7 @@ def mount_knowledge_routes(app: FastAPI):
              tags=["Knowledge Base Management"],
              response_model=BaseResponse,
              summary="上传文件到知识库，并/或进行向量化"
-             )(update_docs_by_id)
+             )(upload_docs)
 
     app.post("/knowledge_base/delete_docs",
              tags=["Knowledge Base Management"],
@@ -264,7 +264,7 @@ def mount_knowledge_routes(app: FastAPI):
              tags=["Knowledge Base Management"],
              response_model=BaseResponse,
              summary="更新现有文件到知识库"
-             )(update_docs_by_id)
+             )(update_docs)
 
     app.get("/knowledge_base/download_doc",
             tags=["Knowledge Base Management"],
