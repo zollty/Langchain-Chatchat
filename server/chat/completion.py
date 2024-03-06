@@ -1,5 +1,6 @@
 from fastapi import Body
-from sse_starlette.sse import EventSourceResponse
+#from sse_starlette.sse import EventSourceResponse
+from fastapi.responses import StreamingResponse
 from configs import LLM_MODELS, TEMPERATURE
 from server.utils import wrap_done, get_OpenAI
 from langchain.chains import LLMChain
@@ -63,7 +64,7 @@ async def completion(query: str = Body(..., description="用户输入", examples
 
         await task
 
-    return EventSourceResponse(completion_iterator(query=query,
+    return StreamingResponse(completion_iterator(query=query,
                                                  model_name=model_name,
                                                  prompt_name=prompt_name),
-                             )
+                             media_type="text/event-stream")
