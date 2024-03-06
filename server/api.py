@@ -258,13 +258,13 @@ def mount_knowledge_routes(app: FastAPI):
              tags=["Knowledge Base Management"],
              response_model=BaseResponse,
              summary="更新知识库介绍"
-             )(update_docs_by_id)
+             )(update_info)
     
     app.post("/knowledge_base/update_docs",
              tags=["Knowledge Base Management"],
              response_model=BaseResponse,
              summary="更新现有文件到知识库"
-             )(update_docs)
+             )(update_docs_by_id)
 
     app.get("/knowledge_base/download_doc",
             tags=["Knowledge Base Management"],
