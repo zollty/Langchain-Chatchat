@@ -1,4 +1,4 @@
-from fastapi.responses import StreamingResponse
+from sse_starlette.sse import EventSourceResponse
 from typing import List, Optional
 import openai
 from configs import LLM_MODELS, logger, log_verbose
@@ -54,7 +54,4 @@ async def openai_chat(msg: OpenAiChatMsgIn):
             logger.error(f'{e.__class__.__name__}: {msg}',
                          exc_info=e if log_verbose else None)
 
-    return StreamingResponse(
-        get_response(msg),
-        media_type='text/event-stream',
-    )
+    return EventSourceResponse(get_response(msg))

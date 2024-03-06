@@ -413,4 +413,4 @@ def recreate_vector_store(
             if not not_refresh_vs_cache:
                 kb.save_vector_store()
 
-    return StreamingResponse(output(), media_type="text/event-stream")
+    return EventSourceResponse(output())
