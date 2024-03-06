@@ -1,6 +1,7 @@
 # LangChain 的 Shell 工具
-from pydantic import BaseModel, Field
+from pydantic.v1 import BaseModel, Field
 from langchain.tools import ShellTool
+
 def shell(query: str):
     tool = ShellTool()
     query = query.rstrip("\"").lstrip("\"").rstrip("`").lstrip("`")

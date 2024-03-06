@@ -1,7 +1,7 @@
 """
 更简单的单参数输入工具实现，用于查询现在天气的情况
 """
-from pydantic import BaseModel, Field
+from pydantic.v1 import BaseModel, Field
 import requests
 from configs.kb_config import SENIVERSE_API_KEY
 
