@@ -136,7 +136,7 @@ FSCHAT_MODEL_WORKERS = {
     "chatglm3-6b-32k": {
        "port": 20006,
        "device": LLM_DEVICE,
-       "infer_turbo": "vllm",
+       "infer_turbo": False,
        "gpus": None,
 	    #"gpus": "1,2,3,4,5", # 使用的GPU，以str的格式指定，如"0,1"，如失效请使用CUDA_VISIBLE_DEVICES="0,1"等形式指定
        "num_gpus": 3, # 使用GPU的数量

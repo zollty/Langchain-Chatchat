@@ -108,7 +108,8 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
     else:
         from configs.model_config import VLLM_MODEL_DICT
         if kwargs["model_names"][0] in VLLM_MODEL_DICT and args.infer_turbo == "vllm":
-            print("====================222========================"*5)
+            model = kwargs["model_names"][0]
+            print("Loading the model [{model}] use vllm worker.......................................")
             import fastchat.serve.vllm_worker
             from fastchat.serve.vllm_worker import VLLMWorker, app, worker_id
             from vllm import AsyncLLMEngine
@@ -175,7 +176,8 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
 
         else:
             from fastchat.serve.model_worker import app, GptqConfig, AWQConfig, ModelWorker, worker_id
-            print("---------------111------------------"*5)
+            model = kwargs["model_names"][0]
+            print("Loading the model [{model}] use plain worker.......................................")
             args.gpus = "0"  # GPU的编号,如果有多个GPU，可以设置为"0,1,2,3"
             args.max_gpu_memory = "22GiB"
             args.num_gpus = 1  # model worker的切分是model并行，这里填写显卡的数量
