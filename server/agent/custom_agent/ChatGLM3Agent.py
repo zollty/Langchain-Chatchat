@@ -6,7 +6,7 @@ from __future__ import annotations
 import json
 import logging
 from typing import Any, List, Sequence, Tuple, Optional, Union
-from pydantic.BaseModel import model_json_schema
+from pydantic.v1.schema import model_schema
 
 
 from langchain.agents.structured_chat.output_parser import StructuredChatOutputParser
@@ -133,7 +133,7 @@ class StructuredGLM3ChatAgent(Agent):
         tools_json = []
         tool_names = []
         for tool in tools:
-            tool_schema = model_json_schema(tool.args_schema) if tool.args_schema else {}
+            tool_schema = model_schema(tool.args_schema) if tool.args_schema else {}
             simplified_config_langchain = {
                 "name": tool.name,
                 "description": tool.description,
