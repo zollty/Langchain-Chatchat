@@ -1,4 +1,5 @@
-from pydantic.v1 import BaseModel, Field
+from pydantic.v1 import BaseModel
+from langchain_core.pydantic_v1 import Field
 from typing import List
 from fastapi import FastAPI
 from pathlib import Path
