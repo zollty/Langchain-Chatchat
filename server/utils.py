@@ -1,5 +1,4 @@
-import pydantic
-from pydantic.v1 import BaseModel
+from pydantic.v1 import BaseModel, Field
 from typing import List
 from fastapi import FastAPI
 from pathlib import Path
@@ -106,9 +105,9 @@ def get_OpenAI(
 
 
 class BaseResponse(BaseModel):
-    code: int = pydantic.Field(200, description="API status code")
-    msg: str = pydantic.Field("success", description="API status message")
-    data: Any = pydantic.Field(None, description="API data")
+    code: int = Field(200, description="API status code")
+    msg: str = Field("success", description="API status message")
+    data: Any = Field(None, description="API data")
 
     class Config:
         schema_extra = {
@@ -120,7 +119,7 @@ class BaseResponse(BaseModel):
 
 
 class ListResponse(BaseResponse):
-    data: List[str] = pydantic.Field(..., description="List of names")
+    data: List[str] = Field(..., description="List of names")
 
     class Config:
         schema_extra = {
@@ -133,10 +132,10 @@ class ListResponse(BaseResponse):
 
 
 class ChatMessage(BaseModel):
-    question: str = pydantic.Field(..., description="Question text")
-    response: str = pydantic.Field(..., description="Response text")
-    history: List[List[str]] = pydantic.Field(..., description="History text")
-    source_documents: List[str] = pydantic.Field(
+    question: str = Field(..., description="Question text")
+    response: str = Field(..., description="Response text")
+    history: List[List[str]] = Field(..., description="History text")
+    source_documents: List[str] = Field(
         ..., description="List of source documents and their scores"
     )
 
