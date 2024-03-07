@@ -3,7 +3,7 @@ from typing import List, Optional
 import openai
 from configs import LLM_MODELS, logger, log_verbose
 from server.utils import get_model_worker_config, fschat_openai_api_address
-from pydantic import BaseModel
+from pydantic.v1 import BaseModel
 
 
 class OpenAiMessage(BaseModel):
