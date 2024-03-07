@@ -23,7 +23,7 @@ from configs import VECTOR_SEARCH_TOP_K, SCORE_THRESHOLD, MAX_TOKENS
 
 import asyncio
 from server.agent import model_container
-from pydantic import BaseModel, Field
+from pydantic.v1 import BaseModel, Field
 
 async def search_knowledge_base_iter(database: str, query: str):
     response = await knowledge_base_chat(query=query,
