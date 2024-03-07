@@ -11,7 +11,7 @@ from server.knowledge_base.utils import (validate_kb_name, list_files_from_folde
 from fastapi.responses import FileResponse
 from sse_starlette import EventSourceResponse
 import json
-from pydantic.v1 import Json
+from pydantic import Json
 from server.knowledge_base.kb_service.base import KBServiceFactory
 from server.db.repository.knowledge_file_repository import get_file_detail
 from langchain.docstore.document import Document
