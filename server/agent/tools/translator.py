@@ -1,7 +1,7 @@
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from server.agent import model_container
-from pydantic.v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 
 _PROMPT_TEMPLATE = '''
 # 指令

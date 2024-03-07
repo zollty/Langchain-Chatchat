@@ -8,7 +8,8 @@ from langchain.callbacks.manager import (
     CallbackManagerForChainRun,
 )
 from langchain.chains.llm import LLMChain
-from langchain.pydantic_v1 import Extra, root_validator
+#from langchain.pydantic_v1 import Extra, root_validator
+from pydantic import Extra, root_validator
 from langchain.schema import BasePromptTemplate
 from langchain.schema.language_model import BaseLanguageModel
 from typing import List, Any, Optional
@@ -23,7 +24,7 @@ from configs import VECTOR_SEARCH_TOP_K, SCORE_THRESHOLD, MAX_TOKENS
 
 import asyncio
 from server.agent import model_container
-from pydantic.v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 
 async def search_knowledge_base_iter(database: str, query: str):
     response = await knowledge_base_chat(query=query,

@@ -1,7 +1,7 @@
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMMathChain
 from server.agent import model_container
-from pydantic.v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 
 _PROMPT_TEMPLATE = """
 将数学问题翻译成可以使用Python的numexpr库执行的表达式。使用运行此代码的输出来回答问题。
