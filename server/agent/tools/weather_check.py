@@ -24,7 +24,7 @@ from typing import List, Any, Optional
 from datetime import datetime
 from langchain.prompts import PromptTemplate
 from server.agent import model_container
-from pydantic import BaseModel, Field
+from pydantic.v1 import BaseModel, Field
 
 ## 使用和风天气API查询天气
 KEY = "926959aa2b1d40b5a58c0189327420b7"
