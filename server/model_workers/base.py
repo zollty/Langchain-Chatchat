@@ -37,7 +37,7 @@ class ApiConfigParams(BaseModel):
     class Config:
         extra = "allow"
 
-    @root_validator(pre=True)
+    #@root_validator(pre=True)
     def validate_config(cls, v: Dict) -> Dict:
         if config := get_model_worker_config(v.get("worker_name")):
             for n in cls.__fields__:
