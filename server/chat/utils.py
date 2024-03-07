@@ -1,4 +1,4 @@
-from pydantic.v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 from langchain.prompts.chat import ChatMessagePromptTemplate
 from configs import logger, log_verbose
 from typing import List, Tuple, Dict, Union

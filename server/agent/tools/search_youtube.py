@@ -1,6 +1,6 @@
 # Langchain 自带的 YouTube 搜索工具封装
 from langchain.tools import YouTubeSearchTool
-from pydantic.v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 
 def search_youtube(query: str):
     tool = YouTubeSearchTool()

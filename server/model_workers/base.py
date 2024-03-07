@@ -6,7 +6,7 @@ from fastchat.serve.base_model_worker import BaseModelWorker
 import uuid
 import json
 import sys
-from pydantic.v1 import BaseModel
+from pydantic import BaseModel
 from langchain.pydantic_v1 import Extra, root_validator
 import fastchat
 import asyncio

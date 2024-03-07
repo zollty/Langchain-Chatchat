@@ -1,6 +1,6 @@
 # Langchain 自带的 Wolfram Alpha API 封装
 from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
-from pydantic.v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 
 wolfram_alpha_appid = "PWV4W7-XXTQQ8YAGT"
 
