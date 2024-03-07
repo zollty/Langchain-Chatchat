@@ -200,7 +200,7 @@ class LLMWeatherChain(Chain):
         extra = Extra.forbid
         arbitrary_types_allowed = True
 
-    @root_validator(pre=True)
+    #@root_validator(pre=True)
     def raise_deprecation(cls, values: Dict) -> Dict:
         if "llm" in values:
             warnings.warn(
