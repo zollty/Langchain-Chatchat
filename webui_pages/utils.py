@@ -23,7 +23,7 @@ import contextlib
 import json
 import os
 from io import BytesIO
-from server.utils import set_httpx_config, api_address, get_httpx_client
+from server.utils import set_httpx_config, api_address, get_httpx_client, fschat_controller_address
 
 from pprint import pprint
 from langchain_core._api import deprecated
@@ -1041,8 +1041,12 @@ class ApiRequest:
         data = {
             "types": types,
         }
+        # response = self.post(
+        #     "/llm_model/list_config_models",
+        #     json=data,
+        # )
         response = self.post(
-            "/llm_model/list_config_models",
+            fschat_controller_address() + "/list_config_models",
             json=data,
         )
         return self._get_response_value(response, as_json=True, value_func=lambda r: r.get("data", {}))
