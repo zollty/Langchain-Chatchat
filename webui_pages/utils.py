@@ -1047,7 +1047,7 @@ class ApiRequest:
         # )
         response = self.post(
             fschat_controller_address() + "/list_config_models",
-            json=data,
+            data=data,
         )
         return self._get_response_value(response, as_json=True, value_func=lambda r: r.get("data", {}))
 
