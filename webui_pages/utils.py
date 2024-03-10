@@ -30,6 +30,8 @@ from langchain_core._api import deprecated
 
 set_httpx_config()
 
+new_api_url = "http://127.0.0.1:7862"
+
 
 class ApiRequest:
     '''
@@ -359,7 +361,7 @@ class ApiRequest:
         # print(f"received input message:")
         # pprint(data)
 
-        response = self.post("/chat/chat", json=data, stream=True, **kwargs)
+        response = self.post(new_api_url + "/chat/chat", json=data, stream=True, **kwargs)
         return self._httpx_stream2generator(response, as_json=True)
 
     @deprecated(
@@ -501,7 +503,7 @@ class ApiRequest:
         }
 
         response = self.post(
-            "/inner/file_chat/upload_temp_docs",
+            new_api_url + "/inner/file_chat/upload_temp_docs",
             data=data,
             files=[("files", (filename, file)) for filename, file in files],
         )
@@ -523,7 +525,7 @@ class ApiRequest:
         }
 
         response = self.post(
-            "/inner/file_chat/auto_summary_docs",
+            new_api_url + "/inner/file_chat/auto_summary_docs",
             json=data,
             stream=True,
         )
@@ -542,7 +544,7 @@ class ApiRequest:
         }
 
         response = self.post(
-            "/inner/file_chat/gen_relate_qa",
+            new_api_url + "/inner/file_chat/gen_relate_qa",
             json=data,
             stream=True,
         )
@@ -640,7 +642,7 @@ class ApiRequest:
         # pprint(data)
 
         response = self.post(
-            "/chat/file_chat",
+            new_api_url + "/chat/file_chat",
             json=data,
             stream=True,
         )
@@ -950,27 +952,6 @@ class ApiRequest:
         return self._httpx_stream2generator(response, as_json=True)
 
     # LLM模型相关操作
-    def list_running_models22(
-            self,
-            controller_address: str = None,
-    ):
-        '''
-        获取Fastchat中正运行的模型列表
-        '''
-        data = {
-            "controller_address": controller_address,
-        }
-
-        if log_verbose:
-            logger.info(f'{self.__class__.__name__}:data: {data}')
-
-        response = self.post(
-            "/llm_model/list_running_models",
-            json=data,
-        )
-        return self._get_response_value(response, as_json=True, value_func=lambda r: r.get("data", []))
-
-
     def list_running_models(
             self,
             controller_address: str = None,
@@ -990,7 +971,6 @@ class ApiRequest:
             json=data,
         )
         def value_func_s(res_json):
-            print(f"--------------{res_json}")
             models = res_json.get("models", [])
             return {m: {} for m in models}
         return self._get_response_value(response, as_json=True, value_func=value_func_s)
