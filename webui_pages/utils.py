@@ -1072,7 +1072,6 @@ class ApiRequest:
     def stop_llm_model(
             self,
             model_name: str,
-            controller_address: str = None,
     ):
         '''
         停止某个LLM模型。
@@ -1080,21 +1079,36 @@ class ApiRequest:
         '''
         data = {
             "model_name": model_name,
-            "controller_address": controller_address,
         }
 
         response = self.post(
-            "/llm_model/stop",
+            fschat_controller_address() + "/stop_worker",
             json=data,
         )
         return self._get_response_value(response, as_json=True)
+
+    def start_llm_model(
+            self,
+            model_name: str,
+    ):
+        '''
+        启动某个LLM模型的worker
+        '''
+        data = {
+            "model_name": model_name,
+        }
+
+        response = self.post(
+            fschat_controller_address() + "/start_worker",
+            json=data,
+        )
+        return self._get_response_value(response, as_json=True)
+    
 
     def change_llm_model(
             self,
             model_name: str,
             new_model_name: str,
-            keep_origin: bool = True,
-            controller_address: str = None,
     ):
         '''
         向fastchat controller请求切换LLM模型。
@@ -1129,12 +1143,10 @@ class ApiRequest:
             data = {
                 "model_name": model_name,
                 "new_model_name": new_model_name,
-                "controller_address": controller_address,
-                "keep_origin": keep_origin,
             }
 
             response = self.post(
-                "/llm_model/change",
+                fschat_controller_address() + "/replace_worker",
                 json=data,
             )
             return self._get_response_value(response, as_json=True)
@@ -1163,11 +1175,10 @@ class ApiRequest:
             data = {
                 "model_name": model_name,
                 "new_model_name": new_model_name,
-                "controller_address": controller_address,
             }
 
             response = self.post(
-                "/llm_model/change",
+                fschat_controller_address() + "/replace_worker",
                 json=data,
             )
             return self._get_response_value(response, as_json=True)
