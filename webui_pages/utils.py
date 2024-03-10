@@ -481,9 +481,6 @@ class ApiRequest:
             chunk_overlap=OVERLAP_SIZE,
             zh_title_enhance=ZH_TITLE_ENHANCE,
     ):
-        '''
-        对应api.py/knowledge_base/upload_tmep_docs接口
-        '''
 
         def convert_file(file, filename=None):
             if isinstance(file, bytes):  # raw bytes
@@ -504,7 +501,7 @@ class ApiRequest:
         }
 
         response = self.post(
-            "/knowledge_base/upload_temp_docs",
+            "/inner/file_chat/upload_temp_docs",
             data=data,
             files=[("files", (filename, file)) for filename, file in files],
         )
@@ -517,9 +514,7 @@ class ApiRequest:
         seg: int,
         stream: bool = True,
     ):
-        '''
-        对应 api.py/inner/auto_summary_docs 接口
-        '''
+
         data = {
             "kid": kid,
             "file_name": file_name,
@@ -528,7 +523,7 @@ class ApiRequest:
         }
 
         response = self.post(
-            "/inner/auto_summary_docs",
+            "/inner/file_chat/auto_summary_docs",
             json=data,
             stream=True,
         )
@@ -540,16 +535,14 @@ class ApiRequest:
         doc: str,
         stream: bool = True,
     ):
-        '''
-        对应 api.py/inner/gen_relate_qa 接口
-        '''
+
         data = {
             "doc": doc,
             "stream": stream,
         }
 
         response = self.post(
-            "/inner/gen_relate_qa",
+            "/inner/file_chat/gen_relate_qa",
             json=data,
             stream=True,
         )
@@ -1046,7 +1039,7 @@ class ApiRequest:
         #     json=data,
         # )
         response = self.post(
-            fschat_controller_address() + "/list_config_models",
+            fschat_controller_address() + "/list_llm_models",
             json=data,
         )
         return self._get_response_value(response, as_json=True, value_func=lambda r: r.get("data", {}))
