@@ -91,13 +91,14 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
     st.markdown("<sub>文件专用聊天（左边上传文件）</sub>", unsafe_allow_html=True)
     #info_placeholder = st.empty()
 
-    def gen_relate_qa(doc: str):
+    def gen_relate_qa(doc: str, llm_model: str):
         chat_box.ai_say([
             f"AI猜您想问 ..."
         ])
         text = "对此文档提问如下，可进一步了解:\n\n"
         for d in api.gen_relate_qa(doc=doc,
-                                stream=True):
+                                   llm_model=llm_model,
+                                   stream=True):
             if error_msg := check_error_msg(d):  # check whether error occured
                 st.error(error_msg)
             elif chunk := d.get("answer"):
@@ -135,7 +136,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
                     if src_info.get("next_seg"):
                         auto_summary([tmp_file_name], src_info.get("next_seg"))
                     else:
-                        gen_relate_qa(st.session_state["file_summary"], llm_model=llm_model)
+                        gen_relate_qa(st.session_state["file_summary"], llm_model)
 
     now = datetime.now()
     with st.sidebar:
