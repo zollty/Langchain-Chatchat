@@ -950,7 +950,7 @@ class ApiRequest:
         return self._httpx_stream2generator(response, as_json=True)
 
     # LLM模型相关操作
-    def list_running_models(
+    def list_running_models22(
             self,
             controller_address: str = None,
     ):
@@ -969,6 +969,28 @@ class ApiRequest:
             json=data,
         )
         return self._get_response_value(response, as_json=True, value_func=lambda r: r.get("data", []))
+
+
+    def list_running_models(
+            self,
+            controller_address: str = None,
+    ):
+        '''
+        获取Fastchat中正运行的模型列表
+        '''
+        data = {
+            "controller_address": controller_address,
+        }
+
+        if log_verbose:
+            logger.info(f'{self.__class__.__name__}:data: {data}')
+
+        response = self.post(
+            fschat_controller_address() + "/list_models",
+            json=data,
+        )
+        return self._get_response_value(response, as_json=True, value_func=lambda r: r.get("models", {}))
+
 
     def get_default_llm_model(self, local_first: bool = True) -> Tuple[str, bool]:
         '''
