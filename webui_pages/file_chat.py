@@ -135,7 +135,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
                     if src_info.get("next_seg"):
                         auto_summary([tmp_file_name], src_info.get("next_seg"))
                     else:
-                        gen_relate_qa(st.session_state["file_summary"])
+                        gen_relate_qa(st.session_state["file_summary"], llm_model=llm_model)
 
     now = datetime.now()
     with st.sidebar:

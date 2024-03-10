@@ -535,11 +535,13 @@ class ApiRequest:
     def gen_relate_qa(
         self,
         doc: str,
+        llm_model: str = None,
         stream: bool = True,
     ):
 
         data = {
             "doc": doc,
+            "llm_model": llm_model,
             "stream": stream,
         }
 
