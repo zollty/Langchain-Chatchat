@@ -989,7 +989,11 @@ class ApiRequest:
             fschat_controller_address() + "/list_models",
             json=data,
         )
-        return self._get_response_value(response, as_json=True, value_func=lambda r: r.get("models", {}))
+        def value_func_s(res_json):
+            print(f"--------------{res_json}")
+            models = res_json.get("models", [])
+            return {m: {} for m in models}
+        return self._get_response_value(response, as_json=True, value_func=value_func_s)
 
 
     def get_default_llm_model(self, local_first: bool = True) -> Tuple[str, bool]:
