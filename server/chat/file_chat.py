@@ -154,7 +154,7 @@ def test_parse_docs(
                                                         chunk_overlap=chunk_overlap,
                                                         start_length=start_size):
         if success:
-            fileDocs.append({"f":file, "d": docs})
+            fileDocs.append({"f":file, "d":  [id["page_content"] for id in docs]})
             print(f"{file}--------------------------update file success: {id}")
             # print(docs)
             rt_success = True
