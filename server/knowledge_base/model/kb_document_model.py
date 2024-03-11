@@ -11,5 +11,5 @@ class DocumentWithVSId(Document):
     score: float = Field(3.0, description="API data")
     
     @root_validator(pre=True)
-    def validate_config(cls, v: Dict) -> Dict:
-        pass
+    def validate_config(cls, values: Dict) -> Dict:
+        return values
