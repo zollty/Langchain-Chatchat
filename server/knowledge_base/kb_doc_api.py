@@ -43,15 +43,8 @@ def search_docs(
     data = [
         {"seq": i + 1, "id": x.id, "page_content": x.page_content, "source": x.metadata.get("source"),
          "type": x.type,
-         "metadata": x.metadata#json.dumps(x.metadata, ensure_ascii=False),
+         "metadata": x.metadata #json.dumps(x.metadata, ensure_ascii=False),
          } for i, x in enumerate(data)]
-    # data = [
-    #     {"id": 1, "page_content": "xxxxxxxxxxxxxxxx", "source": "/ddd/ddd/aaa",
-    #         "type": "txt",
-    #         "metadata": {},
-    #         } for i, x in enumerate(data)]
-    # data = [{"id": 1, "page_content": "xxxxxxxxxxxxxxxx"}]
-    print(f"---------------------{data}")
     return data
 
 
