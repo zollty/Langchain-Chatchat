@@ -30,7 +30,7 @@ def search_docs(
                                       ge=0, le=1),
         file_name: str = Body("", description="文件名称，支持 sql 通配符"),
         metadata: dict = Body({}, description="根据 metadata 进行过滤，仅支持一级键"),
-) -> List[DocumentWithVSId]:
+) : #-> List[DocumentWithVSId]:
     kb = KBServiceFactory.get_service_by_name(knowledge_base_name)
     data = []
     if kb is not None:
@@ -40,17 +40,18 @@ def search_docs(
         elif file_name or metadata:
             data = kb.list_docs(file_name=file_name, metadata=metadata)
     
-    # data = [
-    #     {"seq": i + 1, "id": x.id, "page_content": x.page_content, "source": x.metadata.get("source"),
-    #      "type": x.type,
-    #      "metadata": json.dumps(x.metadata, ensure_ascii=False),
-    #      } for i, x in enumerate(data)]
     data = [
-        {"id": 1, "page_content": "xxxxxxxxxxxxxxxx", "source": "/ddd/ddd/aaa",
-            "type": "txt",
-            "metadata": {},
-            } for i, x in enumerate(data)]
-    #print(f"---------------------{data}")
+        {"seq": i + 1, "id": x.id, "page_content": x.page_content, "source": x.metadata.get("source"),
+         "type": x.type,
+         "metadata": json.dumps(x.metadata, ensure_ascii=False),
+         } for i, x in enumerate(data)]
+    # data = [
+    #     {"id": 1, "page_content": "xxxxxxxxxxxxxxxx", "source": "/ddd/ddd/aaa",
+    #         "type": "txt",
+    #         "metadata": {},
+    #         } for i, x in enumerate(data)]
+    # data = [{"id": 1, "page_content": "xxxxxxxxxxxxxxxx"}]
+    print(f"---------------------{data}")
     return data
 
 
