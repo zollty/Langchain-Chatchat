@@ -16,8 +16,6 @@ from langchain.callbacks.manager import (
 )
 from langchain.chains.base import Chain
 from langchain.chains.llm import LLMChain
-#from langchain.pydantic_v1 import Extra, root_validator
-from pydantic import Extra, root_validator
 from langchain.schema import BasePromptTemplate
 from langchain.schema.language_model import BaseLanguageModel
 import requests
@@ -25,7 +23,9 @@ from typing import List, Any, Optional
 from datetime import datetime
 from langchain.prompts import PromptTemplate
 from server.agent import model_container
-from pydantic import BaseModel, Field
+from langchain.pydantic_v1 import BaseModel, Field
+#from langchain.pydantic_v1 import Extra, root_validator
+from langchain.pydantic_v1 import Extra, root_validator
 
 ## 使用和风天气API查询天气
 KEY = "926959aa2b1d40b5a58c0189327420b7"

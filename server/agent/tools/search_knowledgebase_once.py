@@ -9,7 +9,7 @@ from langchain.callbacks.manager import (
 )
 from langchain.chains.llm import LLMChain
 #from langchain.pydantic_v1 import Extra, root_validator
-from pydantic import Extra, root_validator
+from langchain.pydantic_v1 import Extra, root_validator
 from langchain.schema import BasePromptTemplate
 from langchain.schema.language_model import BaseLanguageModel
 from typing import List, Any, Optional

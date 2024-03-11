@@ -1,5 +1,5 @@
 # LangChain 的 Shell 工具
-from pydantic import BaseModel, Field
+from langchain.pydantic_v1 import BaseModel, Field
 from langchain.tools import ShellTool
 
 def shell(query: str):
