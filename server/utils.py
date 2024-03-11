@@ -1,4 +1,4 @@
-from pydantic import BaseModel,Field
+from pydantic.v1 import BaseModel,Field
 #from langchain.pydantic_v1 import Field
 from typing import List
 from fastapi import FastAPI
@@ -110,13 +110,13 @@ class BaseResponse(BaseModel):
     msg: str = Field("success", description="API status message")
     data: Any = Field(None, description="API data")
 
-    # class Config:
-    #     json_schema_extra = {
-    #         "example": {
-    #             "code": 200,
-    #             "msg": "success",
-    #         }
-    #     }
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "code": 200,
+                "msg": "success",
+            }
+        }
 
 
 class ListResponse(BaseResponse):
