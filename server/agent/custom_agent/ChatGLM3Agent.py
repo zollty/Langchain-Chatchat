@@ -6,7 +6,7 @@ from __future__ import annotations
 import json
 import logging
 from typing import Any, List, Sequence, Tuple, Optional, Union
-from langchain.pydantic_v1 import model_schema
+from pydantic import model_schema
 
 
 from langchain.agents.structured_chat.output_parser import StructuredChatOutputParser
