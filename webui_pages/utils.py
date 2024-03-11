@@ -586,6 +586,8 @@ class ApiRequest:
             data=data,
             files=[("files", (filename, file)) for filename, file in files],
         )
+        print("=========================================")
+        print(response)
         return self._get_response_value(response, as_json=True)
 
 

@@ -110,13 +110,13 @@ class BaseResponse(BaseModel):
     msg: str = Field("success", description="API status message")
     data: Any = Field(None, description="API data")
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "code": 200,
-                "msg": "success",
-            }
-        }
+    # class Config:
+    #     json_schema_extra = {
+    #         "example": {
+    #             "code": 200,
+    #             "msg": "success",
+    #         }
+    #     }
 
 
 class ListResponse(BaseResponse):

@@ -155,12 +155,12 @@ def test_parse_docs(
                                                         start_length=start_size):
         if success:
             fileDocs.append({"f":file, "d": docs})
-            print(f"{file}--------------------------update file success: ")
+            print(f"{file}--------------------------update file success: {id}")
             # print(docs)
             rt_success = True
         else:
             failed_files.append({file: msg})
-            print(f"{file}--------------------------update file failed: ")
+            print(f"{file}--------------------------update file failed: {id}")
             print(msg)
     if rt_success:
         return BaseResponse(code=200, msg="文件解析成功", data={"id": id, "files": fileDocs, "failed_files": failed_files})
