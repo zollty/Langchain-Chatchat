@@ -30,7 +30,7 @@ from langchain_core._api import deprecated
 
 set_httpx_config()
 
-new_api_url = "http://127.0.0.1:7862"
+new_api_url = "http://127.0.0.1:7861"
 
 
 class ApiRequest:
@@ -429,7 +429,7 @@ class ApiRequest:
         # pprint(data)
 
         response = self.post(
-            "/chat/yby_chat",
+            new_api_url + "/chat/yby_chat",
             json=data,
             stream=True,
         )
@@ -582,7 +582,7 @@ class ApiRequest:
         }
 
         response = self.post(
-            "/other/test_parse_docs",
+            new_api_url + "/tools/test_parse_docs",
             data=data,
             files=[("files", (filename, file)) for filename, file in files],
         )
@@ -607,7 +607,7 @@ class ApiRequest:
             "zh_title_enhance": zh_title_enhance,
         }
         response = self.post(
-            "/other/test_parse_url",
+            new_api_url + "/tools/test_parse_url",
             data=data,
         )
         return self._get_response_value(response, as_json=True)
