@@ -122,14 +122,14 @@ class BaseResponse(BaseModel):
 class ListResponse(BaseResponse):
     data: List[str] = Field(..., description="List of names")
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "code": 200,
-                "msg": "success",
-                "data": ["doc1.docx", "doc2.pdf", "doc3.txt"],
-            }
-        }
+    # class Config:
+    #     json_schema_extra = {
+    #         "example": {
+    #             "code": 200,
+    #             "msg": "success",
+    #             "data": ["doc1.docx", "doc2.pdf", "doc3.txt"],
+    #         }
+    #     }
 
 
 class ChatMessage(BaseModel):
