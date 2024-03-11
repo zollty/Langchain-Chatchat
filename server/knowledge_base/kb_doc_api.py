@@ -37,19 +37,20 @@ def search_docs(
         if query:
             docs = kb.search_docs(query, top_k, score_threshold)
             data = [DocumentWithVSId(**x[0].dict(), score=x[1], id=x[0].metadata.get("id")) for x in docs]
-            # data = [
-            #     {"id": x["id"], "page_content": x["page_content"], "source": x["metadata"].get("source"),
-            #      "type": x["type"],
-            #      "metadata": json.dumps(x["metadata"], ensure_ascii=False),
-            #      } for i, x in enumerate(data)]
-            data = [
-                {"id": 1, "page_content": "xxxxxxxxxxxxxxxx", "source": "/ddd/ddd/aaa",
-                 "type": "txt",
-                 "metadata": {},
-                 } for i, x in enumerate(data)]
-            print(f"---------------------{data}")
         elif file_name or metadata:
             data = kb.list_docs(file_name=file_name, metadata=metadata)
+    
+    data = [
+        {"id": x["id"], "page_content": x["page_content"], "source": x["metadata"].get("source"),
+         "type": x["type"],
+         "metadata": json.dumps(x["metadata"], ensure_ascii=False),
+         } for i, x in enumerate(data)]
+    # data = [
+    #     {"id": 1, "page_content": "xxxxxxxxxxxxxxxx", "source": "/ddd/ddd/aaa",
+    #         "type": "txt",
+    #         "metadata": {},
+    #         } for i, x in enumerate(data)]
+    print(f"---------------------{data}")
     return data
 
 
