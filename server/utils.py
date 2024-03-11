@@ -105,7 +105,7 @@ def get_OpenAI(
     return model
 
 
-class BaseResponse(BaseModel):
+class BaseResponse():
     code: int = Field(200, description="API status code")
     msg: str = Field("success", description="API status message")
     data: Any = Field(None, description="API data")
