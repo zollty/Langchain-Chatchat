@@ -335,7 +335,7 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
         if selected_rows:
             file_name = selected_rows[0]["file_name"]
             docs = api.search_kb_docs(knowledge_base_name=selected_kb, file_name=file_name)
-            docs = docs.get("data", {})
+            #docs = docs.get("data", {})
             for i, x in enumerate(docs):
                 print(x)
             print("----------------------98938")
