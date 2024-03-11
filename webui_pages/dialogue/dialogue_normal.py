@@ -206,7 +206,7 @@ def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
             key="system_prompt",
         )
         temperature = st.slider("Temperature：", 0.0, 1.0, TEMPERATURE, 0.05)
-        history_len = st.number_input("历史对话轮数：", 0, 20, HISTORY_LEN)
+        history_len = st.number_input("历史对话轮数：", 0, 20, 20)
 
     # Display chat messages from history on app rerun
     chat_box.output_messages()
