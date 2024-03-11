@@ -338,7 +338,6 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
             #docs = docs.get("data", {})
             # for i, x in enumerate(docs):
             #     print(x)
-            # print("----------------------98938")
             data = [
                 {"seq": i + 1, "id": x["id"], "page_content": x["page_content"], "source": x["metadata"].get("source"),
                  "type": x["type"],
