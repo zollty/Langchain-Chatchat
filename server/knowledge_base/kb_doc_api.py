@@ -47,6 +47,7 @@ def search_docs(
                  "type": "txt",
                  "metadata": {},
                  } for i, x in enumerate(data)]
+            print(f"---------------------{data}")
         elif file_name or metadata:
             data = kb.list_docs(file_name=file_name, metadata=metadata)
     return data
