@@ -8,8 +8,8 @@ from typing import Optional, Sequence
 from langchain_core.documents import Document
 from langchain.callbacks.manager import Callbacks
 from langchain.retrievers.document_compressors.base import BaseDocumentCompressor
-from llama_index.bridge.pydantic import Field, PrivateAttr
-
+#from llama_index.bridge.pydantic import Field, PrivateAttr
+from langchain.pydantic_v1 import Field, PrivateAttr
 
 class LangchainReranker(BaseDocumentCompressor):
     """Document compressor that uses `Cohere Rerank API`."""
