@@ -155,7 +155,7 @@ def test_parse_docs(
                                                         start_length=start_size):
         if success:
             print(docs)
-            fileDocs.append({"f":file, "d":  [xx["page_content"] for xx in docs]})
+            fileDocs.append({"f":file, "d":  [xx.page_content for xx in docs]})
             print(f"{file}--------------------------update file success: {id}")
             
             rt_success = True
