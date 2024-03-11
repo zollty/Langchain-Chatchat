@@ -1,4 +1,5 @@
 
+from typing import Dict
 from langchain.docstore.document import Document
 from langchain_core.pydantic_v1 import Field, root_validator
 
