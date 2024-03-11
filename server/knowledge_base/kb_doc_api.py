@@ -40,16 +40,16 @@ def search_docs(
         elif file_name or metadata:
             data = kb.list_docs(file_name=file_name, metadata=metadata)
     
-    data = [
-        {"seq": i + 1, "id": x.id, "page_content": x.page_content, "source": x.metadata.get("source"),
-         "type": x.type,
-         "metadata": json.dumps(x.metadata, ensure_ascii=False),
-         } for i, x in enumerate(data)]
     # data = [
-    #     {"id": 1, "page_content": "xxxxxxxxxxxxxxxx", "source": "/ddd/ddd/aaa",
-    #         "type": "txt",
-    #         "metadata": {},
-    #         } for i, x in enumerate(data)]
+    #     {"seq": i + 1, "id": x.id, "page_content": x.page_content, "source": x.metadata.get("source"),
+    #      "type": x.type,
+    #      "metadata": json.dumps(x.metadata, ensure_ascii=False),
+    #      } for i, x in enumerate(data)]
+    data = [
+        {"id": 1, "page_content": "xxxxxxxxxxxxxxxx", "source": "/ddd/ddd/aaa",
+            "type": "txt",
+            "metadata": {},
+            } for i, x in enumerate(data)]
     #print(f"---------------------{data}")
     return data
 
