@@ -231,7 +231,7 @@ def mount_knowledge_routes(app: FastAPI):
 
     app.post("/knowledge_base/search_docs",
              tags=["Knowledge Base Management"],
-             response_model=List[DocumentWithVSId],
+             #response_model=List[DocumentWithVSId],
              summary="搜索知识库"
              )(search_docs)
 
