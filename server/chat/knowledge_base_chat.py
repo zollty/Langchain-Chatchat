@@ -99,7 +99,7 @@ async def knowledge_base_chat(query: str = Body(..., description="用户输入",
                                                      query=query)
             print("---------after rerank------------------")
             print(docs)
-        context = "\n".join([doc.page_content for doc in docs])
+        context = "\n".join([doc["page_content"] for doc in docs])
 
         if len(docs) == 0:  # 如果没有找到相关文档，使用empty模板
             prompt_template = get_prompt_template("knowledge_base_chat", "empty")
