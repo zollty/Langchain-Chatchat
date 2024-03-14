@@ -204,6 +204,7 @@ def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
             height=300,
             value=prompt_template,
             key="system_prompt",
+            placeholder="模型固定的引导词，通过调整该内容，可以引导模型聊天方向。该内容会被固定在上下文的开头。可使用变量，例如 {{language}}"
         )
         temperature = st.slider("Temperature：", 0.0, 1.0, TEMPERATURE, 0.05)
         history_len = st.number_input("历史对话轮数：", 0, 20, 20)
