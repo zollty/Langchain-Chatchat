@@ -30,7 +30,7 @@ from langchain_core._api import deprecated
 
 set_httpx_config()
 
-new_api_url = "http://127.0.0.1:7861"
+new_api_url = "http://127.0.0.1:20000"
 
 
 class ApiRequest:
