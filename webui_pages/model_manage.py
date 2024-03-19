@@ -88,3 +88,21 @@ def model_management_page(api: ApiRequest, is_lite: bool = None):
                 st.success(msg)
     st.text("↑↑↑↑↑↑")
     st.divider()
+    st.divider()
+    st.text("↓↓↓↓↓")
+    if st.selectbox("停止模型：",
+                                llm_models,
+                                index,
+                                format_func=llm_model_format_func,
+                                on_change=on_llm_change,
+                                key="llm_model_stop",
+                                ):
+        with st.spinner(f"正在停止模型： {llm_model}，请勿进行操作或刷新页面"):
+            llm_model_stop = st.session_state.get("llm_model_stop")
+            r = api.stop_llm_model(llm_model_stop)
+            if msg := check_error_msg(r):
+                st.error(msg)
+            elif msg := check_success_msg(r):
+                st.success(msg)
+    st.text("↑↑↑↑↑↑")
+    st.divider()
