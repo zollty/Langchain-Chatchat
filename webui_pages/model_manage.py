@@ -74,7 +74,7 @@ def model_management_page(api: ApiRequest, is_lite: bool = None):
     st.text("↓↓↓↓↓")
     if st.selectbox("运行新模型：",
                                 llm_models,
-                                index,
+                                index=None,
                                 format_func=llm_model_format_func,
                                 on_change=on_llm_change,
                                 key="llm_model_new",
@@ -92,7 +92,7 @@ def model_management_page(api: ApiRequest, is_lite: bool = None):
     st.text("↓↓↓↓↓")
     if st.selectbox("停止模型：",
                                 llm_models,
-                                index,
+                                index=None,
                                 format_func=llm_model_format_func,
                                 on_change=on_llm_change,
                                 key="llm_model_stop",
