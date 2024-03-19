@@ -15,7 +15,7 @@ import time
 import json
 
 def model_management_page(api: ApiRequest, is_lite: bool = None):
-    st.subheader("一、切换运行中的模型")
+    st.subheader("在线配置运行模型")
     st.markdown("<h4>使用说明：</h4>\n\n <sub>1、自定义Agent问答：为保证问答质量，需要手动切换成Qwen-14B模型</sub>\n\n <sub>2、知识库、园博园、搜索引擎问答：为保证问答质量，需要手动切换成chatglm3-6B-32k模型</sub> \n\n", unsafe_allow_html=True)
     st.text("↓↓↓↓↓")
     default_model = api.get_default_llm_model()[0]
@@ -70,4 +70,21 @@ def model_management_page(api: ApiRequest, is_lite: bool = None):
                 st.session_state["prev_llm_model"] = llm_model
     st.text("↑↑↑↑↑↑")
     st.markdown("<h4>注意事项：</h4>\n\n<sub>1、模型切换停止后，要稍等5~15秒才会变更Running状态</sub>", unsafe_allow_html=True)
+    st.divider()
+    st.text("↓↓↓↓↓")
+    if st.selectbox("运行新模型：",
+                                llm_models,
+                                index,
+                                format_func=llm_model_format_func,
+                                on_change=on_llm_change,
+                                key="llm_model_new",
+                                ):
+        with st.spinner(f"正在加载模型： {llm_model}，请勿进行操作或刷新页面"):
+            llm_model_new = st.session_state.get("llm_model_new")
+            r = api.start_llm_model(llm_model_new)
+            if msg := check_error_msg(r):
+                st.error(msg)
+            elif msg := check_success_msg(r):
+                st.success(msg)
+    st.text("↑↑↑↑↑↑")
     st.divider()
