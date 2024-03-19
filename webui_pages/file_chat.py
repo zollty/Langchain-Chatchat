@@ -130,7 +130,7 @@ def file_chat_page(api: ApiRequest, is_lite: bool = False):
                     text += chunk
                     chat_box.update_msg(text, element_index=0)
                 chat_box.update_msg(text, element_index=0, streaming=False)
-                if src_info := d.get("src_info"):
+                if src_info := d.get("docs"):
                     st.session_state["file_summary"] += "\n" + text
                     chat_box.update_msg(src_info.get("doc", ""), element_index=1, streaming=False)
                     if src_info.get("next_seg"):
