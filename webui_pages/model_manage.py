@@ -103,8 +103,8 @@ def model_management_page(api: ApiRequest, is_lite: bool = None):
                                 on_change=on_llm_change,
                                 key="llm_model_new",
                                 ):
-        with st.spinner(f"正在加载模型： {llm_model}，请勿进行操作或刷新页面"):
-            llm_model_new = st.session_state.get("llm_model_new")
+        llm_model_new = st.session_state.get("llm_model_new")
+        with st.spinner(f"正在加载模型： {llm_model_new}，请勿进行操作或刷新页面"):
             r = api.start_llm_model(llm_model_new)
             if msg := check_error_msg(r):
                 st.error(msg)
