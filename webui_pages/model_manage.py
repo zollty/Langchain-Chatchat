@@ -15,29 +15,6 @@ import time
 import json
 
 def model_management_page(api: ApiRequest, is_lite: bool = None):
-    st.subheader("在线配置运行模型")
-    st.markdown("<h4>使用说明：</h4>\n\n <sub>1、自定义Agent问答：为保证问答质量，需要手动切换成Qwen-14B模型</sub>\n\n <sub>2、知识库、园博园、搜索引擎问答：为保证问答质量，需要手动切换成chatglm3-6B-32k模型</sub> \n\n", unsafe_allow_html=True)
-    st.markdown("<h6>停止模型</h4>", unsafe_allow_html=True)
-    st.text("↓↓↓↓↓")
-    if st.selectbox("停止模型：",
-                                llm_models,
-                                index=None,
-                                format_func=llm_model_format_func,
-                                on_change=on_llm_change,
-                                key="llm_model_stop",
-                                ):
-        with st.spinner(f"正在停止模型： {llm_model}，请勿进行操作或刷新页面"):
-            llm_model_stop = st.session_state.get("llm_model_stop")
-            r = api.stop_llm_model(llm_model_stop)
-            if msg := check_error_msg(r):
-                st.error(msg)
-            elif msg := check_success_msg(r):
-                st.success(msg)
-    st.text("↑↑↑↑↑↑")
-    st.divider()
-    
-    st.markdown("<h6>切换运行模型</h4>", unsafe_allow_html=True)
-    st.text("↓↓↓↓↓")
     default_model = api.get_default_llm_model()[0]
     def on_llm_change():
         if llm_model:
@@ -64,6 +41,31 @@ def model_management_page(api: ApiRequest, is_lite: bool = None):
             available_models.append(k)
     llm_models = running_models + available_models
     cur_llm_model = st.session_state.get("cur_llm_model", default_model)
+    
+    st.subheader("在线配置运行模型")
+    st.markdown("<h4>使用说明：</h4>\n\n <sub>1、自定义Agent问答：为保证问答质量，需要手动切换成Qwen-14B模型</sub>\n\n <sub>2、知识库、园博园、搜索引擎问答：为保证问答质量，需要手动切换成chatglm3-6B-32k模型</sub> \n\n", unsafe_allow_html=True)
+    st.markdown("<h6>停止模型</h4>", unsafe_allow_html=True)
+    st.text("↓↓↓↓↓")
+    if st.selectbox("停止模型：",
+                                llm_models,
+                                index=None,
+                                format_func=llm_model_format_func,
+                                on_change=on_llm_change,
+                                key="llm_model_stop",
+                                ):
+        with st.spinner(f"正在停止模型： {llm_model}，请勿进行操作或刷新页面"):
+            llm_model_stop = st.session_state.get("llm_model_stop")
+            r = api.stop_llm_model(llm_model_stop)
+            if msg := check_error_msg(r):
+                st.error(msg)
+            elif msg := check_success_msg(r):
+                st.success(msg)
+    st.text("↑↑↑↑↑↑")
+    st.divider()
+    
+    st.markdown("<h6>切换运行模型</h4>", unsafe_allow_html=True)
+    st.text("↓↓↓↓↓")
+    
     if cur_llm_model in llm_models:
         index = llm_models.index(cur_llm_model)
     else:
