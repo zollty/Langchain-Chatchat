@@ -404,7 +404,7 @@ class ApiRequest:
         top_k: int = SEARCH_ENGINE_TOP_K,
         history: List[Dict] = [],
         stream: bool = True,
-        model: str = LLM_MODELS[0],
+        model: str = None,
         temperature: float = TEMPERATURE,
         max_tokens: int = None,
         prompt_name: str = "default",
