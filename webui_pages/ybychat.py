@@ -151,7 +151,7 @@ def yby_page(api: ApiRequest, is_lite: bool = False):
             for d in api.yby_chat(prompt,
                                             top_k=kb_top_k,
                                             history=history,
-                                            model=llm_model,
+                                            #model=llm_model,
                                             max_tokens=32767,
                                             prompt_name=prompt_template_name,
                                             temperature=temperature,
