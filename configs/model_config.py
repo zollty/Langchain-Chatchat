@@ -30,7 +30,7 @@ LLM_MODELS = ["Qwen1.5-7B-Chat", "Qwen-1.8B-Chat", "chatglm3-6b-32k"] # ["chatgl
 
 
 # AgentLM模型的名称 (可以不指定，指定之后就锁定进入Agent之后的Chain的模型，不指定就是LLM_MODELS[0])
-Agent_MODEL = "chatglm3-6b-32k" #"Qwen1.5-7B-Chat"
+Agent_MODEL = "Qwen1.5-7B-Chat" #"chatglm3-6b-32k" #"Qwen1.5-7B-Chat"
 LONG_CONTEXT_MODEL = "chatglm3-6b-32k" #"Qwen1.5-7B-Chat"# "chatglm3-6b-32k"
 
 # LLM 模型运行设备。设为"auto"会自动检测(会有警告)，也可手动设定为 "cuda","mps","cpu","xpu" 其中之一。
