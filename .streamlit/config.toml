@@ -1,0 +1,4 @@
+[theme]
+base = "dark"
+primaryColor = "purple"
+font = "'Helvetica Neue',Helvetica,'Microsoft YaHei','WenQuanYi Micro Hei','Hiragino Sans GB',Simsun,Arial,sans-serif"
