@@ -7,7 +7,7 @@ from io import BytesIO
 
 
 speaker_dict = {
-    'EN': ['EN-US', 'EN-BR', 'EN-AU', 'EN-INDIA', 'EN-DEFAULT'],
+    'EN': ['EN-US', 'EN-BR', 'EN-AU', 'EN_INDIA', 'EN-DEFAULT'],
     'ES': ['ES'],
     'FR': ['FR'],
     'ZH': ['ZH'],
