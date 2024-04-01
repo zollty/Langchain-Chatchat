@@ -29,10 +29,14 @@ def getaudio_html(mymidia_bytes, format):
     b64 = base64.b64encode(mymidia_bytes).decode()
     mymidia_str = f"data:audio/{format};base64,{b64}"
     return f"""
-                    <audio autoplay class="stAudio">
+                    <audio class="stAudio" id="bgAudio">
                     <source src="{mymidia_str}" type="audio/{format}">
                     Your browser does not support the audio element.
                     </audio>
+                    <script>
+                    var audio = document.getElementById("bgAudio");
+                    audio.play();
+                    </script>
                 """
 
 def text2audio(
