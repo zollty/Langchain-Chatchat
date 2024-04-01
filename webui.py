@@ -14,6 +14,7 @@ from webui_pages.model_manage import model_management_page
 from webui_pages.model_management import model_portal_page
 from webui_pages.url_parse_test import test_url_parse_page
 from webui_pages.txt2audio import text2audio_page
+from webui_pages.txt2audio_melo import text2audio_melo_page
 from webui_pages.skills import *
 import os
 import sys
@@ -178,6 +179,10 @@ def txt2audio_page():
     is_lite = "lite" in sys.argv
     text2audio_page(api=api, is_lite=is_lite)
 
+def txt2audio_melo_page():
+    is_lite = "lite" in sys.argv
+    text2audio_melo_page(api=api, is_lite=is_lite)
+
 if __name__ == "__main__":
     router = StreamlitRouter()
     router.register(r_normal_dialogue_page, '/') # index3
@@ -200,6 +205,7 @@ if __name__ == "__main__":
     router.register(skill_wolfram_page, '/skwolf')
     router.register(skill_search_duckduckgo_page, '/skshd')
     router.register(txt2audio_page, '/audio')
+    router.register(txt2audio_melo_page, '/maudio')
     # index(router)
     router.serve()
     
