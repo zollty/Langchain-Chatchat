@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit.components.v1 import html
 from webui_pages.utils import *
 from streamlit_chatbox import *
 from streamlit_modal import Modal
@@ -261,11 +262,11 @@ def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
                     last = ""
                     format = "ogg"
                     data = text2audio(to_audio, response_format=format, language="ZH",  voice="ZH")
-                    st.markdown(getaudio_html(data.read(), format), unsafe_allow_html=True)
+                    html(getaudio_html(data.read(), format), unsafe_allow_html=True)
                 if not last:
                     to_audio = last
                     data = text2audio(to_audio, response_format=format, language="ZH",  voice="ZH")
-                    st.markdown(getaudio_html(data.read(), format), unsafe_allow_html=True)
+                    html(getaudio_html(data.read(), format), unsafe_allow_html=True)
                 message_id = t.get("message_id", "")
 
             metadata = {
