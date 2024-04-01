@@ -26,7 +26,14 @@ default_text_dict = {
     'KR': '최근 텍스트 음성 변환 분야가 급속도로 발전하고 있습니다.',
 }
 
+count = 0
 def getaudio_html(mymidia_bytes, format):
+    global count
+    count += 1
+    if count==1:
+        ctrl = "let count=20;"
+    else:
+        ctrl = "count +=1; console.log(count);"
     b64 = base64.b64encode(mymidia_bytes).decode()
     mymidia_str = f"data:audio/{format};base64,{b64}"
     return f"""
@@ -35,6 +42,7 @@ def getaudio_html(mymidia_bytes, format):
                     Your browser does not support the audio element.
                     </audio>
                     <script>
+                    {ctrl}
                     var audio = document.getElementById("bgAudio");
                     audio.play();
                     console.log("----------", audio.ended)
