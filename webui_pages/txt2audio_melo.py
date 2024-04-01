@@ -80,7 +80,7 @@ def text2audio_melo_page(api: ApiRequest, is_lite: bool = None):
             use_format = f"audio/{format}"
             data = text2audio(content, prompt=prompt, response_format=format, language=lang, speed=float(speed), voice=speaker)
             st.audio(data, format=use_format)
-            st.markdown(getaudio_html(data), unsafe_allow_html=True)
+            st.markdown(getaudio_html(data.read()), unsafe_allow_html=True)
             # st.audio(path, sample_rate=config.sampling_rate)
 
 
