@@ -59,7 +59,7 @@ def text2audio_page(api: ApiRequest, is_lite: bool = None):
         if flag:
             sample_rate = 44100
             format = 'audio/ogg' # wav, mp3
-            st.audio(text2audio(content, prompt=prompt), sample_rate=sample_rate, format='audio/mp3')
+            st.audio(text2audio(content, prompt=prompt, response_format='wav'), sample_rate=sample_rate, format='audio/wav')
             # st.audio(path, sample_rate=config.sampling_rate)
 
 
