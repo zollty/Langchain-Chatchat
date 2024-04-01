@@ -15,6 +15,15 @@ speaker_dict = {
     'KR': ['KR'],
 }
 
+default_txt = "曾经有一份真诚的爱情摆在我的面前，我没有珍惜，等到失去的时候才追悔莫及，人世间最痛苦的事情莫过于此。如果上天能够给我一个重新来过的机会，我会对那个女孩子说三个字：“我爱你”。如果非要给这份爱加上一个期限，我希望是——一~万~年。"
+default_text_dict = {
+    'EN': "Hello my love! What interesting things did you do today? I can't wait for you to attend my concert and make everything kirakira!",
+    'ES': 'El campo de la conversión de texto a voz ha experimentado un rápido desarrollo recientemente.',
+    'FR': 'Le domaine de la synthèse vocale a connu un développement rapide récemment',
+    'ZH': default_txt,
+    'JP': 'テキスト読み上げの分野は最近急速な発展を遂げています',
+    'KR': '최근 텍스트 음성 변환 분야가 급속도로 발전하고 있습니다.',
+}
 
 def getaudio_html(mymidia_bytes):
     mymidia_str = "data:audio/ogg;base64,%s"%(base64.b64encode(mymidia_bytes).decode())
@@ -26,6 +35,7 @@ def getaudio_html(mymidia_bytes):
                 """%mymidia_str
 
 def text2audio_melo_page(api: ApiRequest, is_lite: bool = None):
+    st.session_state.setdefault("lang", "ZH")
     st.set_page_config(
         page_title="Text-To-Speech",
         page_icon="📕",
@@ -60,11 +70,11 @@ def text2audio_melo_page(api: ApiRequest, is_lite: bool = None):
                             exc_info=e if log_verbose else None)
 
     def new_line(i):
-        default_txt = "曾经有一份真诚的爱情摆在我的面前，我没有珍惜，等到失去的时候才追悔莫及，人世间最痛苦的事情莫过于此。如果上天能够给我一个重新来过的机会，我会对那个女孩子说三个字：“我爱你”。如果非要给这份爱加上一个期限，我希望是——一~万~年。"
-        content=st.text_area("Text to be synthesized into speech (合成文本)", default_txt, key=f"{i}_text", height=100)
+        content=st.text_area("Text to be synthesized into speech (合成文本)", default_text_dict[st.session_state.get(f"lang")], key=f"{i}_text", height=100)
         col1, col2, col3, col4, col5 = st.columns([1.5, 1.5, 1.5, 1.5, 1.5])
         with col1:
-            lang=st.selectbox("Language (语言)", ["ZH","EN","FR","JP","KR", "ES"], key=f"{i}_lang")
+            lang=st.selectbox("Language (语言)", ["ZH","EN","FR","JP","KR", "ES"], key=f"lang")
+            
         with col2:
             speaker=st.selectbox("Speaker(说话人)", speaker_dict[lang], key=f"{i}_speaker")
         with col3:
