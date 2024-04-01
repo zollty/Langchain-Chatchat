@@ -36,7 +36,7 @@ def text2audio_page(api: ApiRequest, is_lite: bool = None):
             address = "http://127.0.0.1:6006"
             with get_httpx_client() as client:
                 r = client.post(address + "/v1/audio/speech",
-                    json={"input": input, "prompt": prompt, "voice": voice},
+                    json={"input": input, "prompt": prompt, "voice": voice, "response_format": response_format},
                 )
                 return BytesIO(r.content)
         except Exception as e:
