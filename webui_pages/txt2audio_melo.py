@@ -36,6 +36,7 @@ def getaudio_html(mymidia_bytes, format):
                     <script>
                     var audio = document.getElementById("bgAudio");
                     audio.play();
+                    console.log("----------", audio.ended)
                     </script>
                 """
 
