@@ -46,7 +46,8 @@ def text2audio_page(api: ApiRequest, is_lite: bool = None):
     def new_line(i):
         col1, col2, col3, col4 = st.columns([1.5, 1.5, 3.5, 1.3])
         with col1:
-            speaker=st.selectbox("Speaker ID (说话人)", speakers, key=f"{i}_speaker")
+            #speaker=st.selectbox("Speaker ID (说话人)", speakers, key=f"{i}_speaker")
+            speaker=st.text_input("Speaker ID (说话人)", None, key=f"{i}_speaker")
         with col2:
             prompt=st.text_input("Prompt (开心/悲伤)", "", key=f"{i}_prompt")
         with col3:
