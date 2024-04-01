@@ -131,6 +131,7 @@ def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
         conversation_name = st.selectbox("当前会话：", conv_names, index=index)
         chat_box.use_chat_name(conversation_name)
         conversation_id = st.session_state["conversation_ids"][conversation_name]
+        enable_audio = st.checkbox(label="开启语音回复", value=True, key="enable_audio")
 
         def on_llm_change():
             if llm_model:
@@ -273,7 +274,7 @@ def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
             metadata = {
                 "message_id": message_id,
                 }
-            if text:
+            if text and st.session_state.enable_audio:
                 data = text2audio(text, response_format=format, language="ZH",  voice="ZH")
                 st.markdown(getaudio_html(data.read(), format), unsafe_allow_html=True)
             chat_box.update_msg(text, streaming=False, metadata=metadata)  # 更新最终的字符串，去除光标
