@@ -3,6 +3,7 @@ from configs import logger, log_verbose
 from server.utils import get_httpx_client
 from typing import Optional
 from webui_pages.utils import ApiRequest
+from io import BytesIO
 
 def text2audio_page(api: ApiRequest, is_lite: bool = None):
     st.set_page_config(
@@ -39,7 +40,7 @@ def text2audio_page(api: ApiRequest, is_lite: bool = None):
                 r = client.post(address + "/v1/audio/speech",
                     json={"input": input, "prompt": prompt, "voice": voice},
                 )
-                return r.content
+                return BytesIO(r.content)
         except Exception as e:
             logger.error(f'{e.__class__.__name__}: {e}',
                             exc_info=e if log_verbose else None)
