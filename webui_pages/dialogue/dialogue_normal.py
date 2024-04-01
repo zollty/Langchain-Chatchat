@@ -263,11 +263,11 @@ def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
                     last = ""
                     format = "ogg"
                     data = text2audio(to_audio, response_format=format, language="ZH",  voice="ZH")
-                    html(getaudio_html(data.read(), format))
+                    html(getaudio_html(data.read(), format), iframe=False)
                 if not last:
                     to_audio = last
                     data = text2audio(to_audio, response_format=format, language="ZH",  voice="ZH")
-                    html(getaudio_html(data.read(), format))
+                    html(getaudio_html(data.read(), format), iframe=True)
                 message_id = t.get("message_id", "")
 
             metadata = {
