@@ -18,8 +18,6 @@ def text2audio_page(api: ApiRequest, is_lite: bool = None):
 
     - You can download the audio by clicking on the vertical three points next to the displayed audio widget.
 
-    - For more information on **'Speaker ID'**, please consult the [EmotiVoice voice wiki page](https://github.com/netease-youdao/EmotiVoice/tree/main/data/youdao/text)
-
     - The audio is synthesized by AI. 音频由AI合成，仅供参考。
 
     """, unsafe_allow_html=True)
@@ -46,7 +44,7 @@ def text2audio_page(api: ApiRequest, is_lite: bool = None):
                             exc_info=e if log_verbose else None)
 
     def new_line(i):
-        content=st.text_area("Text to be synthesized into speech (合成文本)", "合成文本", key=f"{i}_text", height=300)
+        content=st.text_area("Text to be synthesized into speech (合成文本)", "合成文本", key=f"{i}_text", height=100)
         col1, col2, col3, col4 = st.columns([1.5, 1.5, 1.5, 1.5])
         with col1:
             #speaker=st.selectbox("Speaker ID (说话人)", speakers, key=f"{i}_speaker")
