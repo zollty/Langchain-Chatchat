@@ -1,5 +1,6 @@
 import streamlit as st
-from streamlit.components.v1 import html
+# from streamlit.components.v1 import html
+from st_bridge import bridge, html
 from webui_pages.utils import *
 from streamlit_chatbox import *
 from streamlit_modal import Modal

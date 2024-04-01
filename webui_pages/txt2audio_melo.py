@@ -1,5 +1,6 @@
 import streamlit as st
-from streamlit.components.v1 import html
+# from streamlit.components.v1 import html
+from st_bridge import bridge, html
 from configs import logger, log_verbose
 from server.utils import get_httpx_client
 from typing import Optional
