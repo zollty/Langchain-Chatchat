@@ -25,14 +25,35 @@ default_text_dict = {
     'KR': '최근 텍스트 음성 변환 분야가 급속도로 발전하고 있습니다.',
 }
 
-def getaudio_html(mymidia_bytes):
-    mymidia_str = "data:audio/ogg;base64,%s"%(base64.b64encode(mymidia_bytes).decode())
-    return """
+def getaudio_html(mymidia_bytes, format):
+    b64 = base64.b64encode(mymidia_bytes).decode()
+    mymidia_str = f"data:audio/{format};base64,{b64}"
+    return f"""
                     <audio autoplay class="stAudio">
-                    <source src="%s" type="audio/ogg">
+                    <source src="{mymidia_str}" type="audio/{format}">
                     Your browser does not support the audio element.
                     </audio>
-                """%mymidia_str
+                """
+
+def text2audio(
+    input: str,
+    voice: str = 'ZH',
+    prompt: Optional[str] = '',
+    language: Optional[str] = 'ZH',
+    model: Optional[str] = 'ZH',
+    response_format: Optional[str] = 'wav',
+    speed: Optional[float] = 1.0
+) :
+    try:
+        address = "http://127.0.0.1:6007"
+        with get_httpx_client() as client:
+            r = client.post(address + "/v1/audio/speech",
+                json={"input": input, "prompt": prompt, "voice": voice, "response_format": response_format, "speed": speed, "language": language},
+            )
+            return BytesIO(r.content)
+    except Exception as e:
+        logger.error(f'{e.__class__.__name__}: {e}',
+                        exc_info=e if log_verbose else None)
 
 def text2audio_melo_page(api: ApiRequest, is_lite: bool = None):
     st.session_state.setdefault("lang", "ZH")
@@ -48,26 +69,6 @@ def text2audio_melo_page(api: ApiRequest, is_lite: bool = None):
 
     """, unsafe_allow_html=True)
 
-
-    def text2audio(
-        input: str,
-        voice: str = 'ZH',
-        prompt: Optional[str] = '',
-        language: Optional[str] = 'ZH',
-        model: Optional[str] = 'ZH',
-        response_format: Optional[str] = 'wav',
-        speed: Optional[float] = 1.0
-    ) :
-        try:
-            address = "http://127.0.0.1:6007"
-            with get_httpx_client() as client:
-                r = client.post(address + "/v1/audio/speech",
-                    json={"input": input, "prompt": prompt, "voice": voice, "response_format": response_format, "speed": speed, "language": language},
-                )
-                return BytesIO(r.content)
-        except Exception as e:
-            logger.error(f'{e.__class__.__name__}: {e}',
-                            exc_info=e if log_verbose else None)
 
     def new_line(i):
         content=st.text_area("Text to be synthesized into speech (合成文本)", default_text_dict[st.session_state.get(f"lang")], key=f"{i}_text", height=100)
@@ -90,7 +91,7 @@ def text2audio_melo_page(api: ApiRequest, is_lite: bool = None):
             use_format = f"audio/{format}"
             data = text2audio(content, prompt=prompt, response_format=format, language=lang, speed=float(speed), voice=speaker)
             st.audio(data, format=use_format)
-            st.markdown(getaudio_html(data.read()), unsafe_allow_html=True)
+            st.markdown(getaudio_html(data.read(), format), unsafe_allow_html=True)
             # st.audio(path, sample_rate=config.sampling_rate)
 
 

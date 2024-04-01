@@ -11,7 +11,7 @@ from configs import (TEMPERATURE, HISTORY_LEN, PROMPT_TEMPLATES)
 from server.utils import get_prompt_template
 import uuid
 from typing import List, Dict, Optional
-
+from webui_pages.txt2audio_melo import text2audio, getaudio_html
 
 chat_box = ChatBox(
     assistant_avatar=os.path.join(
@@ -248,12 +248,24 @@ def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
                             prompt_name=prompt_template_name,
                             system_prompt=system_prompt,
                             temperature=temperature)
+            last = ""
             for t in r:
                 if error_msg := check_error_msg(t):  # check whether error occured
                     st.error(error_msg)
                     break
                 text += t.get("text", "")
                 chat_box.update_msg(text)
+                last += t.get("text", "")
+                if len(last) > 10:
+                    to_audio = last
+                    last = ""
+                    format = "ogg"
+                    data = text2audio(to_audio, response_format=format, language="ZH",  voice="ZH")
+                    st.markdown(getaudio_html(data.read(), format), unsafe_allow_html=True)
+                if not last:
+                    to_audio = last
+                    data = text2audio(to_audio, response_format=format, language="ZH",  voice="ZH")
+                    st.markdown(getaudio_html(data.read(), format), unsafe_allow_html=True)
                 message_id = t.get("message_id", "")
 
             metadata = {
