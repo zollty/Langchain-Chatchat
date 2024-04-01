@@ -1,6 +1,6 @@
 import streamlit as st
 # from streamlit.components.v1 import html
-from st_bridge import bridge, html
+# from st_bridge import bridge, html
 from configs import logger, log_verbose
 from server.utils import get_httpx_client
 from typing import Optional
@@ -28,7 +28,7 @@ default_text_dict = {
 }
 
 count = 0
-def getaudio_html(mymidia_bytes, format):
+def getaudio_html2(mymidia_bytes, format):
     global count
     count += 1
     if count==1:
@@ -48,6 +48,16 @@ def getaudio_html(mymidia_bytes, format):
                     audio.play();
                     console.log("----------", audio.ended)
                     </script>
+                """
+
+def getaudio_html(mymidia_bytes, format):
+    b64 = base64.b64encode(mymidia_bytes).decode()
+    mymidia_str = f"data:audio/{format};base64,{b64}"
+    return f"""
+                    <audio autoplay class="stAudio" id="bgAudio">
+                    <source src="{mymidia_str}" type="audio/{format}">
+                    Your browser does not support the audio element.
+                    </audio>
                 """
 
 def text2audio(
@@ -106,8 +116,8 @@ def text2audio_melo_page(api: ApiRequest, is_lite: bool = None):
             use_format = f"audio/{format}"
             data = text2audio(content, prompt=prompt, response_format=format, language=lang, speed=float(speed), voice=speaker)
             st.audio(data, format=use_format)
-            #st.markdown(getaudio_html(data.read(), format), unsafe_allow_html=True)
-            html(getaudio_html(data.read(), format))
+            st.markdown(getaudio_html(data.read(), format), unsafe_allow_html=True)
+            #html(getaudio_html(data.read(), format))
             # st.audio(path, sample_rate=config.sampling_rate)
 
 
