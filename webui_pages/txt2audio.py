@@ -40,7 +40,7 @@ def text2audio_page(api: ApiRequest, is_lite: bool = None):
                             exc_info=e if log_verbose else None)
 
     def new_line(i):
-        content=st.text_area("Text to be synthesized into speech (合成文本)", "合成文本", key=f"{i}_text", height=100)
+        content=st.text_area("Text to be synthesized into speech (合成文本)", "做人如果没梦想，跟咸鱼有什么分别", key=f"{i}_text", height=100)
         col1, col2, col3, col4, col5 = st.columns([1.5, 1.5, 1.5, 1.5, 1.5])
         with col1:
             #speaker=st.selectbox("Speaker ID (说话人)", speakers, key=f"{i}_speaker")
@@ -48,7 +48,7 @@ def text2audio_page(api: ApiRequest, is_lite: bool = None):
         with col2:
             prompt=st.text_input("Prompt (开心/悲伤)", "", key=f"{i}_prompt")
         with col3:
-            speed=st.selectbox("Speed (速度)", [1.0,1.5,0.7,2.0], key=f"{i}_speed")
+            speed=st.selectbox("Speed (速度)", [1.0,1.1,0.9,0.8,1.2,1.3,1.4,1.5], key=f"{i}_speed")
         with col4:
             lang=st.selectbox("Language (语言)", ["zh_us"], key=f"{i}_lang")
         with col5:
@@ -58,7 +58,7 @@ def text2audio_page(api: ApiRequest, is_lite: bool = None):
         if flag:
             sample_rate = 44100
             use_format = f"audio/{format}"
-            st.audio(text2audio(content, prompt=prompt, response_format=format, language=lang, speed=float(speed)), sample_rate=sample_rate, format=use_format)
+            st.audio(text2audio(content, prompt=prompt, response_format=format, language=lang, speed=float(speed)), format=use_format)
             # st.audio(path, sample_rate=config.sampling_rate)
 
 
