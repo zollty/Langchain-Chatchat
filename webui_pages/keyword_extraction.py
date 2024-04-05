@@ -32,7 +32,7 @@ def keyword_extraction_page(api: ApiRequest, is_lite: bool = False):
         """
     <style>
         [data-testid="block-container"] {
-            padding: 3rem 1rem 1rem;
+            padding: 3rem 4rem 1rem;
         }
     </style>
     """,
@@ -50,8 +50,7 @@ def keyword_extraction_page(api: ApiRequest, is_lite: bool = False):
 《红楼梦》是我国古代著名的长篇小说之一，它的别名是：
 中国历史上被誉为“药王“的是
 都江堰和秦始皇陵哪个的修建年代更早？
-从事贸易活动的人叫做“商人”，这跟历史上的商代有关吗？
-    """
+从事贸易活动的人叫做“商人”，这跟历史上的商代有关吗？"""
 
 
     # Set the title of the demo
@@ -67,6 +66,9 @@ def keyword_extraction_page(api: ApiRequest, is_lite: bool = False):
         sentences = content.split("\n")
         result = []
         for _, sentence in enumerate(sentences):
+            sentence = sentence.strip()
+            if not sentence:
+                continue
             res = remote_api(sentence)
             result.append("、".join(res))
         submit_info.empty()
