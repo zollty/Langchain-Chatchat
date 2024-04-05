@@ -83,7 +83,7 @@ def keyword_extraction_page(api: ApiRequest, is_lite: bool = False):
 
     content=st.text_area("测试文本 (每行为一条)", default_input, key="input_text", height=300)
 
-    if st.button(f"分词", key="button1"):
+    if st.button(f"LLM提取", key="button1"):
         submit_info = st.empty()
         submit_info.text("▒▒▒▒▒▒▒▒▒▒▒▒▒░░░░░░░░░░░░正在处理中…………请稍等（勿重复点击）")
         sentences = content.split("\n")
