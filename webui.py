@@ -206,6 +206,8 @@ if __name__ == "__main__":
     router.register(skill_search_duckduckgo_page, '/skshd')
     router.register(txt2audio_page, '/audio')
     router.register(txt2audio_melo_page, '/maudio')
+    from webui_pages.keyword_extraction import keyword_extraction_page
+    router.register(lambda :keyword_extraction_page(api), '/keyword')
     # index(router)
     router.serve()
     
