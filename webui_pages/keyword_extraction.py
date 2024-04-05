@@ -95,7 +95,7 @@ def keyword_extraction_page(api: ApiRequest, is_lite: bool = False):
             res = remote_api(sentence, model_name=llm_model)
             result.append("、".join(res))
         submit_info.empty()
-        st.text_area("分词结果", "\n".join(result), key="result_text", height=300)
+        st.text_area("提取结果", "\n".join(result), key="result_text", height=300)
     
 
 
