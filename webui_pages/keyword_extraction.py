@@ -1,9 +1,6 @@
 # -*- coding:utf-8 -*-
-from enum import Enum
 import streamlit as st
 from webui_pages.utils import *
-import uuid
-from typing import List, Dict
 
 new_api_url = "http://127.0.0.1:20000"
 
