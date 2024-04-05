@@ -14,7 +14,7 @@ def text2audio_page(api: ApiRequest, is_lite: bool = None):
         """
     <style>
         [data-testid="block-container"] {
-            padding: 4rem 8rem 1rem;
+            padding: 1rem 6rem 10rem;
         }
     </style>
     """,
