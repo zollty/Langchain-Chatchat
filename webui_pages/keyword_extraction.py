@@ -4,8 +4,8 @@ import streamlit as st
 from webui_pages.utils import *
 import uuid
 from typing import List, Dict
-from server.utils import api_address
 
+new_api_url = "http://127.0.0.1:20000"
 
 def remote_api(
     sentence: str,
@@ -14,7 +14,7 @@ def remote_api(
     temperature: Optional[float] = 0.1,
 ) :
     try:
-        address = api_address()
+        address = new_api_url
         with get_httpx_client() as client:
             r = client.post(address + "/spchat/keyword_extraction",
                 json={"sentence": sentence},
