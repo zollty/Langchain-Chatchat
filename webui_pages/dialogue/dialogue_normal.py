@@ -252,6 +252,7 @@ def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
                             system_prompt=system_prompt,
                             temperature=temperature)
             last = ""
+            format = "ogg"
             for t in r:
                 if error_msg := check_error_msg(t):  # check whether error occured
                     st.error(error_msg)
@@ -262,7 +263,6 @@ def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
                 if len(last) > 10:
                     to_audio = last
                     last = ""
-                    format = "ogg"
                     # data = text2audio(to_audio, response_format=format, language="ZH",  voice="ZH")
                     # st.markdown(getaudio_html(data.read(), format), unsafe_allow_html=True)
                 if not last:
