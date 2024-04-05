@@ -48,11 +48,14 @@ def keyword_extraction_page(api: ApiRequest, is_lite: bool = False):
     content=st.text_area("测试文本 (每行为一条)", "园博园有哪些景点", key="input_text", height=300)
 
     if st.button(f"分词", key="button1"):
+        submit_info = st.empty()
+        submit_info.text("▒▒▒▒▒▒▒▒▒▒▒▒▒░░░░░░░░░░░░正在处理中…………请稍等（勿重复点击）")
         sentences = content.split("\n")
         result = []
         for _, sentence in enumerate(sentences):
             res = remote_api(sentence)
             result.append("、".join(res))
+        submit_info.empty()
         st.text_area("分词结果", "\n".join(result), key="result_text", height=300)
     
 
