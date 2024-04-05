@@ -51,9 +51,9 @@ def keyword_extraction_page(api: ApiRequest, is_lite: bool = False):
 
 
     # Set the title of the demo
-    st.write("## 知识库问答分词工具")
+    st.write("## 关键词提取")
     # Add your custom text here, with smaller font size
-    st.markdown("<sub>内置分词的提示词</sub>", unsafe_allow_html=True)
+    st.markdown("<sub>内置“关键词提取”的prompt。可用于知识库问答等场景</sub>", unsafe_allow_html=True)
 
     content=st.text_area("测试文本 (每行为一条)", default_input, key="input_text", height=300)
 
