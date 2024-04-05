@@ -19,7 +19,8 @@ def remote_api(
             r = client.post(address + "/spchat/keyword_extraction",
                 json={"sentence": sentence, "max_tokens": max_tokens},
             )
-            return r.json()
+            value_func = (lambda r: r)
+            return value_func(r)
     except Exception as e:
         logger.error(f'{e.__class__.__name__}: {e}',
                         exc_info=e if log_verbose else None)
@@ -53,7 +54,7 @@ def keyword_extraction_page(api: ApiRequest, is_lite: bool = False):
         for _, sentence in enumerate(sentences):
             res = remote_api(sentence)
             print(res)
-            result.append(res["data"])
+            result = res
         st.text_area("分词结果", result.join("\n"), key="result_text", height=300)
     
 
