@@ -74,7 +74,7 @@ def keyword_extraction_page(api: ApiRequest, is_lite: bool = False):
             return f"{x} (Running)"
         return x
     index = 0
-    llm_model = st.selectbox("切换LLM模型（停止当前选中的Running模型，启动选中的未运行模型）：",
+    llm_model = st.selectbox("选择使用的LLM模型：",
                                 llm_models,
                                 index,
                                 format_func=llm_model_format_func,
