@@ -19,7 +19,7 @@ def remote_api(
             r = client.post(address + "/spchat/keyword_extraction",
                 json={"sentence": sentence, "max_tokens": max_tokens},
             )
-            value_func = (lambda r: r)
+            value_func = (lambda r: r["data"])
             return value_func(r)
     except Exception as e:
         logger.error(f'{e.__class__.__name__}: {e}',
