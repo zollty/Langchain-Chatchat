@@ -17,7 +17,7 @@ def remote_api(
         address = new_api_url
         with get_httpx_client() as client:
             r = client.post(address + "/spchat/keyword_extraction",
-                json={"sentence": sentence},
+                data={"sentence": sentence},
             )
             return r.json()
     except Exception as e:
