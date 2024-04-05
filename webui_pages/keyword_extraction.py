@@ -54,7 +54,7 @@ def keyword_extraction_page(api: ApiRequest, is_lite: bool = False):
             res = remote_api(sentence)
             print(type(res))
             result = res
-        st.text_area("分词结果", result.join("\n"), key="result_text", height=300)
+        st.text_area("分词结果", "\n".join(result), key="result_text", height=300)
     
 
 
