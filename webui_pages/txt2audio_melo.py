@@ -90,7 +90,7 @@ def text2audio_melo_page(api: ApiRequest, is_lite: bool = None):
         """
     <style>
         [data-testid="block-container"] {
-            padding: 1rem 6rem 10rem;
+            padding: 1rem 0 10rem;
         }
     </style>
     """,
