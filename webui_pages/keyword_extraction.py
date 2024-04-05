@@ -14,7 +14,7 @@ def remote_api(
         address = new_api_url
         with get_httpx_client() as client:
             r = client.post(address + "/spchat/keyword_extraction",
-                json={"sentence": sentence, "max_tokens": max_tokens},
+                json={"sentence": sentence, "max_tokens": max_tokens, "model_name": model_name},
             )
             return r.json()
     except Exception as e:
@@ -54,6 +54,32 @@ def keyword_extraction_page(api: ApiRequest, is_lite: bool = False):
     st.write("## 关键词提取")
     # Add your custom text here, with smaller font size
     st.markdown("<sub>内置“关键词提取”的prompt。可用于知识库问答等场景</sub>", unsafe_allow_html=True)
+    
+    running_models = list(api.list_running_models())
+    available_models = []
+    config_models = api.list_config_models()
+    if not is_lite:
+        for k, v in config_models.get("local", {}).items(): # 列出配置了有效本地路径的模型
+            if (v.get("model_path_exists")
+                and k not in running_models):
+                available_models.append(k)
+    for k, v in config_models.get("online", {}).items():  # 列出ONLINE_MODELS中直接访问的模型
+        if not v.get("provider") and k not in running_models:
+            available_models.append(k)
+    llm_models = running_models + available_models
+    
+    
+    def llm_model_format_func(x):
+        if x in running_models:
+            return f"{x} (Running)"
+        return x
+    index = 0
+    llm_model = st.selectbox("切换LLM模型（停止当前选中的Running模型，启动选中的未运行模型）：",
+                                llm_models,
+                                index,
+                                format_func=llm_model_format_func,
+                                key="llm_model",
+                                )
 
     content=st.text_area("测试文本 (每行为一条)", default_input, key="input_text", height=300)
 
@@ -66,7 +92,7 @@ def keyword_extraction_page(api: ApiRequest, is_lite: bool = False):
             sentence = sentence.strip()
             if not sentence:
                 continue
-            res = remote_api(sentence)
+            res = remote_api(sentence, model_name=llm_model)
             result.append("、".join(res))
         submit_info.empty()
         st.text_area("分词结果", "\n".join(result), key="result_text", height=300)
