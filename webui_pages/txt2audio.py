@@ -10,6 +10,16 @@ def text2audio_page(api: ApiRequest, is_lite: bool = None):
         page_title="Text-To-Speech",
         page_icon="📕",
     )
+    st.markdown(
+        """
+    <style>
+        [data-testid="block-container"] {
+            padding: 4rem 8rem 1rem;
+        }
+    </style>
+    """,
+        unsafe_allow_html=True,
+    )
     st.write("## Text-To-Speech")
     st.markdown(f"""
     - You can download the audio by clicking on the vertical three points next to the displayed audio widget.
