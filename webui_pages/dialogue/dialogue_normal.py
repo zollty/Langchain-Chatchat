@@ -275,7 +275,7 @@ def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
                 "message_id": message_id,
                 }
             if text and st.session_state.enable_audio:
-                data = text2audio(text, response_format=format, language="ZH",  voice="ZH")
+                data = text2audio(text[:500], response_format=format, language="ZH",  voice="ZH")
                 st.markdown(getaudio_html(data.read(), format), unsafe_allow_html=True)
             chat_box.update_msg(text, streaming=False, metadata=metadata)  # 更新最终的字符串，去除光标
             chat_box.show_feedback(**feedback_kwargs,
