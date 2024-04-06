@@ -252,7 +252,7 @@ def normal_dialogue_page(api: ApiRequest, is_lite: bool = False):
                             system_prompt=system_prompt,
                             temperature=temperature)
             last = ""
-            format = "ogg"
+            format = "wav"
             for t in r:
                 if error_msg := check_error_msg(t):  # check whether error occured
                     st.error(error_msg)
