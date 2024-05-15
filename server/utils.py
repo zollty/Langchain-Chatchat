@@ -509,7 +509,7 @@ def set_httpx_config(
     # TODO: 简单的清除系统代理不是个好的选择，影响太多。似乎修改代理服务器的bypass列表更好。
     # patch requests to use custom proxies instead of system settings
     def _get_proxies():
-        return proxies
+        return {"http": None, "https": None} #proxies
 
     import urllib.request
     urllib.request.getproxies = _get_proxies
