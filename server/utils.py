@@ -572,6 +572,8 @@ def get_httpx_client(
     default_proxies = {
         # do not use proxy for locahost
         "all://127.0.0.1": None,
+        "all://192.168.33.104": None,
+        "all://192.168.33.105": None,
         "all://localhost": None,
     }
     # do not use proxy for user deployed fastchat servers
