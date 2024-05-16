@@ -609,7 +609,8 @@ def get_httpx_client(
         default_proxies.update(proxies)
 
     # construct Client
-    kwargs.update(timeout=timeout, proxies={"http": None, "https": None})
+    print(f"--------------------------------------{default_proxies}")
+    kwargs.update(timeout=timeout, proxies=default_proxies) # {"http": None, "https": None})
 
     if log_verbose:
         logger.info(f'{get_httpx_client.__class__.__name__}:kwargs: {kwargs}')
