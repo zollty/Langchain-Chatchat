@@ -31,7 +31,7 @@ from langchain_core._api import deprecated
 set_httpx_config()
 
 new_api_url = "http://127.0.0.1:20000"
-
+new_api_url_internet = "http://127.0.0.1:8111"
 
 class ApiRequest:
     '''
@@ -607,7 +607,7 @@ class ApiRequest:
             "zh_title_enhance": zh_title_enhance,
         }
         response = self.post(
-            new_api_url + "/tools/test_parse_url",
+            new_api_url_internet + "/internet/test_parse_url",
             data=data,
         )
         return self._get_response_value(response, as_json=True)
