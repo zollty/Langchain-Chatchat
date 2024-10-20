@@ -33,7 +33,6 @@ PROMPT_TMPLS = {
 问题：{{ text }}
 关键词（只要名词，不需要标点符号，不需要备注说明，直接给出关键词，结果用“、”分割）：""",
 
-
     "summary1": """请简洁和专业的总结下面文档内容。文档内容如下：
 
 
@@ -42,7 +41,6 @@ PROMPT_TMPLS = {
 
 文档总结为：""",
 
-
     "summary2": """<指令>请简洁和专业的总结下面文档内容。</指令>
 
 <文档>"{text}"</文档>
@@ -50,21 +48,18 @@ PROMPT_TMPLS = {
 
 文档总结为：""",
 
-
     "summary3":
-            '请简洁和专业的总结下面文档内容。'
-            '文档内容如下：\n'
-            '\n\n{{ text }}\n\n'
-            '文档总结为：\n',
-
+        '请简洁和专业的总结下面文档内容。'
+        '文档内容如下：\n'
+        '\n\n{{ text }}\n\n'
+        '文档总结为：\n',
 
     "summary4":
-            '<指令>请简洁和专业的总结下面文档内容。</指令>\n'
-            '<文档>{{ text }}</文档>\n',
-
+        '<指令>请简洁和专业的总结下面文档内容。</指令>\n'
+        '<文档>{{ text }}</文档>\n',
 
     "summary_lc":
-            """Write a concise summary of the following:
+        """Write a concise summary of the following:
 
 
 "{text}"
@@ -72,9 +67,8 @@ PROMPT_TMPLS = {
 
 CONCISE SUMMARY:""",
 
-
     "summary_lc_zh":
-            """Write a concise summary of the following:
+        """Write a concise summary of the following:
 
 
 "{text}"
@@ -82,9 +76,8 @@ CONCISE SUMMARY:""",
 
 CONCISE SUMMARY IN CHINESE:""",
 
-
     "refine":
-            """\
+        """\
 Your job is to produce a final summary.
 We have provided an existing summary up to a certain point: {existing_answer}
 We have the opportunity to refine the existing summary (only if needed) with some more context below.
@@ -94,7 +87,6 @@ We have the opportunity to refine the existing summary (only if needed) with som
 Given the new context, refine the original summary.
 If the context isn't useful, return the original summary.\
 """,
-
 
     "relate_qa": """根据以下内容，生成几个相关的提问。内容如下：
 
@@ -107,13 +99,10 @@ If the context isn't useful, return the original summary.\
 }
 
 PROMPT_TMPL_EG = {
-    "关键词提取": ["""中国建筑有哪几个流派""", """
-        都江堰和秦始皇陵哪个的修建年代更早？
-        """, """
-        林黛玉和贾宝玉的父母分别是谁？
-        """],
+    "关键词提取": ["""中国建筑有哪几个流派""",
+                   """都江堰和秦始皇陵哪个的修建年代更早？""",
+                   """林黛玉和贾宝玉的父母分别是谁？"""],
 }
-
 
 chat_box = ChatBox(
     assistant_avatar=os.path.join(
@@ -177,8 +166,7 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
         on_change=prompt_change,
         key="prompt_template_select",
     )
-    prompt_template_name = st.session_state.prompt_template_select
-    prompt_template = PROMPT_TMPLS[prompt_template_name]
+    prompt_template = PROMPT_TMPLS[prompt_template_select]
     system_prompt = st.text_area(
         label="System Prompt",
         height=500,
@@ -197,7 +185,10 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
             'temperature', 0.0, 1.5, 0.95, step=0.01
         )
 
-        eg = PROMPT_TMPL_EG[prompt_template_name]
+        def prompt_change2():
+            st.session_state.prompt = st.session_state.prompt_eg_select
+
+        eg = PROMPT_TMPL_EG[prompt_template_select]
         prompt_eg = None
         if eg:
             numbers = [i for i in range(0, len(eg))]  # 生成1到9的数字列表
@@ -205,9 +196,10 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
                 "快捷输入：",
                 numbers,
                 index=0,
+                on_change=prompt_change2,
                 key="prompt_eg_select",
             )
-            prompt_eg = PROMPT_TMPL_EG[prompt_template_name][int(prompt_eg_select)]
+            prompt_eg = eg[int(prompt_eg_select)]
 
         cols = st.columns(1)
         if cols[0].button(
@@ -228,7 +220,7 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
         chat_box.ai_say("正在思考...")
         text = ""
         for d in api.chat_chat(prompt,
-                              history=[],
+                               history=[],
                                conversation_id=conversation_id,
                                model=llm_model,
                                prompt_name=prompt_template_name,
