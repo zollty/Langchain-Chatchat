@@ -37,14 +37,14 @@ PROMPT_TMPLS = {
     "summary1": """请简洁和专业的总结下面文档内容。文档内容如下：
 
 
-"{input}"
+"{{ input }}"
 
 
 文档总结为：""",
 
     "summary2": """<指令>请简洁和专业的总结下面文档内容。</指令>
 
-<文档>"{input}"</文档>
+<文档>"{{ input }}"</文档>
 
 
 文档总结为：""",
@@ -63,7 +63,7 @@ PROMPT_TMPLS = {
         """Write a concise summary of the following:
 
 
-"{input}"
+"{{ input }}"
 
 
 CONCISE SUMMARY:""",
@@ -72,7 +72,7 @@ CONCISE SUMMARY:""",
         """Write a concise summary of the following:
 
 
-"{input}"
+"{{ input }}"
 
 
 CONCISE SUMMARY IN CHINESE:""",
@@ -83,7 +83,7 @@ Your job is to produce a final summary.
 We have provided an existing summary up to a certain point: {existing_answer}
 We have the opportunity to refine the existing summary (only if needed) with some more context below.
 ------------
-{input}
+{{ input }}
 ------------
 Given the new context, refine the original summary.
 If the context isn't useful, return the original summary.\
@@ -92,7 +92,7 @@ If the context isn't useful, return the original summary.\
     "relate_qa": """根据以下内容，生成几个相关的提问。内容如下：
 
 
-"{input}"
+"{{ input }}"
 
 
 相关的提问：""",
@@ -148,7 +148,7 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
 
     # Set the title of the demo
     # st.title("💬 园博园Chat")
-    st.write("## 💬 提示词测试")
+    st.write("### 💬 提示词测试")
     # Add your custom text here, with smaller font size
     # st.markdown("<sub>园博园专用聊天（左边设置参数），例如： </sub> \n\n <sub> 例1：介绍一下园博园</sub> \n\n <sub> 例2：龙景书院</sub> \n\n <sub> 园博园主要建筑</sub> \n\n <sub> 园博园公厕</sub>", unsafe_allow_html=True)
 
@@ -217,7 +217,7 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
 
     chat_input_placeholder = prompt_eg if prompt_eg else "请输入对话内容，换行请使用Shift+Enter"
 
-    prompt = st.text_area("测试文本", chat_input_placeholder, key="prompt", height=300)
+    prompt = st.text_area("测试文本", chat_input_placeholder, key="prompt", height=200)
 
     if st.button(f"发送", key="button1"):
         chat_box.reset_history()
