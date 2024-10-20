@@ -7,8 +7,9 @@ from webui_pages.dialogue.dialogue_kb import kb_dialogue_page
 from webui_pages.knowledge_base.knowledge_base import knowledge_base_page
 from webui_pages.ybychat import yby_page
 from webui_pages.ybychat_qa import yby_qa_page
-from webui_pages.file_chat import file_chat_page
 from webui_pages.tool_chat import tool_chat_page
+from webui_pages.file_chat import file_chat_page
+from webui_pages.prompt_tmpl_test import prompt_tmpl_test_page
 from webui_pages.file_parse_test import test_file_parse_page
 from webui_pages.model_manage import model_management_page
 from webui_pages.model_management import model_portal_page
@@ -147,6 +148,10 @@ def ybyqa_page(router):
 	api2 = ApiRequest(base_url="http://192.168.33.104:8777")
 	yby_qa_page(api=api2, is_lite=is_lite)
 
+def prompt_tmpl_test_router(router):
+	is_lite = "lite" in sys.argv
+	prompt_tmpl_test_page(api=api, is_lite=is_lite)
+
 def filechat_page(router):
 	is_lite = "lite" in sys.argv
 	file_chat_page(api=api, is_lite=is_lite)
@@ -197,6 +202,7 @@ if __name__ == "__main__":
     router.register(model_manage_page, '/modelmg')
     router.register(model_portalmg_page, '/modelpt')
     router.register(ybyqa_page, '/ybyqa')
+    router.register(prompt_tmpl_test_router, '/prompt')
     router.register(test_urlparse_page, '/utest')
     router.register(skill_shell_page, '/skshell')
     router.register(skill_calculate_page, '/skcalc')
