@@ -191,7 +191,7 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
         #     st.session_state["prompt"] = st.session_state.prompt_eg_select
 
         prompt_eg = None
-        if prompt_template_select in PROMPT_TMPLS:
+        if prompt_template_select in PROMPT_TMPL_EG:
             eg = PROMPT_TMPL_EG[prompt_template_select]
             numbers = [i for i in range(0, len(eg))]  # 生成1到9的数字列表
             prompt_eg_select = st.selectbox(
