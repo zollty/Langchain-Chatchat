@@ -261,7 +261,7 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
     # Display chat messages from history on app rerun
     chat_box.output_messages()
 
-    chat_input_placeholder = prompt_eg if prompt_eg else "请输入对话内容，换行请使用Shift+Enter"
+    chat_input_placeholder = prompt_eg if prompt_eg else ""
 
     prompt = st.text_area("测试文本", chat_input_placeholder, key="prompt", height=200)
 
