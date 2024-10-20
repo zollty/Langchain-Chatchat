@@ -159,7 +159,6 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
 
     def prompt_change():
         chat_box.reset_history()
-        st.rerun()
         text = f"已切换为 {st.session_state.prompt_template_select} 模板。"
         st.toast(text)
 
@@ -222,11 +221,10 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
 
     if st.button(f"发送", key="button1"):
         chat_box.reset_history()
-        st.rerun()
 
         prompt_tmpl = PromptTemplate.from_template(template=system_prompt, template_format="jinja2")
         final_prompt = prompt_tmpl.format(input=prompt)
-        chat_box.user_say(final_prompt)
+        # chat_box.user_say(final_prompt)
         chat_box.ai_say("正在思考...")
         text = ""
         for d in api.chat_chat(final_prompt,
