@@ -158,6 +158,7 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
         st.session_state.prompt_template_select = prompt_templates_kb_list[0]
 
     def prompt_change():
+        chat_box.reset_history()
         text = f"已切换为 {st.session_state.prompt_template_select} 模板。"
         st.toast(text)
 
