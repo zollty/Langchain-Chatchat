@@ -186,14 +186,17 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
         key="system_prompt",
     )
 
-    prompt_eg_select = st.selectbox(
-        "快捷选择Prompt模板：",
-        PROMPT_TMPLS[PROMPT_TMPL_EG],
-        index=0,
-        key="prompt_eg_select",
-    )
-
-    prompt_eg = PROMPT_TMPLS[prompt_eg_select]
+    eg = PROMPT_TMPL_EG[prompt_template_name]
+    prompt_eg = None
+    if eg:
+        numbers = [i for i in range(0, len(eg))]  # 生成1到9的数字列表
+        prompt_eg_select = st.selectbox(
+            "快捷输入：",
+            numbers,
+            index=0,
+            key="prompt_eg_select",
+        )
+        prompt_eg = PROMPT_TMPLS[prompt_template_name][int(prompt_eg_select)]
 
     DEFAULT_SYSTEM_PROMPT = '''
     You are an AI programming assistant. Follow the user's instructions carefully. Respond using markdown.
