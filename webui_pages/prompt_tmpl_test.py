@@ -31,7 +31,7 @@ PROMPT_TMPLS = {
 关键词：73、84、历史人物、年龄
 
 下面是用户的问题：
-问题：{{ input }}
+问题：{input}
 关键词（只要名词，不需要标点符号，不需要备注说明，直接给出关键词，结果用“、”分割）：""",
 
     "summary1": """请简洁和专业的总结下面文档内容。文档内容如下：
@@ -190,9 +190,9 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
         # def prompt_change2():
         #     st.session_state["prompt"] = st.session_state.prompt_eg_select
 
-        eg = PROMPT_TMPL_EG[prompt_template_select]
         prompt_eg = None
-        if eg:
+        if prompt_template_select in PROMPT_TMPLS:
+            eg = PROMPT_TMPL_EG[prompt_template_select]
             numbers = [i for i in range(0, len(eg))]  # 生成1到9的数字列表
             prompt_eg_select = st.selectbox(
                 "快捷输入：",
