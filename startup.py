@@ -503,9 +503,9 @@ def run_webui(started_event: mp.Event = None, run_mode: str = None):
            "--server.address", host,
            "--server.port", str(port),
            "--theme.base", "dark",
-        #    "--theme.primaryColor", "#165dff",
-        #    "--theme.secondaryBackgroundColor", "#f5f5f5",
-        #    "--theme.textColor", "#000000",
+           "--theme.primaryColor", "#165dff",
+           "--theme.secondaryBackgroundColor", "#f5f5f5",
+           "--theme.textColor", "#000000",
            ]
     if run_mode == "lite":
         cmd += [
