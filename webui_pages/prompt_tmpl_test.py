@@ -219,6 +219,8 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
     prompt = st.text_area("测试文本", chat_input_placeholder, key="prompt", height=300)
 
     if st.button(f"发送", key="button1"):
+        chat_box.reset_history()
+        st.rerun()
 
         prompt_tmpl = PromptTemplate.from_template(template=system_prompt, template_format="jinja2")
         final_prompt = prompt_tmpl.format(input=prompt)
