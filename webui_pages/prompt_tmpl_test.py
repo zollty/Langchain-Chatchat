@@ -31,7 +31,7 @@ PROMPT_TMPLS = {
 关键词：73、84、历史人物、年龄
 
 下面是用户的问题：
-问题：{input}
+问题：{{ input }}
 关键词（只要名词，不需要标点符号，不需要备注说明，直接给出关键词，结果用“、”分割）：""",
 
     "summary1": """请简洁和专业的总结下面文档内容。文档内容如下：
@@ -220,7 +220,7 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
 
     if st.button(f"发送", key="button1"):
 
-        prompt_tmpl = PromptTemplate.from_template(system_prompt)
+        prompt_tmpl = PromptTemplate.from_template(template=system_prompt, template_format="jinja2")
         final_prompt = prompt_tmpl.format(input=prompt)
         chat_box.user_say(final_prompt)
         chat_box.ai_say("正在思考...")
