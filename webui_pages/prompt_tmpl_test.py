@@ -220,11 +220,12 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
 
     if st.button(f"发送", key="button1"):
 
-        prompt = PromptTemplate.from_template(system_prompt)
-        chat_box.user_say(prompt.format(input=prompt))
+        prompt_tmpl = PromptTemplate.from_template(system_prompt)
+        final_prompt = prompt_tmpl.format(input=prompt)
+        chat_box.user_say(final_prompt)
         chat_box.ai_say("正在思考...")
         text = ""
-        for d in api.chat_chat(prompt,
+        for d in api.chat_chat(final_prompt,
                                history=[],
                                conversation_id=conversation_id,
                                model=llm_model,
