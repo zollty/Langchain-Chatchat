@@ -215,7 +215,12 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
 
     chat_input_placeholder = prompt_eg if prompt_eg else "请输入对话内容，换行请使用Shift+Enter"
 
-    if prompt := st.chat_input(chat_input_placeholder, key="prompt", value=chat_input_placeholder):
+    prompt = st.text_area("测试文本", chat_input_placeholder, key="prompt", height=300)
+
+    if st.button(f"发送", key="button1"):
+
+
+    # if prompt := st.chat_input(chat_input_placeholder, key="prompt"):
         chat_box.user_say(prompt)
 
         chat_box.ai_say("正在思考...")
