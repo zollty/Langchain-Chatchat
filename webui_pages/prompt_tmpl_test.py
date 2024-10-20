@@ -117,7 +117,7 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
     st.session_state["conversation_ids"].setdefault(chat_box.cur_chat_name, uuid.uuid4().hex)
     conversation_id = st.session_state["conversation_ids"][chat_box.cur_chat_name]
     st.session_state.setdefault("file_chat_id", None)
-    st.session_state.setdefault("prompt", "")
+    # st.session_state.setdefault("prompt", "")
     default_model = api.get_default_llm_model()[0]
     llm_model = "Qwen1.5-7B-Chat"  # "chatglm3-6b-32k" #
 
@@ -186,8 +186,8 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
             'temperature', 0.0, 1.5, 0.95, step=0.01
         )
 
-        def prompt_change2():
-            st.session_state["prompt"] = st.session_state.prompt_eg_select
+        # def prompt_change2():
+        #     st.session_state["prompt"] = st.session_state.prompt_eg_select
 
         eg = PROMPT_TMPL_EG[prompt_template_select]
         prompt_eg = None
@@ -197,7 +197,7 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
                 "快捷输入：",
                 numbers,
                 index=0,
-                on_change=prompt_change2,
+                # on_change=prompt_change2,
                 key="prompt_eg_select",
             )
             prompt_eg = eg[int(prompt_eg_select)]
@@ -215,7 +215,7 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
 
     chat_input_placeholder = prompt_eg if prompt_eg else "请输入对话内容，换行请使用Shift+Enter"
 
-    if prompt := st.chat_input(chat_input_placeholder, key="prompt"):
+    if prompt := st.chat_input(chat_input_placeholder, key="prompt", value=chat_input_placeholder):
         chat_box.user_say(prompt)
 
         chat_box.ai_say("正在思考...")
