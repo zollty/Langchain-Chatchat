@@ -186,18 +186,6 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
         key="system_prompt",
     )
 
-    eg = PROMPT_TMPL_EG[prompt_template_name]
-    prompt_eg = None
-    if eg:
-        numbers = [i for i in range(0, len(eg))]  # 生成1到9的数字列表
-        prompt_eg_select = st.selectbox(
-            "快捷输入：",
-            numbers,
-            index=0,
-            key="prompt_eg_select",
-        )
-        prompt_eg = PROMPT_TMPLS[prompt_template_name][int(prompt_eg_select)]
-
     DEFAULT_SYSTEM_PROMPT = '''
     You are an AI programming assistant. Follow the user's instructions carefully. Respond using markdown.
     '''.strip()
@@ -209,9 +197,20 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
             'temperature', 0.0, 1.5, 0.95, step=0.01
         )
 
-        cols = st.columns(2)
-        export_btn = cols[0]
-        if cols[1].button(
+        eg = PROMPT_TMPL_EG[prompt_template_name]
+        prompt_eg = None
+        if eg:
+            numbers = [i for i in range(0, len(eg))]  # 生成1到9的数字列表
+            prompt_eg_select = st.selectbox(
+                "快捷输入：",
+                numbers,
+                index=0,
+                key="prompt_eg_select",
+            )
+            prompt_eg = PROMPT_TMPL_EG[prompt_template_name][int(prompt_eg_select)]
+
+        cols = st.columns(1)
+        if cols[0].button(
                 "清空对话",
                 use_container_width=True,
         ):
