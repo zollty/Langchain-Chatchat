@@ -117,6 +117,7 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
     st.session_state["conversation_ids"].setdefault(chat_box.cur_chat_name, uuid.uuid4().hex)
     conversation_id = st.session_state["conversation_ids"][chat_box.cur_chat_name]
     st.session_state.setdefault("file_chat_id", None)
+    st.session_state.setdefault("prompt", "")
     default_model = api.get_default_llm_model()[0]
     llm_model = "Qwen1.5-7B-Chat"  # "chatglm3-6b-32k" #
 
@@ -186,7 +187,7 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
         )
 
         def prompt_change2():
-            st.session_state.prompt = st.session_state.prompt_eg_select
+            st.session_state["prompt"] = st.session_state.prompt_eg_select
 
         eg = PROMPT_TMPL_EG[prompt_template_select]
         prompt_eg = None
