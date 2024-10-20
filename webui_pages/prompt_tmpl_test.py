@@ -14,6 +14,7 @@ from server.knowledge_base.utils import LOADER_DICT
 from server.utils import get_prompt_template
 import uuid
 from typing import List, Dict
+from langchain.prompts import PromptTemplate
 
 PROMPT_TMPLS = {
     "关键词提取": """你是一个关键词捕捉专家，请捕获用户问题中最关键的1到2个词（只要名词，不需要标点符号，不需要备注说明，直接给出关键词，结果用“、”分割）。
@@ -30,20 +31,20 @@ PROMPT_TMPLS = {
 关键词：73、84、历史人物、年龄
 
 下面是用户的问题：
-问题：{{ text }}
+问题：{{ input }}
 关键词（只要名词，不需要标点符号，不需要备注说明，直接给出关键词，结果用“、”分割）：""",
 
     "summary1": """请简洁和专业的总结下面文档内容。文档内容如下：
 
 
-"{text}"
+"{input}"
 
 
 文档总结为：""",
 
     "summary2": """<指令>请简洁和专业的总结下面文档内容。</指令>
 
-<文档>"{text}"</文档>
+<文档>"{input}"</文档>
 
 
 文档总结为：""",
@@ -51,18 +52,18 @@ PROMPT_TMPLS = {
     "summary3":
         '请简洁和专业的总结下面文档内容。'
         '文档内容如下：\n'
-        '\n\n{{ text }}\n\n'
+        '\n\n{{ input }}\n\n'
         '文档总结为：\n',
 
     "summary4":
         '<指令>请简洁和专业的总结下面文档内容。</指令>\n'
-        '<文档>{{ text }}</文档>\n',
+        '<文档>{{ input }}</文档>\n',
 
     "summary_lc":
         """Write a concise summary of the following:
 
 
-"{text}"
+"{input}"
 
 
 CONCISE SUMMARY:""",
@@ -71,7 +72,7 @@ CONCISE SUMMARY:""",
         """Write a concise summary of the following:
 
 
-"{text}"
+"{input}"
 
 
 CONCISE SUMMARY IN CHINESE:""",
@@ -82,7 +83,7 @@ Your job is to produce a final summary.
 We have provided an existing summary up to a certain point: {existing_answer}
 We have the opportunity to refine the existing summary (only if needed) with some more context below.
 ------------
-{text}
+{input}
 ------------
 Given the new context, refine the original summary.
 If the context isn't useful, return the original summary.\
@@ -91,7 +92,7 @@ If the context isn't useful, return the original summary.\
     "relate_qa": """根据以下内容，生成几个相关的提问。内容如下：
 
 
-"{text}"
+"{input}"
 
 
 相关的提问：""",
@@ -219,18 +220,14 @@ def prompt_tmpl_test_page(api: ApiRequest, is_lite: bool = False):
 
     if st.button(f"发送", key="button1"):
 
-
-    # if prompt := st.chat_input(chat_input_placeholder, key="prompt"):
-        chat_box.user_say(prompt)
-
+        prompt = PromptTemplate.from_template(system_prompt)
+        chat_box.user_say(prompt.format(input=prompt))
         chat_box.ai_say("正在思考...")
         text = ""
         for d in api.chat_chat(prompt,
                                history=[],
                                conversation_id=conversation_id,
                                model=llm_model,
-                               prompt_name=prompt_template_name,
-                               system_prompt=system_prompt,
                                temperature=temperature):
             if error_msg := check_error_msg(d):  # check whether error occured
                 st.error(error_msg)
