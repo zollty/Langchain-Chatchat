@@ -132,7 +132,7 @@ def tool_chat_page(api: ApiRequest, is_lite: bool = False):
                 and llm_model not in running_models):
             with st.spinner(f"正在加载模型： {llm_model}，请勿进行操作或刷新页面"):
                 prev_model = st.session_state.get("prev_llm_model")
-                r = api.change_llm_model(prev_model, llm_model, keep_origin=False)
+                r = api.change_llm_model(prev_model, llm_model)
                 if msg := check_error_msg(r):
                     st.error(msg)
                 elif msg := check_success_msg(r):
